@@ -17,16 +17,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import API_URL from "../../settings";
 import { TextInput } from "react-native-paper";
+import MyModal from "../../utils/MyModal";
 
 const Register = ({ navigation }) => {
-	const [email, setEmail] = useState("");
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [phone, setPhone] = useState("");
-	const [password, setPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
+	const [email, setEmail] = useState("q@q.com");
+	const [firstName, setFirstName] = useState("james");
+	const [lastName, setLastName] = useState("lol");
+	const [phone, setPhone] = useState("0994938725");
+	const [password, setPassword] = useState("11111111");
+	const [confirmPassword, setConfirmPassword] = useState("11111111");
 
 	const [loading, setLoading] = useState(false);
+
+	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
+	const [failedModalVisible, setFailedModalVisible] = useState(false);
 
 	const [inputError, setInputError] = useState({
 		phone: false,
@@ -52,17 +56,17 @@ const Register = ({ navigation }) => {
 	// const navigate = useNavigation()
 
 	const registerUser = async () => {
-        // To Check for White Spaces
-		phone_number = '+234' + phone
-        const payload ={
-            firstName,
-            lastName,
-            email,
-            phone: phone_number,
-            password
-        }
-		console.log(payload)
-        // This is the Full Validation for all the textInputs
+		// To Check for White Spaces
+		phone_number = "+234" + phone;
+		const payload = {
+			firstName,
+			lastName,
+			email,
+			phone: phone_number,
+			password,
+		};
+		console.log(payload);
+		// This is the Full Validation for all the textInputs
 		if (
 			firstName.trim() === "" ||
 			lastName.trim() === "" ||
@@ -72,14 +76,14 @@ const Register = ({ navigation }) => {
 		) {
 			Alert.alert("Please fill in all fields");
 		} else {
-            if (password.length < 8) {
-                Alert.alert("Password must be at least 8 characters");
+			if (password.length < 8) {
+				Alert.alert("Password must be at least 8 characters");
 			} else {
-                if (password !== confirmPassword) {
-                    Alert.alert("Please the password must be the same");
-                } else {
-                    if (!validateEmail(email)) {
-                        Alert.alert("Please enter a valid email");
+				if (password !== confirmPassword) {
+					Alert.alert("Please the password must be the same");
+				} else {
+					if (!validateEmail(email)) {
+						Alert.alert("Please enter a valid email");
 					} else {
 						if (phone.length !== 10) {
 							Alert.alert("Please enter a valid Phone Number");
@@ -104,17 +108,13 @@ const Register = ({ navigation }) => {
 								// Store the authentication token in AsyncStorage
 								await AsyncStorage.setItem("token", res_data.access_token);
 
-								Alert.alert(
-									"Registeration succesful",
-									"Registeration was successful",
-									[{ text: "OK", onPress: () => navigation.navigate("verify", {email}) }]
-								);
-								navigation.navigate("verify");
+								navigation.navigate("verify", { email });
+								setSuccessModalVisible(true);
 							} catch (error) {
 								// Handle network or other errors
-								console.log('This is the Error that occurred');
+								console.log("This is the Error that occurred");
 								console.log(error);
-								Alert.alert("Error", "An error occured during login.");
+								setFailedModalVisible(true);
 							} finally {
 								setLoading(false);
 							}
@@ -231,33 +231,57 @@ const Register = ({ navigation }) => {
 				</TouchableOpacity>
 				{loading && <ActivityIndicator size="large" />}
 
-				<Text
+				<View
 					style={{
-						fontWeight: "500",
-						fontSize: 20,
-						color: "#0B0B0E",
-						marginLeft: 60,
-						marginTop: 15,
+						display: "flex",
+						flexDirection: "row",
+						// backgroundColor: 'red'
+						justifyContent: "center",
+						alignContent: "center",
+						marginTop: 20,
 					}}
 				>
-					Have an account?{" "}
-				</Text>
-				<Pressable onPress={() => navigation.navigate("login")}>
 					<Text
 						style={{
 							fontWeight: "500",
 							fontSize: 20,
-							color: "blue",
-							marginLeft: 260,
-							marginTop: -22,
+							color: "#0B0B0E",
 						}}
 					>
-						Log in
+						Have an account?{" "}
 					</Text>
-				</Pressable>
+					<Pressable onPress={() => navigation.navigate("login")}>
+						<Text
+							style={{
+								fontWeight: "500",
+								fontSize: 20,
+								color: "blue",
+							}}
+						>
+							Log in
+						</Text>
+					</Pressable>
+				</View>
 
 				<View style={{ marginTop: 50 }} />
 			</ScrollView>
+
+			{/* Login Successful Modal */}
+			<MyModal
+				state={SuccessModalVisible}
+				setState={setSuccessModalVisible}
+				text={"Registration Successful"}
+				button={"Thank You"}
+				ButtonColor={"#FEDD00"}
+			/>
+			{/* Login Successful Modal */}
+			<MyModal
+				state={failedModalVisible}
+				setState={setFailedModalVisible}
+				text={"An error occured during Registration"}
+				button={"Try again"}
+				ButtonColor={"#EB270B"}
+			/>
 		</View>
 	);
 };

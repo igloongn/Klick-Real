@@ -18,6 +18,7 @@ import axios from "axios";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import API_URL from "../../settings";
+import MyModal from "../../utils/MyModal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -27,6 +28,9 @@ const Login = ({ navigation }) => {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
+
+	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
+	const [failedModalVisible, setFailedModalVisible] = useState(false);
 
 	const navigate = useNavigation();
 
@@ -64,8 +68,9 @@ const Login = ({ navigation }) => {
 			// Do something with the response data
 			navigation.navigate("hometab");
 			// navigation.navigate('vendordash')
+			setSuccessModalVisible(true);
+			// Alert.alert("Login Success", data.message);
 
-			Alert.alert("Login Success", data.message);
 			// } else {
 			//   // Login failed
 			//   const errorData = await response.json();
@@ -77,7 +82,8 @@ const Login = ({ navigation }) => {
 			// Handle network or other errors
 			console.error("!!!!!!!!!!!!!");
 			console.error(error);
-			Alert.alert("Error", "An error occured during login.");
+			setFailedModalVisible(true);
+			// Alert.alert("Error", "An error occured during login.");
 			setLoading(false);
 		}
 		// finally {
@@ -105,6 +111,7 @@ const Login = ({ navigation }) => {
 							fontSize: 24,
 							color: "#0B0B0E",
 							marginHorizintal: 10,
+							textAlign: "left",
 						}}
 					>
 						Home
@@ -163,32 +170,45 @@ const Login = ({ navigation }) => {
 					</TouchableOpacity>
 					{loading && <ActivityIndicator size="large" />}
 
-					<Text
+					<View
 						style={{
-							fontWeight: "500",
-							fontSize: 20,
-							color: "#0B0B0E",
-							marginLeft: 60,
-							marginTop: 15,
+							display: "flex",
+							flexDirection: "row",
+							// backgroundColor: 'red'
+							justifyContent: "center",
+							alignContent: "center",
+							marginTop: 20,
 						}}
 					>
-						Don't have an account yet?
-					</Text>
-					<Pressable onPress={() => navigation.navigate("register")}>
 						<Text
 							style={{
 								fontWeight: "500",
 								fontSize: 20,
-								color: "blue",
-								marginLeft: 260,
-								marginTop: -22,
+								color: "#0B0B0E",
 							}}
 						>
-							Sign Up
+							Don't have an account yet?
 						</Text>
-					</Pressable>
+						<Pressable onPress={() => navigation.navigate("register")}>
+							<Text
+								style={{
+									fontWeight: "500",
+									fontSize: 20,
+									color: "blue",
+									marginLeft: 10,
+								}}
+							>
+								Sign Up
+							</Text>
+						</Pressable>
+					</View>
 				</View>
 			</View>
+
+			{/* Login Successful Modal */}
+			<MyModal state={SuccessModalVisible} setState={setSuccessModalVisible} text={'Login Successful'} button={'Thank You'} ButtonColor={'#FEDD00'} />
+			{/* Login Successful Modal */}
+			<MyModal state={failedModalVisible} setState={setFailedModalVisible} text={'An error occured during login'} button={'Try again'} ButtonColor={'#EB270B'} />
 		</ScrollView>
 	);
 };
