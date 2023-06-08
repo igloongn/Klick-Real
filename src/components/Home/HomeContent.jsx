@@ -177,7 +177,7 @@ const HomeContent = ({ navigation }) => {
 
 	console.log(showGallery);
 
-	AsyncStorage.getItem('token').then(res => console.log(res))
+	AsyncStorage.getItem("token").then((res) => console.log(res));
 
 	return (
 		<View>
@@ -214,9 +214,13 @@ const HomeContent = ({ navigation }) => {
 								marginLeft: 20,
 								display: "flex",
 								paddingHorizontal: 20,
+								marginHorizontal: 20,
+								marginVertical: 10,
 								borderRadius: 10,
+								// justifyContent: "center",
+								alignSelf: "center",
+								height: 40,
 								justifyContent: "center",
-								alignItems: "center",
 								backgroundColor: "#FEDD00",
 							}}
 							onPress={() => navigation.navigate("login")}
@@ -524,24 +528,26 @@ const HomeContent = ({ navigation }) => {
 
 				<View style={{ marginTop: 400 }}></View>
 			</ScrollView>
-			<TouchableOpacity
-				onPress={() => {
-					mode_data?.switchMode("vendor");
-				}}
-				style={{
-					height: 42,
-					width: 120,
-					borderRadius: 20,
-					backgroundColor: "#FEDD00",
-					position: "absolute",
-					alignItems: "center",
-					justifyContent: "center",
-					bottom: 180,
-					right: 0,
-				}}
-			>
-				<Text style={{ fontSize: 11 }}>Switch to Seller</Text>
-			</TouchableOpacity>
+			{isLoggedIn && (
+				<TouchableOpacity
+					onPress={() => {
+						mode_data?.switchMode("vendor");
+					}}
+					style={{
+						height: 42,
+						width: 120,
+						borderRadius: 20,
+						backgroundColor: "#FEDD00",
+						position: "absolute",
+						alignItems: "center",
+						justifyContent: "center",
+						bottom: 180,
+						right: 0,
+					}}
+				>
+					<Text style={{ fontSize: 11 }}>Switch to Seller</Text>
+				</TouchableOpacity>
+			)}
 		</View>
 	);
 };

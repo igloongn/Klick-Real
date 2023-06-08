@@ -20,6 +20,7 @@ import { useBuyerSwitchVendorContext } from "../BuyerSwitchVendor";
 
 import { useIsFocused } from "@react-navigation/native";
 
+// Authentication
 const getLoginData = async (navigation, alternative = () => null) => {
 	try {
 		const value = await AsyncStorage.getItem("isLoggedIn");
@@ -136,6 +137,28 @@ const VendorDashboard = ({ navigation }) => {
 							style={{ marginLeft: 120 }}
 						/>
 					</Pressable>
+				</View>
+				<View
+				style={{
+					marginVertical: 20,
+				}}
+				>
+					<TouchableOpacity
+						onPress={() => {
+							// getLoginData(navigation, () => navigation.navigate("selleronboard"));
+							navigation.navigate("selleronboard")
+						}}
+						style={{
+							height: 42,
+							width: 120,
+							borderRadius: 20,
+							backgroundColor: "#FEDD00",
+							alignItems: "center",
+							justifyContent: "center",
+						}}
+					>
+						<Text style={{ fontSize: 11 }}>Create Store</Text>
+					</TouchableOpacity>
 				</View>
 				<View
 					style={{
@@ -283,24 +306,7 @@ const VendorDashboard = ({ navigation }) => {
 
 				{/* <View style={{ marginTop: 1000 }}></View> */}
 			</ScrollView>
-			<TouchableOpacity
-				onPress={() => {
-					getLoginData(navigation, () => navigation.navigate("selleronboard"));
-				}}
-				style={{
-					height: 42,
-					width: 120,
-					borderRadius: 20,
-					backgroundColor: "#FEDD00",
-					position: "absolute",
-					alignItems: "center",
-					justifyContent: "center",
-					top: 150,
-					left: 0,
-				}}
-			>
-				<Text style={{ fontSize: 11 }}>Create Store</Text>
-			</TouchableOpacity>
+
 			<TouchableOpacity
 				onPress={() => {
 					mode_data?.switchMode("buyer");
