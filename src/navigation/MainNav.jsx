@@ -83,6 +83,7 @@ export default function MainNav() {
 
 
 
+
         {/* <Stack.Screen name="auth" component={Auth}/> */}
         <Stack.Screen name="hometab" component={HomeTabs}   options={{
           headerShown: false,
@@ -150,9 +151,10 @@ export default function MainNav() {
         <Stack.Screen name="addnewproduct" component={AddNewProduct} options={{
           title: 'Add New Product',
         }} />
-        <Stack.Screen name="productlist" component={SellerProductList} />
-        <Stack.Screen name="createpost" component={CreatePost} />
-        <Stack.Screen name="selleronboard" component={SellerOnboarding} options={{title: 'Create Store'}} />
+        {/* <Stack.Screen name="productlist" component={SellerProductList} options={{
+          title: 'Product List'
+        }} /> */}
+                <Stack.Screen name="createpost" component={CreatePost} />
         <Stack.Screen name="storesettings" component={StoreSettings} />
         <Stack.Screen name="storedetails" component={StoreDetails} />
         <Stack.Screen name="storeaddress" component={StoreAddress} />
@@ -163,7 +165,7 @@ export default function MainNav() {
         <Stack.Screen name="register" component={Register} options={{headerShown: false}} />
         <Stack.Screen name="vendordash" component={VendorDashboard} />
         <Stack.Screen name="verify" component={VerifyToken} options={{headerShown: false}} />
-        {/* <Stack.Screen name="selleronboard" component={SellerOnboarding} options={{title: 'Create Store'}} /> */}
+        <Stack.Screen name="selleronboard" component={SellerOnboarding} options={{title: 'Create Store'}} />
         <Stack.Screen name="shippingmethod" component={ShippingMethod} />
         <Stack.Screen name="team" component={TeamMembers} />
         <Stack.Screen name="addteam" component={AddTeamMembers} />

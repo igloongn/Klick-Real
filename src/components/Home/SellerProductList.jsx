@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text,View,StyleSheet,TouchableOpacity,ScrollView} from "react-native"
+import {Text,View,StyleSheet,TouchableOpacity,ScrollView, Image} from "react-native"
 
 const SellerProductList = ({navigation}) => {
   return (
@@ -7,7 +7,7 @@ const SellerProductList = ({navigation}) => {
     <ScrollView>
     <Text>SellerProductList</Text>
     <View >
-    <Image style={{height:100,width:100,borderRadius:10}} source={require('../../../assets/Ellipse.png')}></Image>
+    <Image style={{height:100,width:100,borderRadius:10}} source={require('../../../assets/Ellipse.png')} />
     <Text>Car Tire</Text>
     <Text>ID: 088134NT</Text>
     <Text>N20,000</Text>

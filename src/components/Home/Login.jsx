@@ -97,11 +97,13 @@ const Login = ({ navigation }) => {
 					onPress={() => navigation.navigate("hometab")}
 					style={{
 						display: "flex",
+						position: "absolute",
 						flexDirection: "row",
 						justifyContent: "flex-start",
 						alignItems: "center",
 						marginTop: 40,
-						marginLeft: 20,
+						left: 10,
+						width: "100%",
 					}}
 				>
 					<MaterialIcons name="arrow-back" size={24} color="black" />
@@ -118,14 +120,14 @@ const Login = ({ navigation }) => {
 					</Text>
 				</TouchableOpacity>
 
-				<View style={{ marginTop: "40%" }}>
+				<View style={{ marginTop: "50%", display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center" }}> 
 					<Text>{error}</Text>
 					<Text
 						style={{
 							fontWeight: "500",
 							fontSize: 24,
 							color: "#0B0B0E",
-							marginLeft: 135,
+							// marginLeft: 135,
 							marginTop: -50,
 						}}
 					>
@@ -136,7 +138,6 @@ const Login = ({ navigation }) => {
 							fontWeight: "400",
 							fontSize: 14,
 							color: "#6A6B6C",
-							marginLeft: 60,
 						}}
 					>
 						Log into your account so you can sell or purchase on Klick.
@@ -217,7 +218,8 @@ const styles = StyleSheet.create({
 	container: {
 		display: "flex",
 		flexDirection: "column",
-		// justifyContent: "cen",
+		// justifyContent: "center",
+		alignItems: "center",
 		backgroundColor: "#FFF",
 		height: windowHeight,
 	},

@@ -260,6 +260,7 @@ const VendorDashboard = ({ navigation }) => {
 					</View>
 					<View>
 						<TouchableOpacity
+							onPress={() => navigation.navigate("productlist")}
 							style={{
 								display: "flex",
 								flexDirection: "column",
