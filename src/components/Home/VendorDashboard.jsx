@@ -49,33 +49,33 @@ const VendorDashboard = ({ navigation }) => {
 	const focused = useIsFocused();
 
 	const getShopData = async () => {
-		// try {
-		// const token = await AsyncStorage.getItem("token");
-		// console.log(token);
-		// const userresponse = await fetch(
-		// 	`https://klick-api.onrender.com/auth/user`,
-		// 	{
-		// 		method: "GET",
-		// 		mode: "no-cors",
-		// 		headers: {
-		// 			Authorization: `Bearer ${token}`,
-		// 		},
-		// 	}
-		// );
-		// const userdata = await userresponse.text();
-		// setUser(userdata);
-		// console.log(userdata);
-		// // const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
-		// //     method: "GET",
-		// //     mode: 'no-cors',
-		// //     headers: {
-		// //
-		// //       'Authorization': `Bearer ${token}`
-		// //     },
-		// // })
-		// } catch (e) {
-		// 	console.log(e);
-		// }
+		try {
+		const token = await AsyncStorage.getItem("token");
+		console.log(token);
+		const userresponse = await fetch(
+			`https://klick-api.onrender.com/auth/user`,
+			{
+				method: "GET",
+				mode: "no-cors",
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+		const userdata = await userresponse.text();
+		setUser(userdata);
+		console.log(userdata);
+		// const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
+		//     method: "GET",
+		//     mode: 'no-cors',
+		//     headers: {
+		//
+		//       'Authorization': `Bearer ${token}`
+		//     },
+		// })
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	if (mode_data?.mode === "buyer") {
@@ -125,7 +125,8 @@ const VendorDashboard = ({ navigation }) => {
 		<View style={styles.container}>
 			<ScrollView>
 				<View style={{ display: "flex", flexDirection: "row", marginTop: 60 }}>
-					<TouchableOpacity onPress={() => setModalVisible(true)}>
+					{/* <TouchableOpacity onPress={() => setModalVisible(true)}> */}
+					<TouchableOpacity onPress={() => {}}>
 						<Image
 							style={{ height: 60, width: 60, borderRadius: 50 }}
 							source={require("../../../assets/orderpic.png")}
@@ -167,7 +168,7 @@ const VendorDashboard = ({ navigation }) => {
 									marginTop: 10,
 								}}
 							>
-								No Store 
+								No Store
 							</Text>
 							<Text
 								style={{

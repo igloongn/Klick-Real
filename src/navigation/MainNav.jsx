@@ -79,6 +79,10 @@ export default function MainNav() {
         screenOptions={{ headerShown: true }}
        
       >
+
+
+
+
         {/* <Stack.Screen name="auth" component={Auth}/> */}
         <Stack.Screen name="hometab" component={HomeTabs}   options={{
           headerShown: false,
@@ -87,9 +91,9 @@ export default function MainNav() {
           
         }} />
          <Stack.Screen name="sellerstab" component={SellersTabs}   options={{
-          headerShown: false,
-          headerStyle: { elevation: 0 },
-          title: '',
+           headerShown: false,
+           headerStyle: { elevation: 0 },
+           title: '',
           
         }} />
 
@@ -97,11 +101,11 @@ export default function MainNav() {
 				name="productView"
 				component={ProductList}
 				options={{
-					title: "My Products",
+          title: "My Products",
 					// headerRight: () => (
-					// 	<TouchableOpacity onPress={() => console.log("End Icon pressed")}>
-					// 		<Text>Hello</Text>
-					// 	</TouchableOpacity>
+            // 	<TouchableOpacity onPress={() => console.log("End Icon pressed")}>
+            // 		<Text>Hello</Text>
+            // 	</TouchableOpacity>
 					// ),
 				}}
 			/>
@@ -148,6 +152,7 @@ export default function MainNav() {
         }} />
         <Stack.Screen name="productlist" component={SellerProductList} />
         <Stack.Screen name="createpost" component={CreatePost} />
+        <Stack.Screen name="selleronboard" component={SellerOnboarding} options={{title: 'Create Store'}} />
         <Stack.Screen name="storesettings" component={StoreSettings} />
         <Stack.Screen name="storedetails" component={StoreDetails} />
         <Stack.Screen name="storeaddress" component={StoreAddress} />
@@ -158,7 +163,7 @@ export default function MainNav() {
         <Stack.Screen name="register" component={Register} options={{headerShown: false}} />
         <Stack.Screen name="vendordash" component={VendorDashboard} />
         <Stack.Screen name="verify" component={VerifyToken} options={{headerShown: false}} />
-        <Stack.Screen name="selleronboard" component={SellerOnboarding} />
+        {/* <Stack.Screen name="selleronboard" component={SellerOnboarding} options={{title: 'Create Store'}} /> */}
         <Stack.Screen name="shippingmethod" component={ShippingMethod} />
         <Stack.Screen name="team" component={TeamMembers} />
         <Stack.Screen name="addteam" component={AddTeamMembers} />
