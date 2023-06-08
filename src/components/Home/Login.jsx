@@ -54,7 +54,7 @@ const Login = ({ navigation }) => {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					phone: email,
+					email,
 					password,
 				}),
 			});

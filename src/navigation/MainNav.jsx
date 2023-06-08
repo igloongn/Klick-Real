@@ -127,7 +127,7 @@ export default function MainNav() {
         <Stack.Screen name="notification" component={Notification} />
         <Stack.Screen name="socialpage" component={SocialPage} />
         <Stack.Screen name="stories" component={Stories} />
-        <Stack.Screen name="categories" component={FakeCategories} />
+        <Stack.Screen name="categories" component={FakeCategories} options={{title: 'Categories' }}/>
 
 
 

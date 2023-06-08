@@ -15,20 +15,18 @@ function CategoriesCard({navigation,route,pic,label}) {
 
 const styles = StyleSheet.create({
       mumcover:{
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         backgroundColor:"#E6E6FA",
-        borderRadius:50,
-       // marginHorizontal:20,
+        borderRadius:20,
         marginTop:20,
-        marginLeft:30
       },
       mum: {
         marginHorizontal:0,
         marginTop:0,  
-        width: 50,
-        height: 50,
-        borderRadius:50,
+        width: 70,
+        height: 70,
+        borderRadius:15,
       },
      
   });
