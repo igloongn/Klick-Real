@@ -39,6 +39,8 @@ const VerifyToken = ({ navigation, route }) => {
 		value,
 		setValue,
 	});
+	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
+	const [failedModalVisible, setFailedModalVisible] = useState(false);
 
 	const navigate = useNavigation();
 
@@ -48,7 +50,7 @@ const VerifyToken = ({ navigation, route }) => {
 				setLoading(true);
 				const token = await AsyncStorage.getItem("token");
 				console.log(token);
-				console.log(verify);
+				console.log(value);
 				const response = await fetch(API_URL + "/auth/verify", {
 					method: "POST",
 					headers: {
@@ -56,7 +58,7 @@ const VerifyToken = ({ navigation, route }) => {
 						Authorization: `Bearer ${token}`,
 					},
 					body: JSON.stringify({
-						code: verify,
+						code: value,
 					}),
 				});
 
@@ -70,23 +72,25 @@ const VerifyToken = ({ navigation, route }) => {
 
 				await AsyncStorage.setItem("isLoggedIn", "true");
 
-				Alert.alert("Verification succesful", "Verification was successful", [
-					{ text: "OK", onPress: () => navigation.navigate("hometab") },
-				]);
+				setSuccessModalVisible(true);
+				navigation.navigate("hometab");
+				// Alert.alert("Verification succesful", "Verification was successful", [
+				// 	{ text: "OK", onPress: () => navigation.navigate("hometab") },
+				// ]);
 
 				navigation.navigate("hometab");
 			} catch (error) {
 				// Handle network or other errors
 				console.error(error);
-				setSuccessModalVisible(true);
-				
-				Alert.alert("Error", "An error occured while verifying email.");
+
+				// Alert.alert("Error", "An error occured while verifying email.");
+				setFailedModalVisible(true);
 			} finally {
 				setLoading(false);
 			}
 		} else {
 			setFailedModalVisible(true);
-			Alert.alert("Error", "An error occured while verifying email.");
+			// Alert.alert("Error", "An error occured while verifying email.");
 		}
 	};
 

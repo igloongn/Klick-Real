@@ -12,13 +12,13 @@ import GeneralButton from "../General/GeneralButton";
 import { SvgUri } from "react-native-svg";
 import OpenBox from "../../utils/SVGs/openBox";
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
-    const windowWidth = Dimensions.get("window").width;
+const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const ProductList = () => {
-    const navigation = useNavigation();
+	const navigation = useNavigation();
 	return (
 		<View style={styles.container}>
 			<View
@@ -51,7 +51,7 @@ const ProductList = () => {
 							borderRadius: 10,
 						}}
 					>
-						<Text>S</Text>
+						<Text></Text>
 					</TouchableOpacity>
 					{/* Settings */}
 					<TouchableOpacity
@@ -63,10 +63,10 @@ const ProductList = () => {
 							borderRadius: 10,
 						}}
 					>
-						<Text>S</Text>
+						<Text></Text>
 					</TouchableOpacity>
 				</View>
-				<TouchableOpacity onPress={() => navigation.navigate('addnewproduct') }>
+				<TouchableOpacity onPress={() => navigation.navigate("addnewproduct")}>
 					<View
 						style={{
 							backgroundColor: "#273B4A",
@@ -121,7 +121,7 @@ const ProductList = () => {
 					style={{
 						fontSize: 16,
 						textAlign: "center",
-                        color: '#6A6B6C',
+						color: "#6A6B6C",
 					}}
 				>
 					You’re yet to add any product to your store. Products that you add

@@ -158,7 +158,7 @@ export default function MainNav() {
         <Stack.Screen name="register" component={Register} options={{headerShown: false}} />
         <Stack.Screen name="vendordash" component={VendorDashboard} />
         <Stack.Screen name="verify" component={VerifyToken} options={{headerShown: false}} />
-        <Stack.Screen name="selleronboard" component={SellerOnboarding} />
+        <Stack.Screen name="selleronboard" component={SellerOnboarding} options={{title: 'Create a Store'}}/>
         <Stack.Screen name="shippingmethod" component={ShippingMethod} />
         <Stack.Screen name="team" component={TeamMembers} />
         <Stack.Screen name="addteam" component={AddTeamMembers} />

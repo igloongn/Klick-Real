@@ -207,7 +207,7 @@ const Login = ({ navigation }) => {
 
 			{/* Login Successful Modal */}
 			<MyModal state={SuccessModalVisible} setState={setSuccessModalVisible} text={'Login Successful'} button={'Thank You'} ButtonColor={'#FEDD00'} />
-			{/* Login Successful Modal */}
+			{/* Login Failed Modal */}
 			<MyModal state={failedModalVisible} setState={setFailedModalVisible} text={'An error occured during login'} button={'Try again'} ButtonColor={'#EB270B'} />
 		</ScrollView>
 	);

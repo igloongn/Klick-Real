@@ -17,6 +17,7 @@ import { Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import axios from "axios";
 import { useBuyerSwitchVendorContext } from "../BuyerSwitchVendor";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import { useIsFocused } from "@react-navigation/native";
 
@@ -59,6 +60,7 @@ const VendorDashboard = ({ navigation }) => {
 
 			const userdata = await userresponse.text();
 			setUser(userdata);
+			console.log('!!!!!!!!!!!!!!!!!!');
 			console.log(userdata);
 			// const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
 			//     method: "GET",
@@ -137,14 +139,39 @@ const VendorDashboard = ({ navigation }) => {
 						/>
 					</Pressable>
 				</View>
+				{/* Create Store */}
+				<TouchableOpacity
+					onPress={() => {
+						getLoginData(navigation, () =>
+							navigation.navigate("selleronboard")
+						);
+					}}
+					style={{
+						height: 42,
+						width: 120,
+						borderRadius: 20,
+						backgroundColor: "#FEDD00",
+						alignItems: "center",
+						justifyContent: "center",
+						marginVertical: 20,
+					}}
+				>
+					<Text style={{ fontSize: 11 }}>Create Store</Text>
+				</TouchableOpacity>
+
 				<View
 					style={{
 						display: "flex",
 						flexDirection: "row",
 						justifyContent: "space-around",
+						marginBottom: 20,
 					}}
 				>
-					<View>
+					<View
+						style={{
+							alignSelf: "center",
+						}}
+					>
 						<TouchableOpacity
 							onPress={() => navigation.navigate("productView")}
 							style={{
@@ -160,9 +187,88 @@ const VendorDashboard = ({ navigation }) => {
 						>
 							<SimpleLineIcons name="handbag" size={24} color="white" />
 						</TouchableOpacity>
-						<Text style={{ marginLeft: -10 }}>Add Product</Text>
+						<Text style={{}}>Add Product</Text>
 					</View>
-					<View>
+					<View
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignSelf: "center",
+						}}
+					>
+						<TouchableOpacity
+							onPress={() => navigation.navigate("discounts")}
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+								justifyContent: "center",
+								height: 52,
+								width: 52,
+								backgroundColor: "#F5AF35",
+								borderRadius: 50,
+							}}
+						>
+							<AntDesign name="tagso" size={24} color={"white"} />
+						</TouchableOpacity>
+						<Text style={{ marginLeft: 0 }}>Discount</Text>
+					</View>
+					<View
+						style={{
+							alignSelf: "center",
+						}}
+					>
+						<TouchableOpacity
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+								justifyContent: "center",
+								height: 52,
+								width: 52,
+								backgroundColor: "#FEDD00",
+								borderRadius: 50,
+							}}
+						>
+							<FontAwesome5 name="store" size={24} color="white" />
+						</TouchableOpacity>
+						<Text style={{ marginLeft: 3 }}>My Store</Text>
+					</View>
+				</View>
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						justifyContent: "space-around",
+					}}
+				>
+					<View
+						style={{
+							alignSelf: "center",
+						}}
+					>
+						<TouchableOpacity
+							onPress={() => navigation.navigate("productView")}
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+								justifyContent: "center",
+								height: 52,
+								width: 52,
+								backgroundColor: "#02508B",
+								borderRadius: 50,
+							}}
+						>
+							<AntDesign name="notification" size={24} color="white" />
+						</TouchableOpacity>
+						<Text style={{ marginLeft: -10 }}>Price Ad</Text>
+					</View>
+					<View
+						style={{
+							alignSelf: "center",
+						}}
+					>
 						<TouchableOpacity
 							onPress={() => navigation.navigate("discounts")}
 							style={{
@@ -176,11 +282,15 @@ const VendorDashboard = ({ navigation }) => {
 								borderRadius: 50,
 							}}
 						>
-							<Feather name="percent" size={24} color="white" />
+							<AntDesign name="setting" size={24} color="white" />
 						</TouchableOpacity>
-						<Text style={{ marginLeft: 0 }}>Run Sales</Text>
+						<Text style={{ marginLeft: 0 }}>Settings</Text>
 					</View>
-					<View>
+					<View
+						style={{
+							alignSelf: "center",
+						}}
+					>
 						<TouchableOpacity
 							style={{
 								display: "flex",
@@ -283,24 +393,7 @@ const VendorDashboard = ({ navigation }) => {
 
 				{/* <View style={{ marginTop: 1000 }}></View> */}
 			</ScrollView>
-			<TouchableOpacity
-				onPress={() => {
-					getLoginData(navigation, () => navigation.navigate("selleronboard"));
-				}}
-				style={{
-					height: 42,
-					width: 120,
-					borderRadius: 20,
-					backgroundColor: "#FEDD00",
-					position: "absolute",
-					alignItems: "center",
-					justifyContent: "center",
-					top: 150,
-					left: 0,
-				}}
-			>
-				<Text style={{ fontSize: 11 }}>Create Store</Text>
-			</TouchableOpacity>
+
 			<TouchableOpacity
 				onPress={() => {
 					mode_data?.switchMode("buyer");
