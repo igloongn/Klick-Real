@@ -7,7 +7,6 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	Pressable,
-	Modal,
 } from "react-native";
 import SHomeCubes from "./SHomeCubes";
 import SRecentOrders from "./SRecentOrders";
@@ -20,10 +19,7 @@ import axios from "axios";
 import { useBuyerSwitchVendorContext } from "../BuyerSwitchVendor";
 
 import { useIsFocused } from "@react-navigation/native";
-import { Button } from "react-native-paper";
-import jwt_decode from "jwt-decode";
 
-// Authentication
 const getLoginData = async (navigation, alternative = () => null) => {
 	try {
 		const value = await AsyncStorage.getItem("isLoggedIn");
@@ -43,10 +39,6 @@ const VendorDashboard = ({ navigation }) => {
 	const mode_data = useBuyerSwitchVendorContext();
 	const [store, setStore] = useState(null);
 	const [user, setUser] = useState(null);
-	const [decoded, setDecoded] = useState(null);
-	const [modalVisible, setModalVisible] = useState(false);
-	const [loading, setLoading] = useState(true);
-
 	// console.log(mode_data)
 	const focused = useIsFocused();
 
@@ -64,6 +56,7 @@ const VendorDashboard = ({ navigation }) => {
 					},
 				}
 			);
+
 			const userdata = await userresponse.text();
 			setUser(userdata);
 			console.log(userdata);
@@ -83,41 +76,15 @@ const VendorDashboard = ({ navigation }) => {
 	if (mode_data?.mode === "buyer") {
 		navigation.navigate({ name: "hometab" });
 	}
-
-	// Default UseEffect
 	useEffect(() => {
-		// axios
-		// 	.get("https://klick-api.onrender.com/product/")
-		// 	.then((res) => setData(res.data.data))
-		// 	.catch((err) => console.log(res.err));
-		// //  .finally(item =>  setLoading(false))
-		// axios.get("https://klick-api.onrender.com/brand/");
-		(async () => {
-			console.log('!!!!!!Hello !!!!!!!!!!!!!!!!')
-			const data = await AsyncStorage.getItem("token");
-			var decodedToken = jwt_decode(data);
-			if (decodedToken) {
-				setDecoded(decodedToken);
-				const stores = await axios.get("https://klick-api.onrender.com/brand/");
-				if (stores) {
-					const StoreData = stores.data.data.filter(
-						(data) => data.owner === decoded.id
-					);
-					console.log("The Store Data");
-					setStore(await StoreData[0]);
-					setLoading(false);
-					console.log(store.logo);
-					console.log("!!!!!!!!!!!!!!!!!!!");
-				}
-			} else {
-				console.log("could not fetch data"); //if fail, resolve error somehow
-			}
-		})();
+		axios
+			.get("https://klick-api.onrender.com/product/")
+			.then((res) => setData(res.data.data))
+			.catch((err) => console.log(res.err));
+		//  .finally(item =>  setLoading(false))
+	}, []);
 
-		// UseEffect
-	}, [store]);
-
-	// console.log("focused", focused);
+	console.log("focused", focused);
 
 	useEffect(() => {
 		getShopData();
@@ -134,73 +101,33 @@ const VendorDashboard = ({ navigation }) => {
 		<View style={styles.container}>
 			<ScrollView>
 				<View style={{ display: "flex", flexDirection: "row", marginTop: 60 }}>
-					{/* <TouchableOpacity onPress={() => setModalVisible(true)}> */}
-					<TouchableOpacity onPress={() => {}}>
-						{loading ? (
-							<Image
-								style={{ height: 60, width: 60, borderRadius: 50 }}
-								source={require("../../../assets/old_logo.png")}
-							></Image>
-						) : (
-							<Image
-								style={{ height: 60, width: 60, borderRadius: 50 }}
-								source={{
-									uri: store?.logo,
-								}}
-							></Image>
-							// <View></View>
-						)}
-					</TouchableOpacity>
-
-					{!loading ? (
-						<View>
-							<Text
-								style={{
-									color: "#0B0B0E",
-									fontSize: 20,
-									fontWeight: "500",
-									marginLeft: 10,
-									marginTop: 10,
-								}}
-							>
-								{store.name}
-							</Text>
-							<Text
-								style={{
-									color: "#98999A",
-									fontSize: 12,
-									fontWeight: "400",
-									marginLeft: 10,
-								}}
-							>
-								Yaba, Lagos
-							</Text>
-						</View>
-					) : (
-						<View>
-							<Text
-								style={{
-									color: "#0B0B0E",
-									fontSize: 20,
-									fontWeight: "500",
-									marginLeft: 10,
-									marginTop: 10,
-								}}
-							>
-								No Store
-							</Text>
-							<Text
-								style={{
-									color: "#98999A",
-									fontSize: 12,
-									fontWeight: "400",
-									marginLeft: 10,
-								}}
-							>
-								Yaba, Lagos
-							</Text>
-						</View>
-					)}
+					<Image
+						style={{ height: 60, width: 60, borderRadius: 50 }}
+						source={require("../../../assets/orderpic.png")}
+					></Image>
+					<View>
+						<Text
+							style={{
+								color: "#0B0B0E",
+								fontSize: 20,
+								fontWeight: "500",
+								marginLeft: 10,
+								marginTop: 10,
+							}}
+						>
+							Store Name
+						</Text>
+						<Text
+							style={{
+								color: "#98999A",
+								fontSize: 12,
+								fontWeight: "400",
+								marginLeft: 10,
+							}}
+						>
+							Yaba, Lagos
+						</Text>
+					</View>
 					<Pressable onPress={() => navigation.navigate("notifications")}>
 						<AntDesign
 							name="bells"
@@ -212,42 +139,12 @@ const VendorDashboard = ({ navigation }) => {
 				</View>
 				<View
 					style={{
-						marginVertical: 20,
-					}}
-				>
-					<TouchableOpacity
-						onPress={() => {
-							// getLoginData(navigation, () => navigation.navigate("selleronboard"));
-							navigation.navigate("selleronboard");
-						}}
-						style={{
-							height: 42,
-							width: 120,
-							borderRadius: 20,
-							backgroundColor: "#FEDD00",
-							alignItems: "center",
-							justifyContent: "center",
-						}}
-					>
-						<Text style={{ fontSize: 11 }}>Create Store</Text>
-					</TouchableOpacity>
-				</View>
-
-				<View
-					style={{
 						display: "flex",
 						flexDirection: "row",
 						justifyContent: "space-around",
-						// marginLeft: 20,
 					}}
 				>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-						}}
-					>
+					<View>
 						<TouchableOpacity
 							onPress={() => navigation.navigate("productView")}
 							style={{
@@ -263,98 +160,11 @@ const VendorDashboard = ({ navigation }) => {
 						>
 							<SimpleLineIcons name="handbag" size={24} color="white" />
 						</TouchableOpacity>
-						<Text style={{}}>Add Product</Text>
+						<Text style={{ marginLeft: -10 }}>Add Product</Text>
 					</View>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-						}}
-					>
+					<View>
 						<TouchableOpacity
 							onPress={() => navigation.navigate("discounts")}
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "center",
-								justifyContent: "center",
-								height: 52,
-								width: 52,
-								backgroundColor: "#F5AF35",
-								borderRadius: 50,
-							}}
-						>
-							<Feather name="percent" size={24} color="white" />
-						</TouchableOpacity>
-						<Text style={{ marginLeft: 0 }}>Apply Discount</Text>
-					</View>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-						}}
-					>
-						<TouchableOpacity
-							onPress={() => navigation.navigate("productlist")}
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "center",
-								justifyContent: "center",
-								height: 52,
-								width: 52,
-								backgroundColor: "#FEDD00",
-								borderRadius: 50,
-							}}
-						>
-							<Octicons name="comment-discussion" size={24} color="white" />
-						</TouchableOpacity>
-						<Text style={{ marginLeft: 3 }}>View My Store</Text>
-					</View>
-				</View>
-				<View
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "space-around",
-						marginTop: 20,
-					}}
-				>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-						}}
-					>
-						<TouchableOpacity
-							onPress={() => navigation.navigate("productView")}
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "center",
-								justifyContent: "center",
-								height: 52,
-								width: 52,
-								backgroundColor: "#0485E8",
-								borderRadius: 50,
-							}}
-						>
-							<SimpleLineIcons name="handbag" size={24} color="white" />
-						</TouchableOpacity>
-						<Text style={{ marginLeft: -10 }}>Price Ad</Text>
-					</View>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-						}}
-					>
-						<TouchableOpacity
-							onPress={() => navigation.navigate("wallet")}
 							style={{
 								display: "flex",
 								flexDirection: "column",
@@ -368,15 +178,9 @@ const VendorDashboard = ({ navigation }) => {
 						>
 							<Feather name="percent" size={24} color="white" />
 						</TouchableOpacity>
-						<Text style={{ marginLeft: 0 }}>Wallet</Text>
+						<Text style={{ marginLeft: 0 }}>Run Sales</Text>
 					</View>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-						}}
-					>
+					<View>
 						<TouchableOpacity
 							style={{
 								display: "flex",
@@ -388,11 +192,10 @@ const VendorDashboard = ({ navigation }) => {
 								backgroundColor: "#EB270B",
 								borderRadius: 50,
 							}}
-							onPress={() => navigation.navigate("team")}
 						>
 							<Octicons name="comment-discussion" size={24} color="white" />
 						</TouchableOpacity>
-						<Text style={{ marginLeft: 3 }}>Team</Text>
+						<Text style={{ marginLeft: 3 }}>Support</Text>
 					</View>
 				</View>
 
@@ -480,8 +283,24 @@ const VendorDashboard = ({ navigation }) => {
 
 				{/* <View style={{ marginTop: 1000 }}></View> */}
 			</ScrollView>
-
-			{/* Switch to Buyer */}
+			<TouchableOpacity
+				onPress={() => {
+					getLoginData(navigation, () => navigation.navigate("selleronboard"));
+				}}
+				style={{
+					height: 42,
+					width: 120,
+					borderRadius: 20,
+					backgroundColor: "#FEDD00",
+					position: "absolute",
+					alignItems: "center",
+					justifyContent: "center",
+					top: 150,
+					left: 0,
+				}}
+			>
+				<Text style={{ fontSize: 11 }}>Create Store</Text>
+			</TouchableOpacity>
 			<TouchableOpacity
 				onPress={() => {
 					mode_data?.switchMode("buyer");
@@ -495,30 +314,12 @@ const VendorDashboard = ({ navigation }) => {
 					position: "absolute",
 					alignItems: "center",
 					justifyContent: "center",
-					bottom: 100,
+					bottom: 10,
 					right: 0,
 				}}
 			>
 				<Text style={{ fontSize: 11 }}>Switch to Buyer</Text>
 			</TouchableOpacity>
-
-			{/* Side Drawer Model */}
-			<View style={styles.centeredView}>
-				<Modal
-					animationType="slide"
-					transparent={true}
-					visible={modalVisible}
-					statusBarTranslucent={true}
-				>
-					<View style={styles.innercenteredView}>
-						<View style={styles.modalView}>
-							<View>
-								<Image req />
-							</View>
-						</View>
-					</View>
-				</Modal>
-			</View>
 		</View>
 	);
 };
@@ -526,63 +327,8 @@ const VendorDashboard = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		marginLeft: 20,
-	},
-	centeredView: {
-		// flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		marginTop: 22,
-		// height: '100%',
-		width: "50%",
-	},
-	innercenteredView: {
-		// flex: 1,
-
-		justifyContent: "center",
-		alignItems: "flex-start",
-		marginTop: 22,
-	},
-	modalView: {
-		marginVertical: 20,
-		marginHorizontal: 1,
-		backgroundColor: "white",
-		borderRadius: 20,
-		padding: 35,
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 4,
-		elevation: 9,
-		width: "50%",
-		height: "100%",
-
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	button: {
-		borderRadius: 20,
-		padding: 10,
-		elevation: 2,
-	},
-	buttonOpen: {
-		backgroundColor: "#F194FF",
-	},
-	buttonClose: {
-		backgroundColor: "#2196F3",
-	},
-	textStyle: {
-		color: "white",
-		fontWeight: "bold",
-		textAlign: "center",
-	},
-	modalText: {
-		marginBottom: 15,
-		textAlign: "center",
+		//   alignItems: 'center',
+		//   justifyContent: 'center',
 	},
 });
 

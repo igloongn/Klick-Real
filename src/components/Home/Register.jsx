@@ -20,10 +20,10 @@ import { TextInput } from "react-native-paper";
 import MyModal from "../../utils/MyModal";
 
 const Register = ({ navigation }) => {
-	const [email, setEmail] = useState("q@q.com");
-	const [firstName, setFirstName] = useState("james");
-	const [lastName, setLastName] = useState("lol");
-	const [phone, setPhone] = useState("0994938725");
+	const [email, setEmail] = useState("");
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [phone, setPhone] = useState("");
 	const [password, setPassword] = useState("11111111");
 	const [confirmPassword, setConfirmPassword] = useState("11111111");
 
@@ -128,144 +128,142 @@ const Register = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			<ScrollView>
-				<View style={{ marginTop: "10%", display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center" }}> 
-					<View
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "column",
+						flex: 1,
+						alignItems: "center",
+						justifyContent: "center",
+						padding: 20,
+					}}
+				>
+					<Text
 						style={{
-							display: "flex",
-							flexDirection: "column",
-							flex: 1,
-							alignItems: "center",
-							justifyContent: "center",
-							padding: 20,
+							fontWeight: "500",
+							fontSize: 24,
+							color: "#0B0B0E",
 						}}
 					>
-						<Text
-							style={{
-								fontWeight: "500",
-								fontSize: 24,
-								color: "#0B0B0E",
-							}}
-						>
-							Create your Klick Account
-						</Text>
-						<Text
-							style={{
-								fontWeight: "400",
-								fontSize: 14,
-								color: "#6A6B6C",
-							}}
-						>
-							Register an account so you can start selling on Klick.
-						</Text>
+						Create your Klick Account
+					</Text>
+					<Text
+						style={{
+							fontWeight: "400",
+							fontSize: 14,
+							color: "#6A6B6C",
+						}}
+					>
+						Register an account so you can start selling on Klick.
+					</Text>
+				</View>
+				<GeneralInput
+					placeholder={"John"}
+					name="FirstName"
+					width={335}
+					value={firstName}
+					onChangeValue={(text) => setFirstName(text)}
+				/>
+				<GeneralInput
+					placeholder={"Doe"}
+					name="LastName"
+					width={335}
+					value={lastName}
+					onChangeValue={(text) => setLastName(text)}
+				/>
+				<GeneralInput
+					placeholder={"johndoe@gmail.com"}
+					name="Email"
+					width={335}
+					value={email}
+					onChangeValue={(text) => setEmail(text)}
+					inputMode="email"
+				/>
+
+				<View style={styles.innerContainer}>
+					<View style={{ width: "85%" }}>
+						<Text style={styles.text}>{"Phone number"}</Text>
 					</View>
-					<GeneralInput
-						placeholder={"John"}
-						name="FirstName"
-						width={335}
-						value={firstName}
-						onChangeValue={(text) => setFirstName(text)}
-					/>
-					<GeneralInput
-						placeholder={"Doe"}
-						name="LastName"
-						width={335}
-						value={lastName}
-						onChangeValue={(text) => setLastName(text)}
-					/>
-					<GeneralInput
-						placeholder={"johndoe@gmail.com"}
-						name="Email"
-						width={335}
-						value={email}
-						onChangeValue={(text) => setEmail(text)}
-						inputMode="email"
-					/>
-
-					<View style={styles.innerContainer}>
-						<View style={{ width: "85%" }}>
-							<Text style={styles.text}>{"Phone number"}</Text>
-						</View>
-						<View style={styles.inputContainer}>
-							<Text style={styles.prefix}>+234</Text>
-							<TextInput
-								placeholder={"e.g 9062056518 (whatsapp no.)"}
-								style={styles.input}
-								onChangeText={(text) => setPhone(text)}
-								value={phone}
-								inputMode="tel"
-								error={inputError.phone}
-							/>
-						</View>
-					</View>
-
-					{/* Password */}
-					<GeneralInput
-						name="Password"
-						width={335}
-						value={password}
-						onChangeValue={(text) => setPassword(text)}
-						error={inputError.password}
-						password={true}
-					/>
-
-					{/* Confirm Password */}
-					<GeneralInput
-						name="Confirm Password"
-						width={335}
-						value={confirmPassword}
-						onChangeValue={(text) => setConfirmPassword(text)}
-						password={true}
-					/>
-
-					<TouchableOpacity onPress={() => registerUser()}>
-						<GeneralButton
-							backgroundColor={"#FEDD00"}
-							message={loading ? "Loading ....." : "Sign Up"}
-							width={335}
-							height={54}
-							borderColor={"#FEDD00"}
-							marginLeft={130}
-							top={15}
-							marginHorizintal={40}
-							marginTop={30}
+					<View style={styles.inputContainer}>
+						<Text style={styles.prefix}>+234</Text>
+						<TextInput
+							placeholder={"e.g 9062056518 (whatsapp no.)"}
+							style={styles.input}
+							onChangeText={(text) => setPhone(text)}
+							value={phone}
+							inputMode="tel"
+							error={inputError.phone}
 						/>
-					</TouchableOpacity>
-					{loading && <ActivityIndicator size="large" />}
+					</View>
+				</View>
 
-					<View
+				{/* Password */}
+				<GeneralInput
+					name="Password"
+					width={335}
+					value={password}
+					onChangeValue={(text) => setPassword(text)}
+					error={inputError.password}
+					password={true}
+				/>
+
+				{/* Confirm Password */}
+				<GeneralInput
+					name="Confirm Password"
+					width={335}
+					value={confirmPassword}
+					onChangeValue={(text) => setConfirmPassword(text)}
+					password={true}
+				/>
+
+				<TouchableOpacity onPress={() => registerUser()}>
+					<GeneralButton
+						backgroundColor={"#FEDD00"}
+						message={loading ? "Loading ....." : "Continue"}
+						width={335}
+						height={54}
+						borderColor={"#FEDD00"}
+						marginLeft={130}
+						top={15}
+						marginHorizintal={40}
+						marginTop={30}
+					/>
+				</TouchableOpacity>
+				{loading && <ActivityIndicator size="large" />}
+
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						// backgroundColor: 'red'
+						justifyContent: "center",
+						alignContent: "center",
+						marginTop: 20,
+					}}
+				>
+					<Text
 						style={{
-							display: "flex",
-							flexDirection: "row",
-							// backgroundColor: 'red'
-							justifyContent: "center",
-							alignContent: "center",
-							marginTop: 20,
+							fontWeight: "500",
+							fontSize: 20,
+							color: "#0B0B0E",
 						}}
 					>
+						Have an account?{" "}
+					</Text>
+					<Pressable onPress={() => navigation.navigate("login")}>
 						<Text
 							style={{
 								fontWeight: "500",
 								fontSize: 20,
-								color: "#0B0B0E",
+								color: "blue",
 							}}
 						>
-							Have an account?{" "}
+							Log in
 						</Text>
-						<Pressable onPress={() => navigation.navigate("login")}>
-							<Text
-								style={{
-									fontWeight: "500",
-									fontSize: 20,
-									color: "blue",
-								}}
-							>
-								Log in
-							</Text>
-						</Pressable>
-					</View>
-
-					<View style={{ marginTop: 50 }} />
+					</Pressable>
 				</View>
+
+				<View style={{ marginTop: 50 }} />
 			</ScrollView>
 
 			{/* Login Successful Modal */}

@@ -54,7 +54,7 @@ const Login = ({ navigation }) => {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					email,
+					phone: email,
 					password,
 				}),
 			});
@@ -97,13 +97,11 @@ const Login = ({ navigation }) => {
 					onPress={() => navigation.navigate("hometab")}
 					style={{
 						display: "flex",
-						position: "absolute",
 						flexDirection: "row",
 						justifyContent: "flex-start",
 						alignItems: "center",
 						marginTop: 40,
-						left: 10,
-						width: "100%",
+						marginLeft: 20,
 					}}
 				>
 					<MaterialIcons name="arrow-back" size={24} color="black" />
@@ -120,14 +118,14 @@ const Login = ({ navigation }) => {
 					</Text>
 				</TouchableOpacity>
 
-				<View style={{ marginTop: "50%", display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center" }}> 
+				<View style={{ marginTop: "40%" }}>
 					<Text>{error}</Text>
 					<Text
 						style={{
 							fontWeight: "500",
 							fontSize: 24,
 							color: "#0B0B0E",
-							// marginLeft: 135,
+							marginLeft: 135,
 							marginTop: -50,
 						}}
 					>
@@ -138,6 +136,7 @@ const Login = ({ navigation }) => {
 							fontWeight: "400",
 							fontSize: 14,
 							color: "#6A6B6C",
+							marginLeft: 60,
 						}}
 					>
 						Log into your account so you can sell or purchase on Klick.
@@ -159,7 +158,7 @@ const Login = ({ navigation }) => {
 					<TouchableOpacity onPress={() => login()}>
 						<GeneralButton
 							backgroundColor={"#FEDD00"}
-							message={loading ? "Loading ....." : "Login"}
+							message={loading ? "Loading ....." : "Continue"}
 							width={335}
 							height={54}
 							borderColor={"#FEDD00"}
@@ -218,8 +217,7 @@ const styles = StyleSheet.create({
 	container: {
 		display: "flex",
 		flexDirection: "column",
-		// justifyContent: "center",
-		alignItems: "center",
+		// justifyContent: "cen",
 		backgroundColor: "#FFF",
 		height: windowHeight,
 	},

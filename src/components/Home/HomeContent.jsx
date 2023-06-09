@@ -177,8 +177,6 @@ const HomeContent = ({ navigation }) => {
 
 	console.log(showGallery);
 
-	AsyncStorage.getItem("token").then((res) => console.log(res));
-
 	return (
 		<View>
 			<View
@@ -186,7 +184,7 @@ const HomeContent = ({ navigation }) => {
 					display: "flex",
 					flexDirection: "row",
 					justifyContent: "space-between",
-					marginTop: 50,
+					paddingTop: 50,
 				}}
 			>
 				<Image
@@ -195,7 +193,7 @@ const HomeContent = ({ navigation }) => {
 				></Image>
 				{isLoggedIn ? (
 					<View style={{ marginTop: 5 }}>
-						<Text
+						{/* <Text
 							style={{
 								fontSize: 12,
 								fontWeight: "400",
@@ -203,9 +201,9 @@ const HomeContent = ({ navigation }) => {
 								marginRight: 30,
 							}}
 						>
-							
+							Location
 						</Text>
-						<Text style={styles.central}></Text>
+						<Text style={styles.central}>Central Ikoyi</Text> */}
 					</View>
 				) : (
 					<>
@@ -214,13 +212,9 @@ const HomeContent = ({ navigation }) => {
 								marginLeft: 20,
 								display: "flex",
 								paddingHorizontal: 20,
-								marginHorizontal: 20,
-								marginVertical: 10,
 								borderRadius: 10,
-								// justifyContent: "center",
-								alignSelf: "center",
-								height: 40,
 								justifyContent: "center",
+								alignItems: "center",
 								backgroundColor: "#FEDD00",
 							}}
 							onPress={() => navigation.navigate("login")}
@@ -266,25 +260,17 @@ const HomeContent = ({ navigation }) => {
         </View>
                 </View>
             </View> */}
-			<ScrollView style={styles.scrollView}>
+			<ScrollView style={[styles.scrollView]}>
 				<View
 					style={{
+						marginVertical: 10,
 						flexDirection: "row",
-						paddingHorizontal: 10,
-						paddingVertical: 5,
-						backgroundColor: "#f2f2f2",
 						alignItems: "center",
-						paddingVertical: 10,
+						paddingHorizontal: 12,
 					}}
 				>
 					<TextInput
-						style={{
-							flex: 1,
-							height: 40,
-							borderRadius: 5,
-							paddingHorizontal: 10,
-							backgroundColor: "white",
-						}}
+						style={[styles.input, { flex: 1 }]}
 						onChangeSearch={onChangeSearch}
 						value={search}
 						placeholder="Looking for something Amazing?"
@@ -294,7 +280,7 @@ const HomeContent = ({ navigation }) => {
 						name="search-outline"
 						size={24}
 						color="#6A6B6C"
-						style={{ marginLeft: 10 }}
+						style={{ marginRight: 8 }}
 					/>
 				</View>
 
@@ -326,7 +312,7 @@ const HomeContent = ({ navigation }) => {
 					style={{
 						fontWeight: "500",
 						fontSize: 16,
-						marginTop: 20,
+						marginTop: 10,
 						marginHorizontal: 20,
 					}}
 				>
@@ -339,31 +325,31 @@ const HomeContent = ({ navigation }) => {
 						flexDirection: "row",
 						justifyContent: "space-around",
 						alignItems: "center",
-						height: 100,
+						marginHorizontal: 20,
 					}}
 				>
 					<CategoriesCard
 						navigation={navigation}
 						pic={require("../../../assets/1.png")}
-						label={"Mum"}
+						label={"mum"}
 						route={"categories"}
 					/>
 					<CategoriesCard
 						navigation={navigation}
 						pic={require("../../../assets/1.png")}
-						label={"Mum"}
+						label={"mum"}
 						route={"categories"}
 					/>
 					<CategoriesCard
 						navigation={navigation}
 						pic={require("../../../assets/2.png")}
-						label={"Baby"}
+						label={"baby"}
 						route={"categories"}
 					/>
 					<CategoriesCard
 						navigation={navigation}
 						pic={require("../../../assets/3.png")}
-						label={"Electron"}
+						label={"electron"}
 						route={"categories"}
 					/>
 				</View>
@@ -373,62 +359,45 @@ const HomeContent = ({ navigation }) => {
 						flexDirection: "row",
 						justifyContent: "space-around",
 						alignItems: "center",
-						height: 100,
+						marginHorizontal: 20,
+            marginVertical: 40,
 					}}
 				>
 					<CategoriesCard
 						navigation={navigation}
 						pic={require("../../../assets/4.png")}
-						label={"Homeware"}
+						label={"homeware"}
 						route={"categories"}
 					/>
 					<CategoriesCard
 						navigation={navigation}
 						pic={require("../../../assets/5.png")}
-						label={"Health"}
+						label={"health"}
 						route={"categories"}
 					/>
 					<CategoriesCard
 						navigation={navigation}
 						pic={require("../../../assets/6.png")}
-						label={"Beauty"}
+						label={"beauty"}
 						route={"categories"}
 					/>
-					{/* More */}
-					<TouchableOpacity
-						onPress={() => {
-							navigation.navigate("categories");
-						}}
-					>
-						<View
-							style={{
-								width: 70,
-								height: 70,
-								backgroundColor: "#E6E6FA",
-								borderRadius: 20,
-								marginTop: 60,
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-						>
-							<View
-								style={{
-									width: 20,
-									height: 20,
-									borderRadius: 50,
-									backgroundColor: "blue",
-								}}
-							/>
-						</View>
-						<Text style={{ marginLeft: 5 }}>{"More"}</Text>
-					</TouchableOpacity>
+					<CategoriesCard
+						navigation={navigation}
+						pic={require("../../../assets/7.png")}
+						label={"fashion"}
+						route={"categories"}
+					/>
 				</View>
+				<View
+					style={{
+						marginTop: 30,
+					}}
+				></View>
 				<Text
 					style={{
 						fontWeight: "500",
 						fontSize: 16,
-						marginTop: 50,
+						marginTop: 20,
 						marginHorizontal: 15,
 					}}
 				>
@@ -528,26 +497,24 @@ const HomeContent = ({ navigation }) => {
 
 				<View style={{ marginTop: 400 }}></View>
 			</ScrollView>
-			{isLoggedIn && (
-				<TouchableOpacity
-					onPress={() => {
-						mode_data?.switchMode("vendor");
-					}}
-					style={{
-						height: 42,
-						width: 120,
-						borderRadius: 20,
-						backgroundColor: "#FEDD00",
-						position: "absolute",
-						alignItems: "center",
-						justifyContent: "center",
-						bottom: 180,
-						right: 0,
-					}}
-				>
-					<Text style={{ fontSize: 11 }}>Switch to Seller</Text>
-				</TouchableOpacity>
-			)}
+			<TouchableOpacity
+				onPress={() => {
+					mode_data?.switchMode("vendor");
+				}}
+				style={{
+					height: 42,
+					width: 120,
+					borderRadius: 20,
+					backgroundColor: "#FEDD00",
+					position: "absolute",
+					alignItems: "center",
+					justifyContent: "center",
+					bottom: 180,
+					right: 0,
+				}}
+			>
+				<Text style={{ fontSize: 11 }}>Switch to Seller</Text>
+			</TouchableOpacity>
 		</View>
 	);
 };
@@ -599,7 +566,6 @@ const styles = StyleSheet.create({
 	input: {
 		height: 40,
 		margin: 12,
-		marginTop: 40,
 		borderWidth: 1,
 		padding: 10,
 		borderColor: "#98999A",

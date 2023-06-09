@@ -55,7 +55,7 @@ export const BuyerSwitchVendor = ({ children }) => {
 				button="Good"
 				state={SuccessModalVisible}
 				setState={setSuccessModalVisible}
-			/>			
+			/>
 			<ModalFunc
 				text="An error occured during switching"
 				button="Try Again"

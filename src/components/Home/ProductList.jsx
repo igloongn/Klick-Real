@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
 	Text,
 	View,
@@ -6,65 +6,19 @@ import {
 	Image,
 	TouchableOpacity,
 	ScrollView,
-	FlatList,
 } from "react-native";
 import { Dimensions } from "react-native";
 import GeneralButton from "../General/GeneralButton";
 import { SvgUri } from "react-native-svg";
 import OpenBox from "../../utils/SVGs/openBox";
 
-import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwtDecode from "jwt-decode";
-import Product from "./Product";
+import { useNavigation } from '@react-navigation/native';
 
-const windowWidth = Dimensions.get("window").width;
+    const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const ProductList = () => {
-	const navigation = useNavigation();
-	const [userData, setUserData] = useState(null);
-	const [productList, setProductList] = useState([]);
-	const [loading, setLoading] = useState(true);
-	useEffect(() => {
-		getData = async () => {
-			// axios.get('https://klick-api.onrender.com/product/store/product?')
-			console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			const access_token = await AsyncStorage.getItem("token");
-			const userData = jwtDecode(access_token);
-			// console.log('!!!!!!!!!!!!!!!!!!!!!!!!!')
-			// console.log(userData)
-			// console.log(userData)
-			// setUserData(userData)
-			const res = await axios.get("https://klick-api.onrender.com/brand");
-			// console.log(res.data.data)
-			const Full = res.data.data;
-			// console.log(Full)
-			const store = Full.filter((res) => res.owner === userData.id);
-			storeData = store[0];
-			// console.log(storeData.id)
-			const response = await axios.get(
-				`https://klick-api.onrender.com/product/store/product?` + store[0].id,
-				{
-					headers: {
-						Authorization: "Bearer " + access_token,
-					},
-				}
-			);
-			console.log(response.data.data);
-			setProductList(response.data.data);
-			setLoading(false);
-		};
-		getData();
-	}, []);
-	const renderCard = ({ item }) => {
-		return (
-			<Product
-				item={item}
-			/>
-		);
-	};
+    const navigation = useNavigation();
 	return (
 		<View style={styles.container}>
 			<View
@@ -97,7 +51,7 @@ const ProductList = () => {
 							borderRadius: 10,
 						}}
 					>
-						{/* <Text>S</Text> */}
+						<Text>S</Text>
 					</TouchableOpacity>
 					{/* Settings */}
 					<TouchableOpacity
@@ -109,10 +63,10 @@ const ProductList = () => {
 							borderRadius: 10,
 						}}
 					>
-						{/* <Text>S</Text> */}
+						<Text>S</Text>
 					</TouchableOpacity>
 				</View>
-				<TouchableOpacity onPress={() => navigation.navigate("addnewproduct")}>
+				<TouchableOpacity onPress={() => navigation.navigate('addnewproduct') }>
 					<View
 						style={{
 							backgroundColor: "#273B4A",
@@ -129,7 +83,7 @@ const ProductList = () => {
 							paddingHorizontal: 10,
 						}}
 					>
-						<Text style={{ fontSize: 20 }}>{"+  "}</Text>
+						<Text style={{ fontSize: 20 }}>{"+   "}</Text>
 						<Text
 							style={{
 								fontWeight: "500",
@@ -152,46 +106,28 @@ const ProductList = () => {
 				</TouchableOpacity>
 			</View>
 			{/* Body */}
-			{loading ? (
-				<View>
-					<OpenBox />
-					<Text
-						style={{
-							fontSize: 25,
-							fontWeight: 400,
-							textAlign: "center",
-						}}
-					>
-						No Product Found
-					</Text>
-					<Text
-						style={{
-							fontSize: 16,
-							textAlign: "center",
-							color: "#6A6B6C",
-						}}
-					>
-						You’re yet to add any product to your store. Products that you add
-						will appear here
-					</Text>
-				</View>
-			) : (
-				<View
+			<View>
+				<OpenBox />
+				<Text
 					style={{
-						flexDirection: "column",
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						width: windowWidth,
+						fontSize: 25,
+						fontWeight: 400,
+						textAlign: "center",
 					}}
 				>
-					<FlatList
-						data={productList}
-						renderItem={renderCard}
-						keyExtractor={(item) => item.id}
-					/>
-				</View>
-			)}
+					No Product Found
+				</Text>
+				<Text
+					style={{
+						fontSize: 16,
+						textAlign: "center",
+                        color: '#6A6B6C',
+					}}
+				>
+					You’re yet to add any product to your store. Products that you add
+					will appear here
+				</Text>
+			</View>
 		</View>
 	);
 };

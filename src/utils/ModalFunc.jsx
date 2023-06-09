@@ -31,13 +31,13 @@ const ModalFunc = ({ text, button, state, setState, ButtonColor='#FEDD00' }) => 
 };
 const styles = StyleSheet.create({
 	centeredView: {
-        position: 'absolute',
-        height: '100%',
-        width: '100%',
+		position: "absolute",
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
 		marginTop: 22,
+		height: '100%',
+		width: '100%',
 	},
 	modalView: {
 		margin: 20,

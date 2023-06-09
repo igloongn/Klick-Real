@@ -27,8 +27,9 @@ import MyModal from "../../utils/MyModal";
 const CELL_COUNT = 4;
 
 const VerifyToken = ({ navigation, route }) => {
-	// const email = route.params.email;
-	const email = "q@q.com";
+	const email = route.params.email;
+
+	const [verify, setVerify] = useState("");
 
 	const [loading, setLoading] = useState(false);
 
@@ -39,9 +40,6 @@ const VerifyToken = ({ navigation, route }) => {
 		setValue,
 	});
 
-	const [emptyModalVisible, setEmptyModalVisible] = useState(false);
-	const [failedModalVisible, setFailedModalVisible] = useState(false);
-
 	const navigate = useNavigation();
 
 	const registerUser = async () => {
@@ -50,9 +48,7 @@ const VerifyToken = ({ navigation, route }) => {
 				setLoading(true);
 				const token = await AsyncStorage.getItem("token");
 				console.log(token);
-
-				console.log("!!!!!!!!!!!!!!!!");
-				console.log(value);
+				console.log(verify);
 				const response = await fetch(API_URL + "/auth/verify", {
 					method: "POST",
 					headers: {
@@ -60,7 +56,7 @@ const VerifyToken = ({ navigation, route }) => {
 						Authorization: `Bearer ${token}`,
 					},
 					body: JSON.stringify({
-						code: value,
+						code: verify,
 					}),
 				});
 
@@ -74,22 +70,23 @@ const VerifyToken = ({ navigation, route }) => {
 
 				await AsyncStorage.setItem("isLoggedIn", "true");
 
-				// Alert.alert("Verification succesful", "Verification was successful", [
-				// 	{ text: "OK", onPress: () => navigation.navigate("hometab") },
-				// ]);
+				Alert.alert("Verification succesful", "Verification was successful", [
+					{ text: "OK", onPress: () => navigation.navigate("hometab") },
+				]);
 
 				navigation.navigate("hometab");
 			} catch (error) {
 				// Handle network or other errors
 				console.error(error);
-				// Alert.alert("Error", "An error occured while verifying email.");
-				setFailedModalVisible(true);
+				setSuccessModalVisible(true);
+				
+				Alert.alert("Error", "An error occured while verifying email.");
 			} finally {
 				setLoading(false);
 			}
 		} else {
-			// Alert.alert("Error", "An error occured while verifying email.");
-			setEmptyModalVisible(true);
+			setFailedModalVisible(true);
+			Alert.alert("Error", "An error occured while verifying email.");
 		}
 	};
 
@@ -176,19 +173,21 @@ const VerifyToken = ({ navigation, route }) => {
 
 				<View style={{ marginTop: 50 }} />
 			</ScrollView>
+			{/* Login Successful Modal */}
 			<MyModal
-				text={"Please input can not be empty"}
-				button={"Try again"}
-				ButtonColor="#EB270B"
-				state={emptyModalVisible}
-				setState={setEmptyModalVisible}
-			/>			
+				state={SuccessModalVisible}
+				setState={setSuccessModalVisible}
+				text={"Login Successful"}
+				button={"Thank You"}
+				ButtonColor={"#FEDD00"}
+			/>
+			{/* Login Successful Modal */}
 			<MyModal
-				text={"Please input the correct code"}
-				button={"Try again"}
-				ButtonColor="#EB270B"
 				state={failedModalVisible}
 				setState={setFailedModalVisible}
+				text={"An error occured during login"}
+				button={"Try again"}
+				ButtonColor={"#EB270B"}
 			/>
 		</SafeAreaView>
 	);
