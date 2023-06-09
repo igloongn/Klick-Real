@@ -203,9 +203,9 @@ const HomeContent = ({ navigation }) => {
 								marginRight: 30,
 							}}
 						>
-							Location
+							
 						</Text>
-						<Text style={styles.central}>Central Ikoyi</Text>
+						<Text style={styles.central}></Text>
 					</View>
 				) : (
 					<>

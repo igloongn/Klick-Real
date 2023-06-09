@@ -220,7 +220,7 @@ const Register = ({ navigation }) => {
 					<TouchableOpacity onPress={() => registerUser()}>
 						<GeneralButton
 							backgroundColor={"#FEDD00"}
-							message={loading ? "Loading ....." : "Continue"}
+							message={loading ? "Loading ....." : "Sign Up"}
 							width={335}
 							height={54}
 							borderColor={"#FEDD00"}

@@ -22,13 +22,13 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import API_URL from "../../settings";
+import MyModal from "../../utils/MyModal";
 
 const CELL_COUNT = 4;
 
 const VerifyToken = ({ navigation, route }) => {
-    const email = route.params.email;
-
-    const [verify, setVerify] = useState("");
+	// const email = route.params.email;
+	const email = "q@q.com";
 
 	const [loading, setLoading] = useState(false);
 
@@ -39,6 +39,9 @@ const VerifyToken = ({ navigation, route }) => {
 		setValue,
 	});
 
+	const [emptyModalVisible, setEmptyModalVisible] = useState(false);
+	const [failedModalVisible, setFailedModalVisible] = useState(false);
+
 	const navigate = useNavigation();
 
 	const registerUser = async () => {
@@ -47,7 +50,9 @@ const VerifyToken = ({ navigation, route }) => {
 				setLoading(true);
 				const token = await AsyncStorage.getItem("token");
 				console.log(token);
-				console.log(verify);
+
+				console.log("!!!!!!!!!!!!!!!!");
+				console.log(value);
 				const response = await fetch(API_URL + "/auth/verify", {
 					method: "POST",
 					headers: {
@@ -55,7 +60,7 @@ const VerifyToken = ({ navigation, route }) => {
 						Authorization: `Bearer ${token}`,
 					},
 					body: JSON.stringify({
-						code: verify,
+						code: value,
 					}),
 				});
 
@@ -69,27 +74,36 @@ const VerifyToken = ({ navigation, route }) => {
 
 				await AsyncStorage.setItem("isLoggedIn", "true");
 
-				Alert.alert("Verification succesful", "Verification was successful", [
-					{ text: "OK", onPress: () => navigation.navigate("hometab") },
-				]);
+				// Alert.alert("Verification succesful", "Verification was successful", [
+				// 	{ text: "OK", onPress: () => navigation.navigate("hometab") },
+				// ]);
 
 				navigation.navigate("hometab");
 			} catch (error) {
 				// Handle network or other errors
 				console.error(error);
-				Alert.alert("Error", "An error occured while verifying email.");
+				// Alert.alert("Error", "An error occured while verifying email.");
+				setFailedModalVisible(true);
 			} finally {
 				setLoading(false);
 			}
 		} else {
-			Alert.alert("Error", "An error occured while verifying email.");
+			// Alert.alert("Error", "An error occured while verifying email.");
+			setEmptyModalVisible(true);
 		}
 	};
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView style={{ display: "flex", flexDirection: "column"}}>
-                <View style={{display: "flex", flexDirection: "column", alignItems: 'flex-start', marginBottom: 20}}>
+			<ScrollView style={{ display: "flex", flexDirection: "column" }}>
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "flex-start",
+						marginBottom: 20,
+					}}
+				>
 					<Text
 						style={{
 							fontWeight: "500",
@@ -107,8 +121,7 @@ const VerifyToken = ({ navigation, route }) => {
 							color: "#6A6B6C",
 						}}
 					>
-						Kindly input the 4-digit verification code sent to
-						“{email}”
+						Kindly input the 4-digit verification code sent to “{email}”
 					</Text>
 				</View>
 				{/* <Text style={{fontWeight:"400", fontSize:14, color:"#6A6B6C",marginLeft:70}}>Register an account so you can start selling on Klick.</Text> */}
@@ -163,6 +176,20 @@ const VerifyToken = ({ navigation, route }) => {
 
 				<View style={{ marginTop: 50 }} />
 			</ScrollView>
+			<MyModal
+				text={"Please input can not be empty"}
+				button={"Try again"}
+				ButtonColor="#EB270B"
+				state={emptyModalVisible}
+				setState={setEmptyModalVisible}
+			/>			
+			<MyModal
+				text={"Please input the correct code"}
+				button={"Try again"}
+				ButtonColor="#EB270B"
+				state={failedModalVisible}
+				setState={setFailedModalVisible}
+			/>
 		</SafeAreaView>
 	);
 };
@@ -181,8 +208,8 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		borderColor: "#00000030",
 		textAlign: "center",
-        marginBottom: 30,
-        borderRadius: 10
+		marginBottom: 30,
+		borderRadius: 10,
 	},
 	focusCell: {
 		borderColor: "#000",

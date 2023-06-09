@@ -1,32 +1,13 @@
 import React, { useState, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
+import { Alert, Text } from "react-native";
 import MyModal from "../utils/MyModal";
+import ModalFunc from "../utils/ModalFunc";
 const BuyerSwitchVendorContext = React.createContext();
 
 export const BuyerSwitchVendor = ({ children }) => {
-	const [SuccessModalVisible, setSuccessModalVisible] = useState(true);
+	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
-	{
-		/* Login Successful Modal */
-	}
-	<MyModal
-		state={SuccessModalVisible}
-		setState={setSuccessModalVisible}
-		text={"User switched succesfully"}
-		button={"Thank You"}
-		ButtonColor={"#FEDD00"}
-	/>;
-	{
-		/* Login Successful Modal */
-	}
-	<MyModal
-		state={failedModalVisible}
-		setState={setFailedModalVisible}
-		text={"An error occured during switching"}
-		button={"Try again"}
-		ButtonColor={"#EB270B"}
-	/>;
 
 	const [mode, setMode] = useState("buyer");
 
@@ -51,8 +32,8 @@ export const BuyerSwitchVendor = ({ children }) => {
 				const _data = await response.json();
 				console.log("y", _data);
 				setMode(type);
-				Alert.alert("Success", "user switched succesfully");
-				// setSuccessModalVisible(true);
+				// Alert.alert("Success", "user switched succesfully");
+				setSuccessModalVisible(true);
 			} else {
 				throw Error("");
 			}
@@ -69,6 +50,18 @@ export const BuyerSwitchVendor = ({ children }) => {
 	};
 	return (
 		<>
+			<ModalFunc
+				text="User switched succesfully"
+				button="Good"
+				state={SuccessModalVisible}
+				setState={setSuccessModalVisible}
+			/>			
+			<ModalFunc
+				text="An error occured during switching"
+				button="Try Again"
+				state={failedModalVisible}
+				setState={setFailedModalVisible}
+			/>
 			<BuyerSwitchVendorContext.Provider value={value}>
 				{children}
 			</BuyerSwitchVendorContext.Provider>

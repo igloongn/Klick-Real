@@ -43,36 +43,38 @@ const VendorDashboard = ({ navigation }) => {
 	const mode_data = useBuyerSwitchVendorContext();
 	const [store, setStore] = useState(null);
 	const [user, setUser] = useState(null);
+	const [decoded, setDecoded] = useState(null);
 	const [modalVisible, setModalVisible] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	// console.log(mode_data)
 	const focused = useIsFocused();
 
 	const getShopData = async () => {
 		try {
-		const token = await AsyncStorage.getItem("token");
-		console.log(token);
-		const userresponse = await fetch(
-			`https://klick-api.onrender.com/auth/user`,
-			{
-				method: "GET",
-				mode: "no-cors",
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		);
-		const userdata = await userresponse.text();
-		setUser(userdata);
-		console.log(userdata);
-		// const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
-		//     method: "GET",
-		//     mode: 'no-cors',
-		//     headers: {
-		//
-		//       'Authorization': `Bearer ${token}`
-		//     },
-		// })
+			const token = await AsyncStorage.getItem("token");
+			console.log(token);
+			const userresponse = await fetch(
+				`https://klick-api.onrender.com/auth/user`,
+				{
+					method: "GET",
+					mode: "no-cors",
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			const userdata = await userresponse.text();
+			setUser(userdata);
+			console.log(userdata);
+			// const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
+			//     method: "GET",
+			//     mode: 'no-cors',
+			//     headers: {
+			//
+			//       'Authorization': `Bearer ${token}`
+			//     },
+			// })
 		} catch (e) {
 			console.log(e);
 		}
@@ -90,25 +92,32 @@ const VendorDashboard = ({ navigation }) => {
 		// 	.catch((err) => console.log(res.err));
 		// //  .finally(item =>  setLoading(false))
 		// axios.get("https://klick-api.onrender.com/brand/");
-		const getUser = async () => {
+		(async () => {
+			console.log('!!!!!!Hello !!!!!!!!!!!!!!!!')
 			const data = await AsyncStorage.getItem("token");
 			var decodedToken = jwt_decode(data);
-			setUser(decodedToken);
-		};
-		getUser();
-		const getStoreDetails = async () => {
-			const stores = await axios.get("https://klick-api.onrender.com/brand/");
-			const StoreData = stores.data.data.filter(
-				(data) => data.owner === user.id
-			);
-			console.log("The Store Data");
-			console.log(StoreData);
-			setStore(StoreData);
-		};
-		getStoreDetails();
-	}, []);
+			if (decodedToken) {
+				setDecoded(decodedToken);
+				const stores = await axios.get("https://klick-api.onrender.com/brand/");
+				if (stores) {
+					const StoreData = stores.data.data.filter(
+						(data) => data.owner === decoded.id
+					);
+					console.log("The Store Data");
+					setStore(await StoreData[0]);
+					setLoading(false);
+					console.log(store.logo);
+					console.log("!!!!!!!!!!!!!!!!!!!");
+				}
+			} else {
+				console.log("could not fetch data"); //if fail, resolve error somehow
+			}
+		})();
 
-	console.log("focused", focused);
+		// UseEffect
+	}, [store]);
+
+	// console.log("focused", focused);
 
 	useEffect(() => {
 		getShopData();
@@ -127,13 +136,23 @@ const VendorDashboard = ({ navigation }) => {
 				<View style={{ display: "flex", flexDirection: "row", marginTop: 60 }}>
 					{/* <TouchableOpacity onPress={() => setModalVisible(true)}> */}
 					<TouchableOpacity onPress={() => {}}>
-						<Image
-							style={{ height: 60, width: 60, borderRadius: 50 }}
-							source={require("../../../assets/orderpic.png")}
-						></Image>
+						{loading ? (
+							<Image
+								style={{ height: 60, width: 60, borderRadius: 50 }}
+								source={require("../../../assets/old_logo.png")}
+							></Image>
+						) : (
+							<Image
+								style={{ height: 60, width: 60, borderRadius: 50 }}
+								source={{
+									uri: store?.logo,
+								}}
+							></Image>
+							// <View></View>
+						)}
 					</TouchableOpacity>
 
-					{store ? (
+					{!loading ? (
 						<View>
 							<Text
 								style={{
@@ -219,10 +238,16 @@ const VendorDashboard = ({ navigation }) => {
 						display: "flex",
 						flexDirection: "row",
 						justifyContent: "space-around",
-						marginLeft: 20,
+						// marginLeft: 20,
 					}}
 				>
-					<View>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+						}}
+					>
 						<TouchableOpacity
 							onPress={() => navigation.navigate("productView")}
 							style={{
@@ -240,7 +265,13 @@ const VendorDashboard = ({ navigation }) => {
 						</TouchableOpacity>
 						<Text style={{}}>Add Product</Text>
 					</View>
-					<View>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+						}}
+					>
 						<TouchableOpacity
 							onPress={() => navigation.navigate("discounts")}
 							style={{
@@ -258,7 +289,13 @@ const VendorDashboard = ({ navigation }) => {
 						</TouchableOpacity>
 						<Text style={{ marginLeft: 0 }}>Apply Discount</Text>
 					</View>
-					<View>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+						}}
+					>
 						<TouchableOpacity
 							onPress={() => navigation.navigate("productlist")}
 							style={{
@@ -285,7 +322,13 @@ const VendorDashboard = ({ navigation }) => {
 						marginTop: 20,
 					}}
 				>
-					<View>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+						}}
+					>
 						<TouchableOpacity
 							onPress={() => navigation.navigate("productView")}
 							style={{
@@ -303,9 +346,15 @@ const VendorDashboard = ({ navigation }) => {
 						</TouchableOpacity>
 						<Text style={{ marginLeft: -10 }}>Price Ad</Text>
 					</View>
-					<View>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+						}}
+					>
 						<TouchableOpacity
-							onPress={() => navigation.navigate("discounts")}
+							onPress={() => navigation.navigate("wallet")}
 							style={{
 								display: "flex",
 								flexDirection: "column",
@@ -319,9 +368,15 @@ const VendorDashboard = ({ navigation }) => {
 						>
 							<Feather name="percent" size={24} color="white" />
 						</TouchableOpacity>
-						<Text style={{ marginLeft: 0 }}>Settings</Text>
+						<Text style={{ marginLeft: 0 }}>Wallet</Text>
 					</View>
-					<View>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+						}}
+					>
 						<TouchableOpacity
 							style={{
 								display: "flex",
@@ -333,10 +388,11 @@ const VendorDashboard = ({ navigation }) => {
 								backgroundColor: "#EB270B",
 								borderRadius: 50,
 							}}
+							onPress={() => navigation.navigate("team")}
 						>
 							<Octicons name="comment-discussion" size={24} color="white" />
 						</TouchableOpacity>
-						<Text style={{ marginLeft: 3 }}>Support</Text>
+						<Text style={{ marginLeft: 3 }}>Team</Text>
 					</View>
 				</View>
 

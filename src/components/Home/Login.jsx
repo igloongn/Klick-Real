@@ -159,7 +159,7 @@ const Login = ({ navigation }) => {
 					<TouchableOpacity onPress={() => login()}>
 						<GeneralButton
 							backgroundColor={"#FEDD00"}
-							message={loading ? "Loading ....." : "Continue"}
+							message={loading ? "Loading ....." : "Login"}
 							width={335}
 							height={54}
 							borderColor={"#FEDD00"}
