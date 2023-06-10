@@ -48,56 +48,57 @@ const VendorDashboard = ({ navigation }) => {
 	}
 
 	AsyncStorage.getItem("token").then((token) => {
-		console.log("!!!!!!!!!!!!!!!!!!!");
-		console.log(token);
+		// console.log("!!!!!!!!!Token Outside!!!!!!!!!!");
+		// console.log(token);
 	});
 
 	useEffect(() => {
-		async () => {
-			try {
-				const token = await AsyncStorage.getItem("token");
-				console.log("!!!!!!!!!!!!!!!!!!!");
-				console.log(token);
-				const userresponse = await fetch(
-					`https://klick-api.onrender.com/auth/user`,
-					{
-						method: "GET",
-						mode: "no-cors",
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					}
-				);
+		AsyncStorage.getItem("token").then((token) => {
+			console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
+			console.log(token);
+			fetch(`https://klick-api.onrender.com/auth/user`, {
+				method: "GET",
+				mode: "no-cors",
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+				.then((userresponse) => userresponse.json())
+				.then((userdata) => {
+					setUser(userdata);
+					console.log("!!!!!!!!!!User Data!!!!!!!!");
+					console.log(userdata);
+				});
+		});
 
-				const userdata = await userresponse.text();
-				setUser(userdata);
-				console.log("!!!!!!!!!!!!!!!!!!");
-				console.log(userdata);
-				// const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
-				//     method: "GET",
-				//     mode: 'no-cors',
-				//     headers: {
-				//
-				//       'Authorization': `Bearer ${token}`
-				//     },
-				// })
-			} catch (e) {
-				console.log("Error");
-				console.log(e);
-			}
-		};
-		axios
-			.get("https://klick-api.onrender.com/product/")
-			.then((res) => setData(res.data.data))
-			.catch((err) => console.log(res.err));
-		//  .finally(item =>  setLoading(false))
+		// const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
+		//     method: "GET",
+		//     mode: 'no-cors',
+		//     headers: {
+		//
+		//       'Authorization': `Bearer ${token}`
+		//     },
+		// })
+		// axios
+		// 	.get("https://klick-api.onrender.com/product/")
+		// 	.then((res) => setData(res.data.data))
+		// 	.catch((err) => console.log(res.err));
+		// //  .finally(item =>  setLoading(false))
 	}, []);
+
+	// async () =>  {
+	// axios
+	// 	.get("https://klick-api.onrender.com/product/")
+	// 	.then((res) => setData(res.data.data))
+	// 	.catch((err) => console.log(res.err));
+	// //  .finally(item =>  setLoading(false))
+	// }, []);
 
 	console.log("focused", focused);
 
-	useEffect(() => {
-		() => console.log("out");
-	}, [focused]);
+	// useEffect(() => {
+	// 	() => console.log("out");
+	// }, [focused]);
 
 	// useEffect(()=>{
 	//     // Add Login && Register logic here
@@ -108,41 +109,93 @@ const VendorDashboard = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			<ScrollView>
-				<View style={{ display: "flex", flexDirection: "row", marginTop: 60 }}>
-					<Image
-						style={{ height: 60, width: 60, borderRadius: 50 }}
-						source={require("../../../assets/orderpic.png")}
-					></Image>
-					<View>
-						<Text
-							style={{
-								color: "#0B0B0E",
-								fontSize: 20,
-								fontWeight: "500",
-								marginLeft: 10,
-								marginTop: 10,
-							}}
-						>
-							Store Name
-						</Text>
-						<Text
-							style={{
-								color: "#98999A",
-								fontSize: 12,
-								fontWeight: "400",
-								marginLeft: 10,
-							}}
-						>
-							Yaba, Lagos
-						</Text>
-					</View>
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						marginTop: 60,
+						justifyContent: "space-between",
+						alignItems: "center",
+						paddingHorizontal: 10,
+					}}
+				>
+					{user ? (
+						<View style={{ display: "flex", flexDirection: "row" }}>
+							<View>
+								<Image
+									style={{
+										height: 60,
+										width: 60,
+										borderRadius: 50,
+										marginRight: 10,
+									}}
+									source={{ uri: user.stores[0].logo }} // Network image
+								></Image>
+							</View>
+							<View>
+								<Text
+									style={{
+										color: "#0B0B0E",
+										fontSize: 20,
+										fontWeight: "500",
+										marginLeft: 10,
+										marginTop: 10,
+									}}
+								>
+									{user.stores[0].name}
+								</Text>
+								<Text
+									style={{
+										color: "#98999A",
+										fontSize: 12,
+										fontWeight: "400",
+										marginLeft: 10,
+									}}
+								>
+									{user.stores[0].role}
+								</Text>
+							</View>
+						</View>
+					) : (
+						<View style={{ display: "flex", flexDirection: "row" }}>
+							<View>
+								<Image
+									style={{
+										height: 60,
+										width: 60,
+										borderRadius: 50,
+										marginRight: 10,
+									}}
+									source={require("../../../assets/orderpic.png")}
+								></Image>
+							</View>
+							<View>
+								<Text
+									style={{
+										color: "#0B0B0E",
+										fontSize: 20,
+										fontWeight: "500",
+										marginLeft: 10,
+										marginTop: 10,
+									}}
+								>
+									Loading......
+								</Text>
+								<Text
+									style={{
+										color: "#98999A",
+										fontSize: 12,
+										fontWeight: "400",
+										marginLeft: 10,
+									}}
+								>
+									Yaba, Lagos
+								</Text>
+							</View>
+						</View>
+					)}
 					<Pressable onPress={() => navigation.navigate("notifications")}>
-						<AntDesign
-							name="bells"
-							size={24}
-							color="black"
-							style={{ marginLeft: 120 }}
-						/>
+						<AntDesign name="bells" size={24} color="black" style={{}} />
 					</Pressable>
 				</View>
 				{/* Create Store */}
