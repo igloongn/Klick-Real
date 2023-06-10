@@ -63,6 +63,7 @@ import TopUp from "../components/Settings/TopUp";
 import Withdraw from "../components/Settings/Withdraw";
 import FakeCategories from "../components/Home/FakeCategories";
 import ProductList from "../components/Home/ProductList";
+import StatusView from "../utils/Test";
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -74,19 +75,7 @@ export default function MainNav() {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: true }}>
 			{/* <Stack.Screen name="auth" component={Auth}/> */}
-
-			<Stack.Screen
-				name="productView"
-				component={ProductList}
-				options={{
-					title: "My Products",
-					// headerRight: () => (
-					// 	<TouchableOpacity onPress={() => console.log("End Icon pressed")}>
-					// 		<Text>Hello</Text>
-					// 	</TouchableOpacity>
-					// ),
-				}}
-			/>
+			<Stack.Screen name="test" component={StatusView} />
 
 			<Stack.Screen
 				name="hometab"
@@ -107,7 +96,7 @@ export default function MainNav() {
 				}}
 			/>
 
-			{/* <Stack.Screen
+			<Stack.Screen
 				name="productView"
 				component={ProductList}
 				options={{
@@ -118,7 +107,7 @@ export default function MainNav() {
 					// 	</TouchableOpacity>
 					// ),
 				}}
-			/> */}
+			/>
 
 			{/* <Stack.Screen name="home" component={Home} /> */}
 			<Stack.Screen name="orders" component={Orders} />
@@ -140,7 +129,9 @@ export default function MainNav() {
 			<Stack.Screen name="addnewcard" component={AddNewCard} />
 			<Stack.Screen name="notification" component={Notification} />
 			<Stack.Screen name="socialpage" component={SocialPage} />
-			<Stack.Screen name="stories" component={Stories} />
+			<Stack.Screen name="stories" component={Stories} options={{
+				title: 'Stories'
+			}} />
 			<Stack.Screen name="categories" component={FakeCategories} />
 
 			<Stack.Screen name="sellerorders" component={SellerOrders} />

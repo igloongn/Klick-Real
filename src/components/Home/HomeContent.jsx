@@ -99,6 +99,24 @@ const HomeContent = ({ navigation }) => {
 	const [showGallery, setShowGallery] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
+	AsyncStorage.getItem("token").then((token) => {
+		axios
+			.get("https://klick-api.onrender.com/auth/user", {
+				headers: {
+					Authorization: "Bearer " + token,
+				},
+			})
+			.then((res) => {
+				console.log("!!!!!!!!!!Store ID!!!!!!!!");
+				console.log(res.data.stores[0].id);
+				AsyncStorage.setItem("StoreData", res.data.stores[0].id)
+			})
+			.catch((err) => {
+				console.log("!!!!!!!Error!!!!!!!");
+				console.log(err);
+			});
+	});
+
 	const getLoginData = async (navigation, alternative = () => null) => {
 		try {
 			const value = await AsyncStorage.getItem("isLoggedIn");
@@ -124,16 +142,28 @@ const HomeContent = ({ navigation }) => {
 	//   },[focus])
 
 	useEffect(() => {
-		async () => {
-			const op = await AsyncStorage.getAllKeys();
-			console.log("!!!!!!!!!!!!!!!");
-			console.log(op);
-		};
-		axios
-			.get("https://klick-api.onrender.com/product/")
-			.then((res) => setData(res.data.data))
-			.catch((err) => console.log(res.err))
-			.finally((item) => setLoading(false));
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				console.log("!!!!!!Token from the home page!!!!!!!!!!");
+				console.log(token);
+				axios
+					.get("https://klick-api.onrender.com/product/", {
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					})
+					.then((res) => {
+						console.log("!!!!!!!!!!Products!!!!!!!");
+						console.log(res.data.data.products);
+						setData(res.data.data.products);
+					})
+					.catch((err) => {
+						console.log("!!!!!!!!!Axios Error!!!!!!!");
+						console.log(res.err);
+					})
+					.finally((item) => setLoading(false));
+			})
+			.catch((err) => console.log(err));
 	}, []);
 
 	const getAllData = async () => {
@@ -152,7 +182,7 @@ const HomeContent = ({ navigation }) => {
 			.then((res) => res.json())
 			.then((_data) => {
 				set_Data(_data?.data?.rows);
-				console.log("--all", data);
+				// console.log("--all", data);
 			})
 			.catch((e) => console.log(e));
 	};
@@ -443,17 +473,17 @@ const HomeContent = ({ navigation }) => {
       )}
  */}
 
-				{loading && (
+				{/* {loading && (
 					<View>
-						<ActivityIndicator />
-						{/* <Text>Loading...</Text> */}
-					</View>
-				)}
+						<ActivityIndicator /> */}
+				{/* <Text>Loading...</Text> */}
+				{/* </View>
+				)} */}
 				{data && (
 					<>
 						<FlatList
 							style={{ marginTop: 20 }}
-							data={data?.rows}
+							data={data}
 							renderItem={({ item }) => (
 								<SponsorCard item={item} navigation={navigation} />
 							)}

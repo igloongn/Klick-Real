@@ -112,7 +112,7 @@ const ProductCard = ({ productDetails }) => {
 					}
 				}
 			>
-				T
+				{/* T */}
 			</Text>
 		</View>
 	);
