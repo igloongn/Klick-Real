@@ -56,6 +56,9 @@ const AddNewProduct = ({ navigation }) => {
 			const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
 			setHasGalleryPermission(galleryStatus.status === "granted");
 		})();
+		
+
+
 	}, []);
 
 	useEffect(() => {
@@ -268,6 +271,7 @@ const AddNewProduct = ({ navigation }) => {
 						width={335}
 						value={price}
 						onChangeValue={(text) => setPrice(text)}
+						mode={"numeric"}
 					/>
 					<GeneralInput
 						placeholder={"e.g 25"}
@@ -275,6 +279,7 @@ const AddNewProduct = ({ navigation }) => {
 						width={335}
 						value={total}
 						onChangeValue={(text) => setTotal(text)}
+						mode={"numeric"}
 					/>
 					<GeneralInput
 						placeholder={"e.g 25"}
@@ -282,6 +287,7 @@ const AddNewProduct = ({ navigation }) => {
 						width={335}
 						value={instock}
 						onChangeValue={(text) => setInStock(text)}
+						mode={"numeric"}
 					/>
 					<GeneralInput
 						placeholder={"optional, e.g mens Shoes"}
@@ -304,6 +310,7 @@ const AddNewProduct = ({ navigation }) => {
 						width={335}
 						value={weight}
 						onChangeValue={(text) => setWeight(text)}
+						mode={"numeric"}
 					/>
 					<GeneralInput
 						placeholder={"in cm, e.g 35"}
@@ -311,6 +318,7 @@ const AddNewProduct = ({ navigation }) => {
 						width={335}
 						value={length}
 						onChangeValue={(text) => setLength(text)}
+						mode={"numeric"}
 					/>
 					<GeneralInput
 						placeholder={"in cm, e.g 25"}
@@ -318,6 +326,7 @@ const AddNewProduct = ({ navigation }) => {
 						width={335}
 						value={width}
 						onChangeValue={(text) => setWidth(text)}
+						mode={"numeric"}
 					/>
 					<GeneralInput
 						placeholder={"in cm, e.g 45"}
@@ -325,6 +334,7 @@ const AddNewProduct = ({ navigation }) => {
 						width={335}
 						value={height}
 						onChangeValue={(text) => setHeight(text)}
+						mode={"numeric"}
 					/>
 					<View style={{ marginTop: 20, width: 335 }}>
 						<SelectList

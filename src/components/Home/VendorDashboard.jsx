@@ -53,6 +53,7 @@ const VendorDashboard = ({ navigation }) => {
 	});
 
 	useEffect(() => {
+		// Get User Data
 		AsyncStorage.getItem("token").then((token) => {
 			console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
 			console.log(token);

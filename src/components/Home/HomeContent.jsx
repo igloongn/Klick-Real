@@ -125,10 +125,10 @@ const HomeContent = ({ navigation }) => {
 
 	useEffect(() => {
 		async () => {
-			const op = await AsyncStorage.getAllKeys()
-			console.log('!!!!!!!!!!!!!!!')
-			console.log(op)
-		}
+			const op = await AsyncStorage.getAllKeys();
+			console.log("!!!!!!!!!!!!!!!");
+			console.log(op);
+		};
 		axios
 			.get("https://klick-api.onrender.com/product/")
 			.then((res) => setData(res.data.data))
@@ -296,9 +296,9 @@ const HomeContent = ({ navigation }) => {
 					</View>
 				)}
 				{_data && (
-					<>
+					<View>
 						<FlatList
-							style={{ marginTop: 20 }}
+							// style={{  }}
 							data={_data}
 							renderItem={({ item }) =>
 								item?.posttype === "status" ? (
@@ -310,7 +310,7 @@ const HomeContent = ({ navigation }) => {
 							keyExtractor={(item) => item.id}
 							horizontal
 						/>
-					</>
+					</View>
 				)}
 
 				<Text
@@ -364,7 +364,7 @@ const HomeContent = ({ navigation }) => {
 						justifyContent: "space-around",
 						alignItems: "center",
 						// marginHorizontal: 20,
-            marginVertical: 40,
+						marginVertical: 40,
 					}}
 				>
 					<CategoriesCard
@@ -596,7 +596,7 @@ const styles = StyleSheet.create({
 		borderRadius: 100,
 		borderWidth: 1,
 		borderColor: "#007FFF",
-		marginTop: 30,
+		// marginTop: 30,
 	},
 	item2: {
 		backgroundColor: "#E6E6FA",

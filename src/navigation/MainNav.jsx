@@ -143,9 +143,11 @@ export default function MainNav() {
         <Stack.Screen name="selleraddaddress" component={SellerAddAddress} />
         <Stack.Screen name="selleraddlogo" component={SellerAddLogo} />
         <Stack.Screen name="notifications" component={Notifications} />
+
         <Stack.Screen name="addnewproduct" component={AddNewProduct} options={{
           title: 'Add New Product',
         }} />
+        
         <Stack.Screen name="productlist" component={SellerProductList} />
         <Stack.Screen name="createpost" component={CreatePost} />
         <Stack.Screen name="storesettings" component={StoreSettings} />

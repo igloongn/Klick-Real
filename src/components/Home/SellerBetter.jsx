@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Text,
 	View,
@@ -15,6 +15,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import axios from "axios";
 import { useSellerOnboardingContext } from "./SellerOnboarding";
 import MyModal from "../../utils/MyModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 	const {
@@ -28,38 +29,62 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
+	const [fillAllFields, setFillAllFields] = useState(false);
 
-	const data = [
-		{ key: "1", value: "Electronics" },
-		{ key: "2", value: "Fashion" },
-		{ key: "3", value: "Home and Garden" },
-		{ key: "4", value: "Toys and Games" },
-		{ key: "5", value: "Food and beverages" },
-		{ key: "6", value: "Beauty and personal care" },
-		{ key: "7", value: "Travel" },
-		{ key: "8", value: "Education" },
-		{ key: "9", value: "Healthcare" },
-		{ key: "10", value: "Business" },
-	];
-
-	fetch("https://klick-api.onrender.com/auth/registerstore", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			// Add any additional headers if required
-		},
-		body: JSON.stringify({
-			title: "New Post",
-			content: "This is the content of the post.",
-		}),
-	})
-		.then((response) => response.json())
-		.then((data) => {
-			console.log(data); // Handle the response data
-		})
-		.catch((error) => {
-			console.error(error); // Handle any error that occurred
+	const [data, setData] = useState([]);
+	useEffect(() => {
+		AsyncStorage.getItem("token").then((token) => {
+			axios
+				.get("https://klick-api.onrender.com/category/getAll", {
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+						// Add more headers as needed
+					},
+				})
+				.then((res) => {
+					console.log("!!!!!!!!Categories!!!!!!!");
+					console.log(res.data.data);
+					setData(res.data.data);
+					data.map((res) => {
+						console.log("Item!!!!!!!!");
+						console.log(res.id);
+					});
+				});
 		});
+		// const data = [
+		// 	{ key: "1", value: "Electronics" },
+		// 	{ key: "2", value: "Fashion" },
+		// 	{ key: "3", value: "Home and Garden" },
+		// 	{ key: "4", value: "Toys and Games" },
+		// 	{ key: "5", value: "Food and beverages" },
+		// 	{ key: "6", value: "Beauty and personal care" },
+		// 	{ key: "7", value: "Travel" },
+		// 	{ key: "8", value: "Education" },
+		// 	{ key: "9", value: "Healthcare" },
+		// 	{ key: "10", value: "Business" },
+		// ];
+	}, []);
+
+	// fetch("https://klick-api.onrender.com/auth/registerstore", {
+	// 	method: "POST",
+	// 	headers: {
+	// 		"Content-Type": "application/json",
+	// 		// Add any additional headers if required
+	// 	},
+	// 	body: JSON.stringify({
+	// 		title: "New Post",
+	// 		content: "This is the content of the post.",
+	// 	}),
+	// })
+	// 	.then((response) => response.json())
+	// 	.then((data) => {
+	// 		console.log(data); // Handle the response data
+	// 	})
+	// 	.catch((error) => {
+	// 		console.error('!!!!!!!!'); // Handle any error that occurred
+	// 		console.error(error); // Handle any error that occurred
+	// 	});
 
 	const handleValidation = () => {
 		const regex = /^[a-zA-Z]+\s[a-zA-Z]+$/; // Regex pattern to validate two words
@@ -68,7 +93,11 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 			// Input value is valid
 			//   Alert.alert('Success', 'Valid input!');
 			//   setSuccessModalVisible(true)
-			nextStage();
+			if (phone.length !== 0 && industry.length !== 0) {
+				nextStage();
+			} else {
+				setFillAllFields(true);
+			}
 		} else {
 			// Input value is invalid
 			setFailedModalVisible(true);
@@ -118,6 +147,7 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 						<SelectList
 							placeholder={"e.g Food"}
 							setSelected={(val) => setIndustry(val)}
+							// data={data?data:[]}
 							data={data}
 							save="value"
 						/>
@@ -142,14 +172,15 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 					<View style={{ marginTop: 50 }} />
 				</View>
 			</ScrollView>
-			{/* Successful Modal */}
+			{/* Fill all form Modal */}
 			<MyModal
-				state={SuccessModalVisible}
-				setState={setSuccessModalVisible}
-				text={""}
-				button={"Thank You"}
+				state={fillAllFields}
+				setState={setFillAllFields}
+				text={"Please fill in all fields"}
+				button={"Try again"}
 				ButtonColor={"#FEDD00"}
 			/>
+
 			{/* Failed Modal */}
 			<MyModal
 				state={failedModalVisible}
