@@ -11,6 +11,7 @@ import {
 import GeneralInput from "../General/GeneralInput";
 import GeneralButton from "../General/GeneralButton";
 import { SelectList } from "react-native-dropdown-select-list";
+import { Picker } from "@react-native-picker/picker";
 // import ImagePicker from 'react-native-image-picker';
 import axios from "axios";
 import { useSellerOnboardingContext } from "./SellerOnboarding";
@@ -43,13 +44,9 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 					},
 				})
 				.then((res) => {
-					console.log("!!!!!!!!Categories!!!!!!!");
-					console.log(res.data.data);
+					// console.log("!!!!!!!!Categories!!!!!!!");
+					// console.log(res.data.data);
 					setData(res.data.data);
-					data.map((res) => {
-						console.log("Item!!!!!!!!");
-						console.log(res.id);
-					});
 				});
 		});
 		// const data = [
@@ -144,13 +141,32 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 						mode="tel"
 					/>
 					<View style={{ marginTop: 20, width: 335 }}>
-						<SelectList
+						{/* <SelectList
 							placeholder={"e.g Food"}
 							setSelected={(val) => setIndustry(val)}
 							// data={data?data:[]}
 							data={data}
 							save="value"
-						/>
+						/> */}
+						<Text
+							style={{
+								fontSize: 13,
+								marginBottom: 10,
+								fontWeight: "500",
+								fontSize: 16,
+							}}
+						>
+							Category
+						</Text>
+
+						<Picker
+							selectedValue={industry}
+							onValueChange={(itemValue, itemIndex) => setIndustry(itemValue)}
+						>
+							{data.map((item, index) => (
+								<Picker.Item label={item.name} value={item.id} />
+							))}
+						</Picker>
 					</View>
 
 					{/* <GeneralInput name="Which industry will you be primarily operating in?" width={335}/> */}
