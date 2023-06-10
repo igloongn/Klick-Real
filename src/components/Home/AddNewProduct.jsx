@@ -53,6 +53,7 @@ const AddNewProduct = ({ navigation }) => {
 	// From Mufasa
 	const [myStoreCat, setMyStoreCat] = useState(null);
 	const [shippingCat, setShippingCat] = useState(null);
+	const [user, setUser] = useState(null)
 
 	const [listofCat, setListofCat] = useState([]);
 	const [sheeplistofCat, setsheepListofCat] = useState([]);
@@ -90,6 +91,9 @@ const AddNewProduct = ({ navigation }) => {
 				})
 				.then((user) => {
 					const userData = user.data;
+					console.log('!!!!!!!!!user data!!!!!!!!!')
+					console.log(userData.stores[0].id)
+					setUser(userData)
 					axios
 						.get(
 							`https://klick-api.onrender.com/brand/${userData.stores[0].id}`
@@ -265,7 +269,7 @@ const AddNewProduct = ({ navigation }) => {
 				const token = await AsyncStorage.getItem("token");
 				console.log("tok-1", token);
 				console.log(myStoreCat.id)
-				const url = `https://klick-api.onrender.com/product/?category=${myStoreCat.id}`;
+				const url = `https://klick-api.onrender.com/product/?category=${myStoreCat.id}&storeId=${user.stores[0].id}`;
 				// const response = await fetch("https://klick-api.onrender.com/product/?category=039c6ea9-45d7-493f-beb1-fd74fb40399d", {
 				const response = await fetch(url, {
 					method: "POST",
@@ -545,8 +549,7 @@ ListHeaderComponent={
 				<View
 					style={{
 						postion: "absolute",
-						bottom: Dimensions.get("screen").height,
-						// top: 0,
+						top: 0,
 						height: Dimensions.get("screen").height,
 						width: Dimensions.get("screen").width,
 					}}

@@ -15,6 +15,7 @@ import OpenBox from "../../utils/SVGs/openBox";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ProductCard from "./ProductCard";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -22,7 +23,7 @@ const windowHeight = Dimensions.get("window").height;
 const ProductList = () => {
 	const navigation = useNavigation();
 	const [store, setStore] = useState(null);
-	const [products, setProducts] = useState([])
+	const [products, setProducts] = useState([]);
 
 	useEffect(() => {
 		// axios.get('https://klick-api.onrender.com/product/store/product?storeId=')
@@ -86,7 +87,7 @@ const ProductList = () => {
 						style={{
 							width: 50,
 							height: 50,
-							borderWidth: 1,
+							// borderWidth: 1,
 							borderColor: "#98999A",
 							borderRadius: 10,
 						}}
@@ -98,7 +99,7 @@ const ProductList = () => {
 						style={{
 							width: 50,
 							height: 50,
-							borderWidth: 1,
+							// borderWidth: 1,
 							borderColor: "#98999A",
 							borderRadius: 10,
 						}}
@@ -148,27 +149,7 @@ const ProductList = () => {
 			{/* Body */}
 			<ScrollView>
 				{products.length > 0 ? (
-					<View>
-						<Text
-							style={{
-								fontSize: 25,
-								fontWeight: 400,
-								textAlign: "center",
-							}}
-						>
-							Store Exist
-						</Text>
-						<Text
-							style={{
-								fontSize: 16,
-								textAlign: "center",
-								color: "#6A6B6C",
-							}}
-						>
-							You’re yet to add any product to your store. Products that you add
-							will appear here
-						</Text>
-					</View>
+					products.map((item) => <ProductCard productDetails={item} />)
 				) : (
 					<View>
 						<OpenBox />
