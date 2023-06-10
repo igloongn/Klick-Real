@@ -29,8 +29,6 @@ const CELL_COUNT = 4;
 const VerifyToken = ({ navigation, route }) => {
 	const email = route.params.email;
 
-	const [verify, setVerify] = useState("");
-
 	const [loading, setLoading] = useState(false);
 
 	const [value, setValue] = useState("");
@@ -64,21 +62,22 @@ const VerifyToken = ({ navigation, route }) => {
 
 				const res_status_code = response.status;
 				const res_data = await response.json();
+				console.log("!!!!!!!!!!!!!!!!!!!!!!!");
 				console.log(res_data);
 				console.log(res_status_code);
 				if (res_status_code != 200) {
 					throw new Error(res_data.message);
 				}
 
-				await AsyncStorage.setItem("isLoggedIn", "true");
+				// await AsyncStorage.setItem("isLoggedIn", "true");
 
-				setSuccessModalVisible(true);
-				navigation.navigate("hometab");
 				// Alert.alert("Verification succesful", "Verification was successful", [
 				// 	{ text: "OK", onPress: () => navigation.navigate("hometab") },
 				// ]);
-
-				navigation.navigate("hometab");
+				setSuccessModalVisible(true);
+				setTimeout(() => {
+					navigation.navigate("1111111");
+				}, 3000);
 			} catch (error) {
 				// Handle network or other errors
 				console.error(error);
@@ -181,7 +180,7 @@ const VerifyToken = ({ navigation, route }) => {
 			<MyModal
 				state={SuccessModalVisible}
 				setState={setSuccessModalVisible}
-				text={"Login Successful"}
+				text={"Verification Successful "}
 				button={"Thank You"}
 				ButtonColor={"#FEDD00"}
 			/>
@@ -189,7 +188,7 @@ const VerifyToken = ({ navigation, route }) => {
 			<MyModal
 				state={failedModalVisible}
 				setState={setFailedModalVisible}
-				text={"An error occured during login"}
+				text={"Invalid Code"}
 				button={"Try again"}
 				ButtonColor={"#EB270B"}
 			/>

@@ -6,7 +6,7 @@ function CategoriesCard({ navigation, route, pic, label }) {
 		<TouchableOpacity onPress={() => navigation.navigate(route)}>
 			<View style={styles.mumcover}>
 				<Image style={styles.mum} source={pic} />
-				<Text style={{ marginLeft: 5 }}>{label}</Text>
+				<Text style={{  }}>{label}</Text>
 				{/* require('../../../assets/1.png') */}
 			</View>
 		</TouchableOpacity>

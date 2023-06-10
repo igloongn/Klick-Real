@@ -4,6 +4,7 @@ import SellerAddAddress from "./SellerAddAddress";
 import SellerAddLogo from "./SellerAddLogo";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import MyModal from "../../utils/MyModal";
 
 const SelleronBoardingContext = React.createContext();
 
@@ -26,6 +27,9 @@ const SellerOnboarding = ({ navigation }) => {
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 
+	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
+	const [failedModalVisible, setFailedModalVisible] = useState(false);
+
 	const submit = async (navigation) => {
 		setLoading(true);
 		console.log({
@@ -38,8 +42,6 @@ const SellerOnboarding = ({ navigation }) => {
 			industry,
 			country,
 		});
-        	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
-	const [failedModalVisible, setFailedModalVisible] = useState(false);
 		// if (true) return;
 		let formData = new FormData();
 		formData.append("storeName", storeName);
@@ -64,7 +66,8 @@ const SellerOnboarding = ({ navigation }) => {
 			type: "image/jpg",
 			name: file[0]?.filename,
 		});
-		console.log(formData);
+		// console.log('!!!!!!!!!!!!formData!!!!!!!!!!!!!!');
+		// console.log(formData);
 		try {
 			const token = await AsyncStorage.getItem("token");
 			console.log(token);
@@ -79,30 +82,21 @@ const SellerOnboarding = ({ navigation }) => {
 						Authorization: `Bearer ${token}`,
 					},
 					body: formData,
-					//   body:JSON.stringify({
-					//     storeName,
-					//     phone,
-					//     state,
-					//     postal,
-					//     city,
-					//     address,
-					//     industry,
-					//     country,
-					//     // file
-
-					// })
+					
 				}
 			);
 			const _data = await response.json();
 			// const _data = await response.text();
 			console.log("y", _data);
 			// Alert.alert("Success", "Your Store was created successfully");
-            setSuccessModalVisible(true);
-			navigation.navigate("sellerstab");
+			setSuccessModalVisible(true);
+			setTimeout(() => {
+				navigation.navigate("sellerstab");
+			}, 3000);
 		} catch (error) {
-            // Handle network or other errors
+			// Handle network or other errors
 			console.error(error);
-            setSuccessModalVisible(true);
+			setFailedModalVisible(true);
 			// Alert.alert("Error", "An error occured while creating store.");
 		} finally {
 			setLoading(false);
@@ -154,7 +148,7 @@ const SellerOnboarding = ({ navigation }) => {
 					<></>
 				)}
 			</SelleronBoardingContext.Provider>
-            {/* Success Modal */}
+			{/* Success Modal */}
 			<MyModal
 				state={SuccessModalVisible}
 				setState={setSuccessModalVisible}

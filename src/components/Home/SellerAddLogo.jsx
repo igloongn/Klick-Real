@@ -39,7 +39,9 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 							height: 200,
 							width: 200,
 							borderRadius: 50,
-							marginTop: 90,
+							marginTop: 30,
+							marginBottom: 30,
+							// padding: '13%',
 							borderWidth: file && file.length > 0 ? 0 : 1,
 							borderColor: file && file.length > 0 ? "none" : "black",
 							borderStyle: "dashed",
@@ -127,8 +129,8 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 					style={{
 						backgroundColor: "grey",
 						postion: "absolute",
-						// marginTop: -50,
-						bottom: 60,
+						marginTop: 200,
+						bottom: Dimensions.get("screen").height,
 						height: Dimensions.get("screen").height,
 						width: Dimensions.get("screen").width,
 					}}
@@ -150,7 +152,7 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		// flex: 1,
 		backgroundColor: "#FFF",
 
 		// 	  alignItems: 'center',
@@ -158,7 +160,7 @@ const styles = StyleSheet.create({
 		// paddingHorizontal: 20
 	},
 	centeredView: {
-		flex: 1,
+		// flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
 		marginTop: 22,

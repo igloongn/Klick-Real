@@ -124,6 +124,11 @@ const HomeContent = ({ navigation }) => {
 	//   },[focus])
 
 	useEffect(() => {
+		async () => {
+			const op = await AsyncStorage.getAllKeys()
+			console.log('!!!!!!!!!!!!!!!')
+			console.log(op)
+		}
 		axios
 			.get("https://klick-api.onrender.com/product/")
 			.then((res) => setData(res.data.data))
@@ -325,7 +330,6 @@ const HomeContent = ({ navigation }) => {
 						flexDirection: "row",
 						justifyContent: "space-around",
 						alignItems: "center",
-						marginHorizontal: 20,
 					}}
 				>
 					<CategoriesCard
@@ -359,7 +363,7 @@ const HomeContent = ({ navigation }) => {
 						flexDirection: "row",
 						justifyContent: "space-around",
 						alignItems: "center",
-						marginHorizontal: 20,
+						// marginHorizontal: 20,
             marginVertical: 40,
 					}}
 				>

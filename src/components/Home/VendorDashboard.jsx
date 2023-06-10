@@ -43,42 +43,49 @@ const VendorDashboard = ({ navigation }) => {
 	// console.log(mode_data)
 	const focused = useIsFocused();
 
-	const getShopData = async () => {
-		try {
-			const token = await AsyncStorage.getItem("token");
-			console.log(token);
-			const userresponse = await fetch(
-				`https://klick-api.onrender.com/auth/user`,
-				{
-					method: "GET",
-					mode: "no-cors",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			);
-
-			const userdata = await userresponse.text();
-			setUser(userdata);
-			console.log('!!!!!!!!!!!!!!!!!!');
-			console.log(userdata);
-			// const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
-			//     method: "GET",
-			//     mode: 'no-cors',
-			//     headers: {
-			//
-			//       'Authorization': `Bearer ${token}`
-			//     },
-			// })
-		} catch (e) {
-			console.log(e);
-		}
-	};
-
 	if (mode_data?.mode === "buyer") {
 		navigation.navigate({ name: "hometab" });
 	}
+
+	AsyncStorage.getItem("token").then((token) => {
+		console.log("!!!!!!!!!!!!!!!!!!!");
+		console.log(token);
+	});
+
 	useEffect(() => {
+		async () => {
+			try {
+				const token = await AsyncStorage.getItem("token");
+				console.log("!!!!!!!!!!!!!!!!!!!");
+				console.log(token);
+				const userresponse = await fetch(
+					`https://klick-api.onrender.com/auth/user`,
+					{
+						method: "GET",
+						mode: "no-cors",
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
+
+				const userdata = await userresponse.text();
+				setUser(userdata);
+				console.log("!!!!!!!!!!!!!!!!!!");
+				console.log(userdata);
+				// const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
+				//     method: "GET",
+				//     mode: 'no-cors',
+				//     headers: {
+				//
+				//       'Authorization': `Bearer ${token}`
+				//     },
+				// })
+			} catch (e) {
+				console.log("Error");
+				console.log(e);
+			}
+		};
 		axios
 			.get("https://klick-api.onrender.com/product/")
 			.then((res) => setData(res.data.data))
@@ -89,7 +96,6 @@ const VendorDashboard = ({ navigation }) => {
 	console.log("focused", focused);
 
 	useEffect(() => {
-		getShopData();
 		() => console.log("out");
 	}, [focused]);
 

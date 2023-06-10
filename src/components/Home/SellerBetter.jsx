@@ -26,7 +26,6 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 		phone,
 	} = useSellerOnboardingContext();
 
-
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
 
@@ -62,31 +61,32 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 			console.error(error); // Handle any error that occurred
 		});
 
-  const handleValidation = () => {
-    const regex = /^[a-zA-Z]+\s[a-zA-Z]+$/; // Regex pattern to validate two words
+	const handleValidation = () => {
+		const regex = /^[a-zA-Z]+\s[a-zA-Z]+$/; // Regex pattern to validate two words
 
-    if (regex.test(storeName)) {
-      // Input value is valid
-    //   Alert.alert('Success', 'Valid input!');
-	//   setSuccessModalVisible(true)
-	  nextStage()
-    } else {
-      // Input value is invalid
-	  setFailedModalVisible(true)
-    //   Alert.alert('Error', 'Please enter two words!');
-    }
-  };
-
+		if (regex.test(storeName)) {
+			// Input value is valid
+			//   Alert.alert('Success', 'Valid input!');
+			//   setSuccessModalVisible(true)
+			nextStage();
+		} else {
+			// Input value is invalid
+			setFailedModalVisible(true);
+			//   Alert.alert('Error', 'Please enter two words!');
+		}
+	};
 
 	return (
 		<View style={styles.container}>
 			<ScrollView>
-				<View style={{
-					display: 'flex',
-					flexDirection: 'column',
-					justifyContent: "center",
-					alignItems: "center",
-				}}>
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "column",
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
 					<Text
 						style={{
 							fontWeight: "500",
@@ -114,7 +114,7 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 						onChangeValue={(text) => setPhone(text)}
 						mode="tel"
 					/>
-					<View style={{ marginTop: 20, width: 335, }}>
+					<View style={{ marginTop: 20, width: 335 }}>
 						<SelectList
 							placeholder={"e.g Food"}
 							setSelected={(val) => setIndustry(val)}
@@ -142,24 +142,35 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 					<View style={{ marginTop: 50 }} />
 				</View>
 			</ScrollView>
-						{/* Successful Modal */}
-			<MyModal state={SuccessModalVisible} setState={setSuccessModalVisible} text={''} button={'Thank You'} ButtonColor={'#FEDD00'} />
+			{/* Successful Modal */}
+			<MyModal
+				state={SuccessModalVisible}
+				setState={setSuccessModalVisible}
+				text={""}
+				button={"Thank You"}
+				ButtonColor={"#FEDD00"}
+			/>
 			{/* Failed Modal */}
-			<MyModal state={failedModalVisible} setState={setFailedModalVisible} text={'Please the store must have two words'} button={'Try again'} ButtonColor={'#EB270B'} />
-
+			<MyModal
+				state={failedModalVisible}
+				setState={setFailedModalVisible}
+				text={"Please the store must have two words"}
+				button={"Try again"}
+				ButtonColor={"#EB270B"}
+			/>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		// flex: 1,
 		backgroundColor: "#FFF",
 		//   alignItems: 'center',
 		justifyContent: "center",
 	},
 	containerStyle: {
-		flex: 1,
+		// flex: 1,
 	},
 	spacerStyle: {
 		marginBottom: 15,

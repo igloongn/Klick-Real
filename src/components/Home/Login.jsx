@@ -54,7 +54,7 @@ const Login = ({ navigation }) => {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					phone: email,
+					email,
 					password,
 				}),
 			});
@@ -66,24 +66,16 @@ const Login = ({ navigation }) => {
 			await AsyncStorage.setItem("token", data.access_token);
 			await AsyncStorage.setItem("isLoggedIn", "true");
 			// Do something with the response data
-			navigation.navigate("hometab");
 			// navigation.navigate('vendordash')
 			setSuccessModalVisible(true);
-			// Alert.alert("Login Success", data.message);
-
-			// } else {
-			//   // Login failed
-			//   const errorData = await response.json();
-			//   // handle login error
-			//   console.log(errorData);
-			//   Alert.alert('Login Error', errorData.message);
-			// }
+			setTimeout(() => {
+				navigation.navigate("hometab");
+			}, 3000);
 		} catch (error) {
 			// Handle network or other errors
 			console.error("!!!!!!!!!!!!!");
 			console.error(error);
 			setFailedModalVisible(true);
-			// Alert.alert("Error", "An error occured during login.");
 			setLoading(false);
 		}
 		// finally {
@@ -118,25 +110,30 @@ const Login = ({ navigation }) => {
 					</Text>
 				</TouchableOpacity>
 
-				<View style={{ marginTop: "40%" }}>
+				<View
+					style={{
+						marginTop: "40%",
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
 					<Text>{error}</Text>
 					<Text
 						style={{
 							fontWeight: "500",
 							fontSize: 24,
 							color: "#0B0B0E",
-							marginLeft: 135,
 							marginTop: -50,
 						}}
 					>
-						Login to Klick{" "}
+						Login to Klick
 					</Text>
 					<Text
 						style={{
 							fontWeight: "400",
 							fontSize: 14,
 							color: "#6A6B6C",
-							marginLeft: 60,
+							paddingHorizontal: 12
 						}}
 					>
 						Log into your account so you can sell or purchase on Klick.
@@ -206,9 +203,21 @@ const Login = ({ navigation }) => {
 			</View>
 
 			{/* Login Successful Modal */}
-			<MyModal state={SuccessModalVisible} setState={setSuccessModalVisible} text={'Login Successful'} button={'Thank You'} ButtonColor={'#FEDD00'} />
+			<MyModal
+				state={SuccessModalVisible}
+				setState={setSuccessModalVisible}
+				text={"Login Successful"}
+				button={"Thank You"}
+				ButtonColor={"#FEDD00"}
+			/>
 			{/* Login Failed Modal */}
-			<MyModal state={failedModalVisible} setState={setFailedModalVisible} text={'An error occured during login'} button={'Try again'} ButtonColor={'#EB270B'} />
+			<MyModal
+				state={failedModalVisible}
+				setState={setFailedModalVisible}
+				text={"An error occured during login"}
+				button={"Try again"}
+				ButtonColor={"#EB270B"}
+			/>
 		</ScrollView>
 	);
 };
@@ -217,7 +226,7 @@ const styles = StyleSheet.create({
 	container: {
 		display: "flex",
 		flexDirection: "column",
-		// justifyContent: "cen",
+		// justifyContent: "",
 		backgroundColor: "#FFF",
 		height: windowHeight,
 	},

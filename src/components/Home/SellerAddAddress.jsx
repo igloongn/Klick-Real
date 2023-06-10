@@ -9,8 +9,11 @@ import {
 import GeneralInput from "../General/GeneralInput";
 import GeneralButton from "../General/GeneralButton";
 import { useSellerOnboardingContext } from "./SellerOnboarding";
+import MyModal from "../../utils/MyModal";
 
 const SellerAddAddress = ({ navigation, prevStage, nextStage }) => {
+	const [fillAllFields, setFillAllFields] = useState(false);
+
 	const {
 		setCountry,
 		setAddress,
@@ -23,6 +26,19 @@ const SellerAddAddress = ({ navigation, prevStage, nextStage }) => {
 		city,
 		postal,
 	} = useSellerOnboardingContext();
+	const handleSubmit = () => {
+		if (
+			country.length !== 0 &&
+			address.length !== 0 &&
+			state.length !== 0 &&
+			postal.length !== 0 &&
+			city.length !== 0
+		) {
+			nextStage();
+		} else {
+			setFillAllFields(true);
+		}
+	};
 
 	return (
 		<View style={styles.container}>
@@ -82,7 +98,7 @@ const SellerAddAddress = ({ navigation, prevStage, nextStage }) => {
 						onChangeValue={(text) => setPostal(text)}
 						mode="tel"
 					/>
-					<TouchableOpacity onPress={() => nextStage()}>
+					<TouchableOpacity onPress={() => handleSubmit()}>
 						<GeneralButton
 							backgroundColor={"#FEDD00"}
 							message={"Continue"}
@@ -112,13 +128,20 @@ const SellerAddAddress = ({ navigation, prevStage, nextStage }) => {
 					<View style={{ marginTop: 70 }} />
 				</View>
 			</ScrollView>
+			<MyModal
+				state={fillAllFields}
+				setState={setFillAllFields}
+				text={"Please fill in all fields"}
+				button={"Try again"}
+				ButtonColor={"#FEDD00"}
+			/>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		// flex: 1,
 		backgroundColor: "#FFF",
 		//   alignItems: 'center',
 		justifyContent: "center",
