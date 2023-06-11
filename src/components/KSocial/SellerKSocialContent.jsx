@@ -35,7 +35,8 @@ const Item = ({ title, navigation, onPress, item }) => (
 	<>
 		<TouchableOpacity
 			onPress={() =>
-				navigation.navigate({ name: "stories", params: { id: item?.id } })
+				// navigation.navigate({ name: "stories", params: { id: item?.id } })
+				navigation.navigate({ name: "newstories", params: { id: item?.id } })
 			}
 			style={styles.item}
 		>

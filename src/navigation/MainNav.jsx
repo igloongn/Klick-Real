@@ -64,6 +64,7 @@ import Withdraw from "../components/Settings/Withdraw";
 import FakeCategories from "../components/Home/FakeCategories";
 import ProductList from "../components/Home/ProductList";
 import StatusView from "../utils/Test";
+import NewStories from "../components/KSocial/NewStories";
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -76,7 +77,6 @@ export default function MainNav() {
 		<Stack.Navigator screenOptions={{ headerShown: true }}>
 			{/* <Stack.Screen name="auth" component={Auth}/> */}
 			<Stack.Screen name="test" component={StatusView} />
-
 			<Stack.Screen
 				name="hometab"
 				component={HomeTabs}
@@ -129,9 +129,21 @@ export default function MainNav() {
 			<Stack.Screen name="addnewcard" component={AddNewCard} />
 			<Stack.Screen name="notification" component={Notification} />
 			<Stack.Screen name="socialpage" component={SocialPage} />
-			<Stack.Screen name="stories" component={Stories} options={{
-				title: 'Stories'
-			}} />
+			<Stack.Screen
+				name="stories"
+				component={Stories}
+				options={{
+					title: "Stories",
+				}}
+			/>
+			<Stack.Screen
+				name="newstories"
+				component={NewStories}
+				options={{
+					title: "Stories",
+				}}
+			/>
+
 			<Stack.Screen name="categories" component={FakeCategories} />
 
 			<Stack.Screen name="sellerorders" component={SellerOrders} />

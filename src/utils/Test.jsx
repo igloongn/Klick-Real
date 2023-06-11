@@ -1,112 +1,60 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { View, Button, Text, StyleSheet } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
-const data = [
-  { id: 1, image: 'https://example.com/status1.png' },
-  { id: 2, image: 'https://example.com/status2.png' },
-  { id: 3, image: 'https://example.com/status3.png' },
-  // Add more status data as needed
-];
+const MediaUpload = () => {
+  const [selectedMedia, setSelectedMedia] = useState(null);
 
-const StatusCarousel = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const handleSelectMedia = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Permission to access media library denied');
+      return;
+    }
 
-  const renderItem = ({ item, index }) => {
-    return (
-      <View style={styles.carouselItem}>
-        <Image source={{ uri: item.image }} style={styles.image} />
-      </View>
-    );
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setSelectedMedia(result);
+    }
   };
 
-  const onViewableItemsChanged = ({ viewableItems }) => {
-    setActiveIndex(viewableItems[0]?.index || 0);
+  const handleUploadMedia = () => {
+    if (selectedMedia) {
+      // Perform the media upload logic here
+      console.log('Uploading media:', selectedMedia.uri);
+      // You can use a library or API to upload the media to a server
+    }
   };
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id.toString()}
-        onViewableItemsChanged={onViewableItemsChanged}
-      />
-      <View style={styles.pagination}>
-        {data.map((item, index) => (
-          <Text
-            key={item.id}
-            style={[
-              styles.paginationDot,
-              index === activeIndex && styles.paginationDotActive,
-            ]}
-          >
-            &bull;
-          </Text>
-        ))}
-      </View>
-      <View style={styles.statusInfo}>
-        <Text style={styles.statusText}>John Doe</Text>
-        <Text style={styles.timestamp}>Just now</Text>
-      </View>
+      <Button title="Select Media" onPress={handleSelectMedia} />
+      {selectedMedia && (
+        <View style={styles.mediaInfo}>
+          <Text>Selected Media:</Text>
+          <Text>Filename: {selectedMedia.uri}</Text>
+          <Text>File Size: {selectedMedia.fileSize / 1024} KB</Text>
+        </View>
+      )}
+      <Button title="Upload Media" onPress={handleUploadMedia} disabled={!selectedMedia} />
     </View>
   );
 };
 
-const windowWidth = Dimensions.get('window').width;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
-  },
-  carouselItem: {
-    width: windowWidth,
-    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  pagination: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 16,
-    left: 0,
-    right: 0,
-  },
-  paginationDot: {
-    fontSize: 10,
-    color: '#fff',
-    marginHorizontal: 4,
-  },
-  paginationDotActive: {
-    color: '#00f',
-    fontSize: 16,
-  },
-  statusInfo: {
-    position: 'absolute',
-    top: 16,
-    left: 16,
-    right: 16,
-  },
-  statusText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 4,
-  },
-  timestamp: {
-    fontSize: 14,
-    color: '#fff',
+  mediaInfo: {
+    marginTop: 20,
   },
 });
 
-export default StatusCarousel;
+export default MediaUpload;
