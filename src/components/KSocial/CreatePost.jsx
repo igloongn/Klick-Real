@@ -58,7 +58,6 @@ const CreatePost = () => {
 	//   }
 
 	// }
-  console.log('ibdneokdkl')
 	useEffect(() => {
 		// axios
 		// 	.get("https://klick-api.onrender.com/auth/user", {
@@ -73,8 +72,6 @@ const CreatePost = () => {
 		// 	.catch((err) => console.log(err));
 	}, []);
 
-
-  
 	const onSubmit = async () => {
 		setIsLoading(true);
 		let formdata = new FormData();
@@ -87,22 +84,26 @@ const CreatePost = () => {
 		});
 		formdata.append("post_type", "ksocial");
 		formdata.append("caption", text);
-		console.log("--form", formdata);
+		console.log("!!!!!!!!Normal Post Form Data!!!!!");
+		console.log("--form", formdata._parts);
 
 		try {
 			const token = await AsyncStorage.getItem("token");
 			console.log("tok", token);
 
-      const storeID = await AsyncStorage.getItem("StoreData");
-			const response = await fetch(`https://klick-api.onrender.com/post/?storeId=${storeID}`, {
-				method: "POST",
-				mode: "no-cors",
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${token}`,
-				},
-				body: formdata,
-			});
+			const storeID = await AsyncStorage.getItem("StoreData");
+			const response = await fetch(
+				`https://klick-api.onrender.com/post/?storeId=${storeID}`,
+				{
+					method: "POST",
+					mode: "no-cors",
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${token}`,
+					},
+					body: formdata,
+				}
+			);
 			if (response?.status >= 200 && response?.status < 203) {
 				const _data = await response.json();
 				console.log("y----", _data);

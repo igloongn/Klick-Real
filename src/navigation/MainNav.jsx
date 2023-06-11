@@ -63,7 +63,7 @@ import TopUp from "../components/Settings/TopUp";
 import Withdraw from "../components/Settings/Withdraw";
 import FakeCategories from "../components/Home/FakeCategories";
 import ProductList from "../components/Home/ProductList";
-import StatusView from "../utils/Test";
+import MessagingScreen from "../utils/Test";
 import NewStories from "../components/KSocial/NewStories";
 
 const Stack = createNativeStackNavigator();
@@ -76,7 +76,7 @@ export default function MainNav() {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: true }}>
 			{/* <Stack.Screen name="auth" component={Auth}/> */}
-			<Stack.Screen name="test" component={StatusView} />
+			{/* <Stack.Screen name="test" component={MessagingScreen} /> */}
 			<Stack.Screen
 				name="hometab"
 				component={HomeTabs}

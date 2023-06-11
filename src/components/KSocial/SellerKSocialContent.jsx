@@ -173,8 +173,8 @@ const SellerKSocialContent = ({ navigation }) => {
 				console.log("tok", token);
 				AsyncStorage.getItem("StoreData")
 					.then((userData) => {
-						console.log("!!!!!!Data!!!!!!!!");
-						console.log(userData);
+						// console.log("!!!!!!Data!!!!!!!!");
+						// console.log(userData);
 
 						fetch("https://klick-api.onrender.com/post/", {
 							method: "GET",
@@ -186,8 +186,8 @@ const SellerKSocialContent = ({ navigation }) => {
 						})
 							.then((res) => res.json())
 							.then((data) => {
-								console.log("!!!!!!!!!Post Data!!!!!!!!!!!!!!!");
-								console.log(data.data.rows);
+								// console.log("!!!!!!!!!Post Data!!!!!!!!!!!!!!!");
+								// console.log(data.data.rows);
 								// console.log(data?.data?.rows);
 								setData(data?.data?.rows);
 								console.log("--all", data);
@@ -239,6 +239,30 @@ const SellerKSocialContent = ({ navigation }) => {
 		}
 	};
 
+
+// This is for Video Upload
+const handleSelectMedia = async () => {
+		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+		if (status !== "granted") {
+			console.log("Permission to access media library denied");
+			return;
+		}
+
+		const result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			quality: 1,
+		});
+		console.log('!!!!!!!!Result!!!!!!!')
+		console.log(result)
+
+		if (!result.cancelled) {
+			setSelectedMedia(result);
+		}
+	};
+
+
+
 	const uploadStatus = async (assets) => {
 		// setIsLoading(true);
 		let formdata = new FormData();
@@ -251,7 +275,7 @@ const SellerKSocialContent = ({ navigation }) => {
 		});
 		formdata.append("post_type", "status");
 		formdata.append("caption", "");
-		console.log("--form", formdata);
+		console.log("--form", formdata.parts);
 
 		try {
 			const token = await AsyncStorage.getItem("token");

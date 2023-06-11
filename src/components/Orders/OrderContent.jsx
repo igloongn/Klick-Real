@@ -31,12 +31,12 @@
 //   setCompletedTab(false)
 //   setCancelledTab(true)
 // }
-
+  
 //   return (
 //     <View >
 //       <View style={styles.row}>
-
-
+       
+      
 //          <TouchableOpacity onPress={active}> 
 //          <Text >Active</Text>
 //       </TouchableOpacity>
@@ -49,8 +49,8 @@
 
 //       </View>
 //         <View style={styles.greyline}/>
-
-
+        
+       
 //         {activeTab &&  <View style={styles.yellowline}/>}
 //         {completedTab &&  <View style={styles.yellowline2}/>}
 //         {cancelledTab &&  <View style={styles.yellowline3}/>}
@@ -92,7 +92,7 @@
 // }
 
 //const styles = StyleSheet.create({
-
+   
 //   row2:{
 //     display: "flex",
 //     flexDirection:"row",
@@ -117,7 +117,7 @@
 //     width: 50,
 //     height: 50,
 //     marginHorizontal:10,
-
+   
 //     borderRadius:50,
 //   },
 //   location:{
@@ -125,7 +125,7 @@
 //     fontWeight:"400",
 //     color:"#98999A",
 //     marginHorizontal:5,
-
+   
 //   },
 //   central:{
 //     fontSize:16,
@@ -142,128 +142,128 @@
 //     height: 48,
 //     marginHorizontal:10,
 //     marginTop: 35,
-
-
+    
+   
 //     borderRadius:4,
 //   },
-
+ 
 // });
 
 // export default OrderContent
 
-import React, { useState, useEffect } from 'react'
-import { Text, View, StyleSheet, Image, TouchableOpacity, } from "react-native"
+import React,{useState,useEffect} from 'react'
+import {Text,View, StyleSheet, Image, TouchableOpacity, } from "react-native"
 
-const OrderContent = ({ navigation }) => {
+const OrderContent = ({navigation}) => {
     const [currentTab, setCurrentTab] = useState(1);
-    const [activeTab, setActiveTab] = useState(true);
-    const [completedTab, setCompletedTab] = useState(false);
-    const [cancelledTab, setCancelledTab] = useState(false);
+   const [activeTab, setActiveTab] = useState(true);
+   const [completedTab, setCompletedTab] = useState(false);
+  const [cancelledTab, setCancelledTab] = useState(false);
 
 
 
 
-    const active = () => {
-        setActiveTab(true)
-        setCompletedTab(false)
-        setCancelledTab(false)
-    }
-    const completed = () => {
-        setActiveTab(false)
-        setCompletedTab(true)
-        setCancelledTab(false)
-    }
-    const cancelled = () => {
-        setActiveTab(false)
-        setCompletedTab(false)
-        setCancelledTab(true)
-    }
-    return (
-        <View style={styles.container}>
+   const active = () =>  {
+       setActiveTab(true)
+       setCompletedTab(false)
+       setCancelledTab(false)
+   }
+   const completed = () =>  {
+     setActiveTab(false)
+     setCompletedTab(true)
+     setCancelledTab(false)
+ }
+ const cancelled = () =>  {
+   setActiveTab(false)
+   setCompletedTab(false)
+   setCancelledTab(true)
+ }
+  return (
+    <View style={styles.container}>
 
-            <View style={styles.row}>
+<View style={styles.row}>
+       
+      
+               <TouchableOpacity onPress={active}> 
+                 <Text >Active</Text>
+              </TouchableOpacity>
+                <TouchableOpacity  onPress={completed}>
+                  <Text>Completed</Text>
+                   </TouchableOpacity>
+                <TouchableOpacity  onPress={cancelled}>
+                   <Text>Cancelled</Text>
+                   </TouchableOpacity>
+       
+              </View>
+                <View style={styles.greyline}/>
+               
+              
+                {activeTab &&  <View style={styles.yellowline}/>}
+                {completedTab &&  <View style={styles.yellowline2}/>}
+                {cancelledTab &&  <View style={styles.yellowline3}/>}
 
 
-                <TouchableOpacity onPress={active}>
-                    <Text >Active</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={completed}>
-                    <Text>Completed</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={cancelled}>
-                    <Text>Cancelled</Text>
-                </TouchableOpacity>
-
-            </View>
-            <View style={styles.greyline} />
-
-
-            {activeTab && <View style={styles.yellowline} />}
-            {completedTab && <View style={styles.yellowline2} />}
-            {cancelledTab && <View style={styles.yellowline3} />}
-
-
-            <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '500', paddingTop: 200 }}>No Orders Found</Text>
-            <Text style={{ textAlign: 'center', fontSize: 16, fontWeight: '200', color: '#6A6B6C' }}>You currently do not have any orders. Orders{'\n'} that you make will appear here</Text>
-        </View>
-    )
+    <Text style={{textAlign:'center', fontSize:24, fontWeight:'500',paddingTop:200}}>No Orders Found</Text>
+    <Text style={{textAlign:'center', fontSize:16, fontWeight:'200',color:'#6A6B6C'}}>You currently do not have any orders. Orders{'\n'} that you make will appear here</Text>
+    </View>
+  )
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        // flex: 1,
-        //backgroundColor: '#FFF',
-        // alignItems: 'center',
-        // justifyContent: 'center',
-    },
-    row: {
-        display: "flex",
-        flexDirection: "row",
-        marginTop: 150,
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    yellowline: {
-        backgroundColor: "#FEDD00",
-        height: 5,
-        width: 110,
-        position: "relative",
-        marginTop: -5,
-        marginLeft: 0,
-
-    },
-    yellowline2: {
-        backgroundColor: "#FEDD00",
-        height: 5,
-        width: 110,
-        position: "relative",
-        marginTop: -5,
-        marginLeft: 120,
-
-    },
-    yellowline3: {
-        backgroundColor: "#FEDD00",
-        height: 5,
-        width: 110,
-        position: "relative",
-        marginTop: -5,
-        marginLeft: 240,
-    },
-    row: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        alignContent: "center"
-    },
-    greyline: {
-        backgroundColor: "#E5E5E5",
-        height: 5,
-        width: 360,
-        position: "relative",
-        marginTop: 10,
-        alignContent: "center"
-    },
+  container: {
+   // flex: 1,
+    //backgroundColor: '#FFF',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop:150,
+    justifyContent: 'space-between',
+    alignItems:'center'
+  },
+  yellowline:{
+    backgroundColor:"#FEDD00",
+    height:5,
+    width:110,
+    position:"relative",
+    marginTop:-5,
+    marginLeft: 0,
+  
+  },
+  yellowline2:{
+    backgroundColor:"#FEDD00",
+    height:5,
+    width:110,
+    position:"relative",
+    marginTop:-5,
+    marginLeft: 120,
+  
+  },
+  yellowline3:{
+    backgroundColor:"#FEDD00",
+    height:5,
+    width:110,
+    position:"relative",
+    marginTop:-5,
+    marginLeft: 240, 
+  },
+  row:{
+    display:"flex",
+    flexDirection:"row",
+    justifyContent:"space-evenly",
+    alignContent:"center"
+  },
+  greyline:{
+    backgroundColor:"#E5E5E5",
+    height:5,
+    width:360,
+    position:"relative",
+    marginTop:10,
+    alignContent:"center"
+  },
 })
 
 export default OrderContent

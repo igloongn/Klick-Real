@@ -18,7 +18,7 @@ const FullScreenCarousel = () => {
 
 		const interval = setInterval(() => {
 			setActiveIndex((prevIndex) => (prevIndex + 1) % data.length);
-		}, 3000); // Adjust the interval time as desired (in milliseconds)
+		}, 15000); // Adjust the interval time as desired (in milliseconds)
 
 		return () => clearInterval(interval);
 	}, [data]);
@@ -32,18 +32,16 @@ const FullScreenCarousel = () => {
 	};
 
 	const onSnapToItem = (index) => {
-
 		setActiveIndex(index);
-        // con
-        // if (index === data.length ) {
-        //     console.log('Finished')
-        // }
-        console.log('Index')
-        console.log(index)
-        console.log('Data Length')
-        console.log(data.length)
-
-    };
+		// con
+		if (index === data.length-1 ) {
+		    console.log('Finished')
+		}
+		console.log("Index");
+		console.log(index);
+		console.log("Data Length");
+		console.log(data.length);
+	};
 
 	return (
 		<View style={styles.container}>
@@ -56,12 +54,12 @@ const FullScreenCarousel = () => {
 						itemWidth={windowWidth}
 						onSnapToItem={onSnapToItem}
 						firstItem={activeIndex}
-                        stopAutoplay = {()=>console.log('holla')}
+						stopAutoplay={() => console.log("holla")}
 						// loop
 						autoplay
-						autoplayInterval={1000} // Adjust the interval time as desired (in milliseconds)
+						autoplayInterval={15000} // Adjust the interval time as desired (in milliseconds)
 					/>
-					<View style={styles.pagination}>
+					{/* <View style={styles.pagination}>
 						{data.map((item, index) => (
 							<Text
 								key={item.id}
@@ -73,7 +71,7 @@ const FullScreenCarousel = () => {
 								&bull;
 							</Text>
 						))}
-					</View>
+					</View> */}
 				</>
 			) : (
 				<></>
