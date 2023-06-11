@@ -20,36 +20,43 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { useRoute, useNavigation } from "@react-navigation/native";
 
-const DATA2 = [
-	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-		title: "First Item",
-	},
-	{
-		id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-		title: "Second Item",
-	},
-	{
-		id: "58694a0f-3da1-471f-bd96-145571e29d72",
-		title: "Third Item",
-	},
-];
+// const DATA2 = [
+// 	{
+// 		id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+// 		title: "First Item",
+// 	},
+// 	{
+// 		id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+// 		title: "Second Item",
+// 	},
+// 	{
+// 		id: "58694a0f-3da1-471f-bd96-145571e29d72",
+// 		title: "Third Item",
+// 	},
+// ];
 
 const ProductDetails = ({ navigation, route }) => {
 	const [toggle, setToggle] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
-	const [data, setData] = useState([]);
+	const [data, setData] = useState(null);
 	const [count, setCount] = useState(1);
 	const { id } = route.params;
 	// const {id} = useParams();
+	const [expanded, setExpanded] = useState(false);
+
+	const toggleAccordion = () => {
+		setExpanded(!expanded);
+	};
 
 	useEffect(() => {
 		axios
 			.get("https://klick-api.onrender.com/product/" + id)
 			.then((res) => {
+				console.log("!!!!!!!!!!Product Detail!!!!!!!!!!!");
+				console.log(res?.data.data);
 				setData(res?.data.data);
-				console.log(res?.data);
-				setIsLoading(true);
+
+				// setIsLoading(true);
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -112,10 +119,12 @@ const ProductDetails = ({ navigation, route }) => {
 	const increment = () => {
 		setCount(count + 1);
 	};
-
 	const decrement = () => {
-		setCount(count - 1);
+		if (count > 1) {
+			setCount(count - 1);
+		}
 	};
+
 	// const route = useRoute();
 	//     const { id } = route.params;
 	//   console.log(route)
@@ -133,99 +142,156 @@ const ProductDetails = ({ navigation, route }) => {
 	return (
 		<View style={styles.container}>
 			<ScrollView>
-				{isLoading && (
+				{data && (
 					<Image
-						style={{ height: 200, width: 357, marginLeft: 20, marginTop: 5 }}
+						style={{ height: 200, width: 357, marginLeft: 20, marginTop: 20 }}
 						source={{ uri: data?.images[0] }}
 					></Image>
 				)}
+				{data && (
+					<>
+						<Text
+							style={{
+								color: "#0B0B0E",
+								fontSize: 20,
+								fontWeight: "500",
+								marginLeft: 20,
+								marginTop: 30,
+							}}
+						>
+							{data?.name}
+						</Text>
+						<Text
+							style={{
+								color: "#0B0B0E",
+								fontSize: 12,
+								fontWeight: "400",
+								marginLeft: 20,
+								marginTop: 5,
+							}}
+						>
+							{data?.rating}(1.2K reviews)
+						</Text>
+						<Text
+							style={{
+								color: "#0485E8",
+								fontSize: 16,
+								fontWeight: "500",
+								marginLeft: 20,
+								marginTop: 5,
+							}}
+						>
+							{data?.price}
+						</Text>
+						<Text
+							style={{
+								color: "#0B0B0E",
+								fontSize: 12,
+								fontWeight: "400",
+								marginLeft: 20,
+								marginTop: 5,
+							}}
+						>
+							{data.quantity.total}
+						</Text>
+						<View
+							style={{
+								backgroundColor: "#F7F7F7",
+								width: 118,
+								height: 48,
+								borderRadius: 30,
+								marginLeft: 20,
+								marginTop: 10,
+							}}
+						>
+							<View style={{ display: "flex", flexDirection: "row" }}>
+								<Pressable onPress={decrement}>
+									<Text
+										style={{
+											fontSize: 24,
+											fontWeight: "500",
+											paddingLeft: 20,
+											paddingTop: 10,
+										}}
+									>
+										-
+									</Text>
+								</Pressable>
+								<Text style={{ marginLeft: 20, marginTop: 15 }}>{count}</Text>
+								<Pressable onPress={increment}>
+									<Text
+										style={{
+											fontSize: 24,
+											fontWeight: "500",
+											fontSize: 24,
+											fontWeight: "500",
+											paddingLeft: 20,
+											paddingTop: 10,
+										}}
+									>
+										+
+									</Text>
+								</Pressable>
+							</View>
+						</View>
 
-				<Text
-					style={{
-						color: "#0B0B0E",
-						fontSize: 20,
-						fontWeight: "500",
-						marginLeft: 20,
-						marginTop: 30,
-					}}
-				>
-					{data?.title}
-				</Text>
-				<Text
-					style={{
-						color: "#0B0B0E",
-						fontSize: 12,
-						fontWeight: "400",
-						marginLeft: 20,
-						marginTop: 5,
-					}}
-				>
-					{data?.rating}(1.2K reviews)
-				</Text>
-				<Text
-					style={{
-						color: "#0485E8",
-						fontSize: 16,
-						fontWeight: "500",
-						marginLeft: 20,
-						marginTop: 5,
-					}}
-				>
-					{data?.price}
-				</Text>
-				<Text
-					style={{
-						color: "#0B0B0E",
-						fontSize: 12,
-						fontWeight: "400",
-						marginLeft: 20,
-						marginTop: 5,
-					}}
-				>
-					Quantity
-				</Text>
-				<View
-					style={{
-						backgroundColor: "#F7F7F7",
-						width: 118,
-						height: 48,
-						borderRadius: 30,
-						marginLeft: 20,
-						marginTop: 10,
-					}}
-				>
-					<View style={{ display: "flex", flexDirection: "row" }}>
-						<Pressable onPress={decrement}>
+						<View
+							style={{
+								backgroundColor: "#F7F7F7",
+								width: 375,
+								height: 76,
+								marginLeft: 0,
+								marginTop: 10,
+							}}
+						>
 							<Text
 								style={{
-									fontSize: 24,
+									color: "#0B0B0E",
+									fontSize: 14,
 									fontWeight: "500",
 									marginLeft: 20,
-									marginTop: 10,
+									marginTop: 20,
 								}}
 							>
-								-
+								K-Secured Return Option
 							</Text>
-						</Pressable>
-						<Text style={{ marginLeft: 20, marginTop: 15 }}>{count}</Text>
-						<Pressable onPress={increment}>
 							<Text
 								style={{
-									fontSize: 24,
-									fontWeight: "500",
-									fontSize: 24,
-									fontWeight: "500",
+									color: "#0B0B0E",
+									fontSize: 12,
+									fontWeight: "400",
 									marginLeft: 20,
-									marginTop: 10,
+									marginTop: 0,
 								}}
 							>
-								+
+								Free return within 3 days. Money back guarantee
 							</Text>
-						</Pressable>
-					</View>
-				</View>
+						</View>
 
-				<View
+						<Text
+							style={{
+								color: "#0B0B0E",
+								fontSize: 16,
+								fontWeight: "500",
+								marginLeft: 20,
+								marginTop: 20,
+							}}
+						>
+							Description
+						</Text>
+						<Text
+							style={{
+								color: "#0B0B0E",
+								fontSize: 12,
+								fontWeight: "400",
+								marginLeft: 20,
+								marginTop: 0,
+							}}
+						>
+							{data?.description}
+						</Text>
+
+						{/* <View
 					style={{
 						backgroundColor: "#F7F7F7",
 						width: 375,
@@ -233,8 +299,9 @@ const ProductDetails = ({ navigation, route }) => {
 						marginLeft: 0,
 						marginTop: 10,
 					}}
-				>
-					<Text
+				> */}
+
+						{/* <Accordion
 						style={{
 							color: "#0B0B0E",
 							fontSize: 14,
@@ -242,110 +309,121 @@ const ProductDetails = ({ navigation, route }) => {
 							marginLeft: 20,
 							marginTop: 20,
 						}}
+						isExpanded={expanded}
+						onToggle={toggleAccordion}
+						header={
+							<TouchableOpacity onPress={toggleAccordion}>
+								<Text>Contact Store Owner </Text>
+							</TouchableOpacity>
+						}
 					>
-						K-Secured Return Option
-					</Text>
-					<Text
-						style={{
-							color: "#0B0B0E",
-							fontSize: 12,
-							fontWeight: "400",
-							marginLeft: 20,
-							marginTop: 0,
-						}}
-					>
-						Free return within 3 days. Money back guarantee
-					</Text>
-				</View>
+						<View>
+							<Text>Accordion Content</Text>
+						</View>
+					</Accordion> */}
+						{/* </View> */}
 
-				<Text
-					style={{
-						color: "#0B0B0E",
-						fontSize: 16,
-						fontWeight: "500",
-						marginLeft: 20,
-						marginTop: 20,
-					}}
-				>
-					Description
-				</Text>
-				<Text
-					style={{
-						color: "#0B0B0E",
-						fontSize: 12,
-						fontWeight: "400",
-						marginLeft: 20,
-						marginTop: 0,
-					}}
-				>
-					{data?.description}
-				</Text>
+						<View style={styles.acontainer}>
+							<TouchableOpacity onPress={toggleAccordion}>
+								<View style={styles.aheader}>
+									<Text style={styles.atitle}>{"Contact Store Owner"}</Text>
+								</View>
+							</TouchableOpacity>
+							{expanded && (
+								<View
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										justifyContent: "center",
+										alignItems: "flex-start",
+										padding: 20,
+									}}
+								>
+									<TouchableOpacity
+										onPress={() => console.log("Instagram Link Clicked")}
+										style={{
+											marginVertical: 10,
+										}}
+									>
+										<Text>{"Instagram"}: Mufasa</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										onPress={() => console.log("WhatsApp Link Clicked")}
+										style={{
+											marginVertical: 10,
+										}}
+									>
+										<Text>{"WhatsApp"}: 081394958736</Text>
+									</TouchableOpacity>
+								</View>
+							)}
+						</View>
 
-				<TouchableOpacity onPress={() => navigation.navigate("rates")}>
-					<Text
-						style={{
-							color: "#0B0B0E",
-							fontSize: 14,
-							fontWeight: "500",
-							marginLeft: 20,
-							marginTop: 20,
-						}}
-					>
-						Ratings & Reviews
-					</Text>
-					<Text
-						style={{
-							color: "#0B0B0E",
-							fontSize: 12,
-							fontWeight: "400",
-							marginLeft: 20,
-							marginTop: 0,
-						}}
-					>
-						4.8(1.2K reviews)
-					</Text>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							marginTop: 10,
-							marginLeft: 20,
-						}}
-					>
-						<AntDesign name="star" size={20} color="yellow" />
-						<AntDesign name="star" size={20} color="yellow" />
-						<AntDesign name="star" size={20} color="yellow" />
-						<AntDesign name="star" size={20} color="gray" />
-						<AntDesign name="star" size={20} color="gray" />
-					</View>
-				</TouchableOpacity>
+						<TouchableOpacity onPress={() => navigation.navigate("rates")}>
+							<Text
+								style={{
+									color: "#0B0B0E",
+									fontSize: 14,
+									fontWeight: "500",
+									marginLeft: 20,
+									marginTop: 20,
+								}}
+							>
+								Ratings & Reviews
+							</Text>
+							<Text
+								style={{
+									color: "#0B0B0E",
+									fontSize: 12,
+									fontWeight: "400",
+									marginLeft: 20,
+									marginTop: 0,
+								}}
+							>
+								4.8(1.2K reviews)
+							</Text>
+							<View
+								style={{
+									display: "flex",
+									flexDirection: "row",
+									marginTop: 10,
+									marginLeft: 20,
+								}}
+							>
+								<AntDesign name="star" size={20} color="yellow" />
+								<AntDesign name="star" size={20} color="yellow" />
+								<AntDesign name="star" size={20} color="yellow" />
+								<AntDesign name="star" size={20} color="gray" />
+								<AntDesign name="star" size={20} color="gray" />
+							</View>
+						</TouchableOpacity>
 
-				<Text
-					style={{
-						color: "#0B0B0E",
-						fontSize: 14,
-						fontWeight: "500",
-						marginLeft: 20,
-						marginTop: 20,
-					}}
-				>
-					It's Lovely
-				</Text>
-				<Text
-					style={{
-						color: "#0B0B0E",
-						fontSize: 12,
-						fontWeight: "400",
-						marginLeft: 20,
-						marginTop: 0,
-					}}
-				>
-					However rare side effects observed among children{"\n"}can be
-					metabolic acidosis, coma, respiratory{"\n"}depression, and
-					hypoglycemia
-				</Text>
+						<Text
+							style={{
+								color: "#0B0B0E",
+								fontSize: 14,
+								fontWeight: "500",
+								marginLeft: 20,
+								marginTop: 20,
+							}}
+						>
+							It's Lovely
+						</Text>
+						<Text
+							style={{
+								color: "#0B0B0E",
+								fontSize: 12,
+								fontWeight: "400",
+								marginLeft: 20,
+								marginTop: 0,
+							}}
+						>
+							However rare side effects observed among children{"\n"}can be
+							metabolic acidosis, coma, respiratory{"\n"}depression, and
+							hypoglycemia
+						</Text>
 
-				{/* <Text style={{fontSize:17,fontWeight:"600",marginHorizontal:10,marginTop:10}}>Popular</Text>
+						{/* <Text style={{fontSize:17,fontWeight:"600",marginHorizontal:10,marginTop:10}}>Popular</Text>
 
            <FlatList
        style={{marginTop: 20}}
@@ -355,133 +433,135 @@ const ProductDetails = ({ navigation, route }) => {
         horizontal
       /> */}
 
-				<Text
-					style={{
-						fontSize: 17,
-						fontWeight: "600",
-						marginHorizontal: 10,
-						marginTop: 20,
-						marginLeft: 20,
-					}}
-				>
-					Similar Products
-				</Text>
+						<Text
+							style={{
+								fontSize: 17,
+								fontWeight: "600",
+								marginHorizontal: 10,
+								marginTop: 20,
+								marginLeft: 20,
+							}}
+						>
+							Similar Products
+						</Text>
 
-				<View style={{ marginBottom: 30 }}>
-					<Image
-						style={styles.orderpic}
-						source={require("../../../assets/orderpic.png")}
-					></Image>
-					<Text
-						style={{
-							marginHorizontal: 130,
-							marginTop: -95,
-							fontWeight: "500",
-							fontSize: 17,
-						}}
-					>
-						HD SLR Camera
-					</Text>
-					<Text
-						style={{
-							color: "#0485E8",
-							marginHorizontal: 130,
-							fontWeight: "500",
-							fontSize: 15,
-							marginTop: 5,
-						}}
-					>
-						N20,000
-					</Text>
-					<Text
-						style={{
-							marginHorizontal: 130,
-							fontWeight: "500",
-							fontSize: 15,
-							marginTop: 5,
-						}}
-					>
-						QTY:2
-					</Text>
-				</View>
+						<View style={{ marginBottom: 30 }}>
+							<Image
+								style={styles.orderpic}
+								source={require("../../../assets/orderpic.png")}
+							></Image>
+							<Text
+								style={{
+									marginHorizontal: 130,
+									marginTop: -95,
+									fontWeight: "500",
+									fontSize: 17,
+								}}
+							>
+								HD SLR Camera
+							</Text>
+							<Text
+								style={{
+									color: "#0485E8",
+									marginHorizontal: 130,
+									fontWeight: "500",
+									fontSize: 15,
+									marginTop: 5,
+								}}
+							>
+								N20,000
+							</Text>
+							<Text
+								style={{
+									marginHorizontal: 130,
+									fontWeight: "500",
+									fontSize: 15,
+									marginTop: 5,
+								}}
+							>
+								QTY:2
+							</Text>
+						</View>
 
-				<View style={{ marginBottom: 30 }}>
-					<Image
-						style={styles.orderpic}
-						source={require("../../../assets/orderpic.png")}
-					></Image>
-					<Text
-						style={{
-							marginHorizontal: 130,
-							marginTop: -95,
-							fontWeight: "500",
-							fontSize: 17,
-						}}
-					>
-						HD SLR Camera
-					</Text>
-					<Text
-						style={{
-							color: "#0485E8",
-							marginHorizontal: 130,
-							fontWeight: "500",
-							fontSize: 15,
-							marginTop: 5,
-						}}
-					>
-						N20,000
-					</Text>
-					<Text
-						style={{
-							marginHorizontal: 130,
-							fontWeight: "500",
-							fontSize: 15,
-							marginTop: 5,
-						}}
-					>
-						QTY:2
-					</Text>
-				</View>
+						<View style={{ marginBottom: 30 }}>
+							<Image
+								style={styles.orderpic}
+								source={require("../../../assets/orderpic.png")}
+							></Image>
+							<Text
+								style={{
+									marginHorizontal: 130,
+									marginTop: -95,
+									fontWeight: "500",
+									fontSize: 17,
+								}}
+							>
+								HD SLR Camera
+							</Text>
+							<Text
+								style={{
+									color: "#0485E8",
+									marginHorizontal: 130,
+									fontWeight: "500",
+									fontSize: 15,
+									marginTop: 5,
+								}}
+							>
+								N20,000
+							</Text>
+							<Text
+								style={{
+									marginHorizontal: 130,
+									fontWeight: "500",
+									fontSize: 15,
+									marginTop: 5,
+								}}
+							>
+								QTY:2
+							</Text>
+						</View>
 
-				<View style={{ marginBottom: 30 }}>
-					<Image
-						style={styles.orderpic}
-						source={require("../../../assets/orderpic.png")}
-					></Image>
-					<Text
-						style={{
-							marginHorizontal: 130,
-							marginTop: -95,
-							fontWeight: "500",
-							fontSize: 17,
-						}}
-					>
-						HD SLR Camera
-					</Text>
-					<Text
-						style={{
-							color: "#0485E8",
-							marginHorizontal: 130,
-							fontWeight: "500",
-							fontSize: 15,
-							marginTop: 5,
-						}}
-					>
-						N20,000
-					</Text>
-					<Text
-						style={{
-							marginHorizontal: 130,
-							fontWeight: "500",
-							fontSize: 15,
-							marginTop: 5,
-						}}
-					>
-						QTY:2
-					</Text>
-				</View>
+						<View style={{ marginBottom: 30 }}>
+							<Image
+								style={styles.orderpic}
+								source={require("../../../assets/orderpic.png")}
+							></Image>
+							<Text
+								style={{
+									marginHorizontal: 130,
+									marginTop: -95,
+									fontWeight: "500",
+									fontSize: 17,
+								}}
+							>
+								HD SLR Camera
+							</Text>
+							<Text
+								style={{
+									color: "#0485E8",
+									marginHorizontal: 130,
+									fontWeight: "500",
+									fontSize: 15,
+									marginTop: 5,
+								}}
+							>
+								N20,000
+							</Text>
+							<Text
+								style={{
+									marginHorizontal: 130,
+									fontWeight: "500",
+									fontSize: 15,
+									marginTop: 5,
+								}}
+							>
+								QTY:2
+							</Text>
+						</View>
 
-				<View style={{ marginTop: 70 }} />
+						<View style={{ marginTop: 70 }} />
+					</>
+				)}
 			</ScrollView>
 
 			<View
@@ -506,7 +586,15 @@ const ProductDetails = ({ navigation, route }) => {
 					marginTop={80}
 					marginHorizintal={25}
 				/>
-				<Pressable onPress={() => navigation.navigate("mycart")}>
+				{/* <Pressable onPress={() => navigation.navigate("mycart")}> */}
+				<Pressable
+					onPress={() =>
+						navigation.navigate({
+							name: "mycart",
+							params: { id: data.id, itemCount: count },
+						})
+					}
+				>
 					{/* <Pressable onPress={() => {}}> */}
 					<GeneralButton
 						style={styles.shift}
@@ -572,6 +660,22 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20,
 		marginTop: 15,
 		borderRadius: 10,
+	},
+	acontainer: {
+		marginTop: 20,
+		// marginBottom: 10,
+		backgroundColor: "#fff",
+		borderRadius: 5,
+		overflow: "hidden",
+	},
+	aheader: {
+		padding: 10,
+		backgroundColor: "#f2f2f2",
+	},
+	atitle: {
+		marginLeft: 10,
+		fontSize: 16,
+		fontWeight: "500",
 	},
 });
 

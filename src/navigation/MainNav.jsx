@@ -66,6 +66,11 @@ import ProductList from "../components/Home/ProductList";
 import MessagingScreen from "../utils/Test";
 import NewStories from "../components/KSocial/NewStories";
 
+import MyCart from "../components/Orders/MyCart";
+import CheckOut from "../components/Orders/CheckOut";
+import ShipSeller from "../components/Orders/ShipSeller";
+import AddDeliveryLocation from "../components/Orders/AddDeliveryLocation";
+
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 
@@ -116,7 +121,9 @@ export default function MainNav() {
 			<Stack.Screen name="settings" component={Settings} />
 			<Stack.Screen name="specialoffer" component={SpecialOffer} />
 			<Stack.Screen name="shoppage" component={ShopPage} />
-			<Stack.Screen name="productdetails" component={ProductDetails} />
+			<Stack.Screen name="productdetails" component={ProductDetails} options={{
+				title: 'Product Details'
+			}} />
 			<Stack.Screen name="orderdetails" component={OrderDetails} />
 			<Stack.Screen name="profilesettings" component={ProfileSettings} />
 			<Stack.Screen name="manageaccount" component={ManageAccount} />
@@ -205,6 +212,20 @@ export default function MainNav() {
 			<Stack.Screen name="wallet" component={Wallet} />
 			<Stack.Screen name="topup" component={TopUp} />
 			<Stack.Screen name="withdraw" component={Withdraw} />
+
+			<Stack.Screen name="mycart" component={MyCart} options={{
+				title: 'My Cart',
+			}} />
+			<Stack.Screen name="checkout" component={CheckOut} options={{
+				title: 'Check out',
+			}} />
+			<Stack.Screen name="shipseller" component={ShipSeller} />
+
+
+
+			<Stack.Screen name="adddeliverylocation" component={AddDeliveryLocation} options={{
+				title: 'Add Delivery Location',
+			}} />
 		</Stack.Navigator>
 	);
 }

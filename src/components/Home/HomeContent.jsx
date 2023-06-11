@@ -112,7 +112,7 @@ const HomeContent = ({ navigation }) => {
 				AsyncStorage.setItem("StoreData", res.data.stores[0].id)
 			})
 			.catch((err) => {
-				console.log("!!!!!!!Error!!!!!!!");
+				console.log("!!!!!!!Error for the user!!!!!!!");
 				console.log(err);
 			});
 	});
