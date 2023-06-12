@@ -19,6 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
 import { useRoute, useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // const DATA2 = [
 // 	{
@@ -40,6 +41,10 @@ const ProductDetails = ({ navigation, route }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState(null);
 	const [count, setCount] = useState(1);
+	const [buttonText, setButtonText] = useState({
+		text: "Add to cart",
+		color: "#FEDD00",
+	});
 	const { id } = route.params;
 	// const {id} = useParams();
 	const [expanded, setExpanded] = useState(false);
@@ -52,69 +57,14 @@ const ProductDetails = ({ navigation, route }) => {
 		axios
 			.get("https://klick-api.onrender.com/product/" + id)
 			.then((res) => {
-				console.log("!!!!!!!!!!Product Detail!!!!!!!!!!!");
-				console.log(res?.data.data);
+				// console.log("!!!!!!!!!!Product Detail!!!!!!!!!!!");
+				// console.log(res?.data.data);
 				setData(res?.data.data);
 
 				// setIsLoading(true);
 			})
 			.catch((err) => console.log(err));
 	}, []);
-
-	// const TopUp = () => {
-	//   const [amount, setAmount] = useState('');
-	//   const [reference, setReference] = useState('')
-	//   const [description, setDescription] = useState('')
-	//   const [isLoading, setIsLoading] = useState(false)
-	//   const [change, setChange] = useState('');
-
-	// const buynow = async () => {
-	//   setIsLoading(true)
-	//   try {
-	//     const token = await AsyncStorage.getItem('token');
-	//     console.log('tok', token)
-
-	//     const submitdata = {
-
-	//       amount: parseInt(amount),
-	//       reference,
-	//       description
-
-	//     }
-	//     console.log(submitdata)
-	//     // const url = `https://klick-api.onrender.com/product/?category=${selectCatId}`
-	//     const response = await fetch('https://klick-api.onrender.com/wallet', {
-	//       method: "POST",
-	//       mode: 'no-cors',
-	//       headers: {
-	//         'Content-Type': 'application/json',
-	//         'Authorization': `Bearer ${token}`
-	//       },
-	//       body: JSON.stringify(submitdata)
-	//     })
-
-	//     let res_status = await response?.statusText
-	//     res_status = parseInt(res_status)
-	//     if (response?.status >= 200 && response?.status < 203) {
-	//       // const _data = await response?.json();
-	//       // console.log('y', _data)
-
-	//       //   navigation.navigate('wallet')
-	//       Alert.alert('Success', 'Top up added successfully');
-	//     } else {
-	//       // throw Error(`${response?.statusText}`)
-	//       Alert.alert('Error', `Top up added unsuccessfully ${response?.status}`);
-	//     }
-
-	//   } catch (error) {
-	//     // Handle network or other errors
-	//     console.error(error);
-	//     Alert.alert('Error', 'An error occured ');
-	//   } finally {
-	//     setIsLoading(false)
-	//   }
-
-	// };
 
 	const increment = () => {
 		setCount(count + 1);
@@ -124,21 +74,99 @@ const ProductDetails = ({ navigation, route }) => {
 			setCount(count - 1);
 		}
 	};
+	const addToCart = () => {
+		setButtonText({ text: "Added", color: "green" });
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				axios
+					.get("https://klick-api.onrender.com/auth/user", {
+						headers: { Authorization: "Bearer " + token },
+					})
+					.then((user) => {
+						console.log("!!!!!!!!Cart id!!!!!!!!!");
+						console.log(user.data.user.Cart.id);
+						const cartId = user.data.user.Cart.id;
+						console.log("!!!!!!!!!Product ID!!!!!!!!!!");
+						const productId = data.id;
+						console.log(productId);
+						console.log("quantity: ", count);
+						const payload = {
+							items: {
+								[productId]: count,
+							},
+						};
+						console.log("!!!!!!!!!!!!!payload!!!!!!!!!!!");
+						console.log(payload);
 
-	// const route = useRoute();
-	//     const { id } = route.params;
-	//   console.log(route)
-	// const navigate = useNavigation()
-	// const {id} = useParams();
-	//     useEffect(() => {
-	//       axios.get("https://fakestoreapi.com/products/" + id  )
-	//       .then(res => {
-	//         setData(res.data)
-	//         console.log(res.data)
-	//       }
-	//         )
-	//       .catch(err => console.log(err))
-	//   },[])
+						// const products = [
+						// 	{
+						// 		productId: productId,
+						// 		quantity: 2,
+						// 	},
+						// 	{
+						// 		productId: productId,
+						// 		quantity: 2,
+						// 	},
+						// ];
+
+						// const payload = {
+						// 	items: {},
+						// };
+
+						// products.forEach((product, index) => {
+						// 	console.log('For Each Product')
+						// 	console.log(product)
+						// 	payload.items[product.productId] = product.quantity;
+						// });
+
+						// fetch(`https://klick-api.onrender.com/cart/update/${cartId}`, {
+						// 	method: "PUT",
+						// 	headers: {
+						// 		Authorization: `Bearer ${token}`,
+						// 		"Content-Type": "application/json", // Set the desired content type
+						// 	},
+						// 	body: JSON.stringify({ items: { productId: count } }),
+						// })
+						// 	.then((res) => res.json())
+						// 	.then((res) => console.log(res));
+
+						axios
+							.put(
+								`https://klick-api.onrender.com/cart/update/${cartId}`,
+								{
+									payload,
+								},
+								{
+									headers: {
+										"Content-Type": "application/json",
+										Authorization: "Bearer " + token,
+									},
+								}
+							)
+							.then((res) => {
+								console.log("!!!!!!Add to Cart Response!!!!!!!!!");
+								console.log(res.data);
+							})
+							.catch((err) => {
+								console.log("Add to cart Error!!!!!!!!!!");
+								console.log(err);
+							});
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
+			})
+			.catch((error) => {
+				console.log("!!!!!!!!Get token Error!!!!!!!!");
+				console.log(error);
+			});
+
+		// navigation.navigate({
+		// 	name: "mycart",
+		// 	params: { id: data.id, itemCount: count },
+		// })
+	};
+
 	return (
 		<View style={styles.container}>
 			<ScrollView>
@@ -290,38 +318,6 @@ const ProductDetails = ({ navigation, route }) => {
 						>
 							{data?.description}
 						</Text>
-
-						{/* <View
-					style={{
-						backgroundColor: "#F7F7F7",
-						width: 375,
-						height: 76,
-						marginLeft: 0,
-						marginTop: 10,
-					}}
-				> */}
-
-						{/* <Accordion
-						style={{
-							color: "#0B0B0E",
-							fontSize: 14,
-							fontWeight: "500",
-							marginLeft: 20,
-							marginTop: 20,
-						}}
-						isExpanded={expanded}
-						onToggle={toggleAccordion}
-						header={
-							<TouchableOpacity onPress={toggleAccordion}>
-								<Text>Contact Store Owner </Text>
-							</TouchableOpacity>
-						}
-					>
-						<View>
-							<Text>Accordion Content</Text>
-						</View>
-					</Accordion> */}
-						{/* </View> */}
 
 						<View style={styles.acontainer}>
 							<TouchableOpacity onPress={toggleAccordion}>
@@ -587,19 +583,12 @@ const ProductDetails = ({ navigation, route }) => {
 					marginHorizintal={25}
 				/>
 				{/* <Pressable onPress={() => navigation.navigate("mycart")}> */}
-				<Pressable
-					onPress={() =>
-						navigation.navigate({
-							name: "mycart",
-							params: { id: data.id, itemCount: count },
-						})
-					}
-				>
+				<Pressable onPress={() => addToCart()}>
 					{/* <Pressable onPress={() => {}}> */}
 					<GeneralButton
 						style={styles.shift}
-						message="Buy Now"
-						backgroundColor={"#FEDD00"}
+						message={buttonText.text}
+						backgroundColor={buttonText.color}
 						color="black"
 						width={159.5}
 						height={54}

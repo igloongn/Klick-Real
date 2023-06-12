@@ -9,6 +9,8 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	ActivityIndicator,
+	Platform,
+	SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CategoriesCard from "./CategoriesCard";
@@ -22,6 +24,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetLogginedUser } from "../../utils/apiHooks";
 import { useIsFocused } from "@react-navigation/native";
 import { useFocusEffect } from "@react-navigation/native";
+
+import { AntDesign } from '@expo/vector-icons';
+
 
 const DATA2 = [
 	{
@@ -109,7 +114,7 @@ const HomeContent = ({ navigation }) => {
 			.then((res) => {
 				console.log("!!!!!!!!!!Store ID!!!!!!!!");
 				console.log(res.data.stores[0].id);
-				AsyncStorage.setItem("StoreData", res.data.stores[0].id)
+				AsyncStorage.setItem("StoreData", res.data.stores[0].id);
 			})
 			.catch((err) => {
 				console.log("!!!!!!!Error for the user!!!!!!!");
@@ -211,253 +216,243 @@ const HomeContent = ({ navigation }) => {
 	}, [focus, isLoading]);
 
 	console.log(showGallery);
+	// Custom Badge component
+const Badge = ({ count }) => {
+  if (count === 0) {
+    return null;
+  }
+
+  return (
+    <View style={styles.badgeContainer}>
+      <Text style={styles.badgeText}>{count}</Text>
+    </View>
+  );
+};
 
 	return (
 		<View>
-			<View
-				style={{
-					display: "flex",
-					flexDirection: "row",
-					justifyContent: "space-between",
-					paddingTop: 50,
-				}}
-			>
-				<Image
-					style={styles.stretch}
-					source={require("../../../assets/profile.jpg")}
-				></Image>
-				{isLoggedIn ? (
-					<View style={{ marginTop: 5 }}>
-						{/* <Text
-							style={{
-								fontSize: 12,
-								fontWeight: "400",
-								color: "#98999A",
-								marginRight: 30,
-							}}
-						>
-							Location
-						</Text>
-						<Text style={styles.central}>Central Ikoyi</Text> */}
-					</View>
-				) : (
-					<>
-						<TouchableOpacity
-							style={{
-								marginLeft: 20,
-								display: "flex",
-								paddingHorizontal: 20,
-								borderRadius: 10,
-								justifyContent: "center",
-								alignItems: "center",
-								backgroundColor: "#FEDD00",
-							}}
-							onPress={() => navigation.navigate("login")}
-						>
-							<Text>Login</Text>
-						</TouchableOpacity>
-					</>
-				)}
+			<SafeAreaView style={styles.droidSafeArea}>
 				<View
 					style={{
-						width: 50,
-						height: 50,
-						backgroundColor: "#E6E6FA",
-						borderRadius: 50,
-						marginRight: 30,
-						//marginLeft: 150,
-					}}
-				>
-					<Ionicons
-						name="notifications-outline"
-						size={17}
-						color="black"
-						style={styles.bell}
-					/>
-				</View>
-			</View>
-			{/* <View style={{ paddingHorizontal: 30, paddingTop: 80 }}>
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image style={{ height: 60, width: 60, borderRadius: 50 }} source={require('../../../assets/profile.jpg')}></Image>
-                    <View style={{ marginRight: 80 }}>
-                        <Text style={{ marginRight: 50, fontSize: 18, marginTop: 20 }}>Central,Ikoyi</Text>
-                        <Text style={{ marginRight:50, fontSize: 18, marginTop: 0, color: "#98999A" }}>location</Text>
-                    </View>
-               
-                    <View style={{ //width: 50,
-   // height: 50,
-    backgroundColor: "#E6E6FA",
-    borderRadius: 50,
-   
-    //marginLeft: 150,
-  }}>
-          <Ionicons name="notifications-outline" size={17} color="black" style={styles.bell} />
-        </View>
-                </View>
-            </View> */}
-			<ScrollView style={[styles.scrollView]}>
-				<View
-					style={{
-						marginVertical: 10,
+						display: "flex",
 						flexDirection: "row",
+						justifyContent: "space-between",
 						alignItems: "center",
-						paddingHorizontal: 12,
+						paddingVertical: 10,
 					}}
 				>
-					<TextInput
-						style={[styles.input, { flex: 1 }]}
-						onChangeSearch={onChangeSearch}
-						value={search}
-						placeholder="Looking for something Amazing?"
-						keyboardType="numeric"
-					/>
-					<Ionicons
-						name="search-outline"
-						size={24}
-						color="#6A6B6C"
-						style={{ marginRight: 8 }}
-					/>
-				</View>
-
-				{loading && (
-					<View>
-						<ActivityIndicator />
-						{/* <Text>Loading...</Text> */}
-					</View>
-				)}
-				{_data && (
-					<View>
-						<FlatList
-							// style={{  }}
-							data={_data}
-							renderItem={({ item }) =>
-								item?.posttype === "status" ? (
-									<Item navigation={navigation} item={item} />
-								) : (
-									<></>
-								)
-							}
-							keyExtractor={(item) => item.id}
-							horizontal
+					<Image
+						style={styles.stretch}
+						source={require("../../../assets/profile.jpg")}
+					></Image>
+					{isLoggedIn ? (
+						<View style={{ marginTop: 5,  }}>
+							<View style={styles.cart}>
+								<TouchableOpacity onPress={() => console.log("Open cart")}>
+									<AntDesign name="shoppingcart" size={24} color="black" />
+									<Badge count={12} />
+								</TouchableOpacity>
+							</View>
+						</View>
+					) : (
+						<>
+							<TouchableOpacity
+								style={{
+									marginLeft: 20,
+									display: "flex",
+									paddingHorizontal: 20,
+									borderRadius: 10,
+									justifyContent: "center",
+									alignItems: "center",
+									backgroundColor: "#FEDD00",
+								}}
+								onPress={() => navigation.navigate("login")}
+							>
+								<Text>Login</Text>
+							</TouchableOpacity>
+						</>
+					)}
+					<View
+						style={{
+							width: 50,
+							height: 50,
+							backgroundColor: "#E6E6FA",
+							borderRadius: 50,
+							marginRight: 30,
+							//marginLeft: 150,
+						}}
+					>
+						<Ionicons
+							name="notifications-outline"
+							size={17}
+							color="black"
+							style={styles.bell}
 						/>
 					</View>
-				)}
-
-				<Text
-					style={{
-						fontWeight: "500",
-						fontSize: 16,
-						marginTop: 10,
-						marginHorizontal: 20,
-					}}
-				>
-					Categories
-				</Text>
-
-				<View
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "space-around",
-						alignItems: "center",
-					}}
-				>
-					<CategoriesCard
-						navigation={navigation}
-						pic={require("../../../assets/1.png")}
-						label={"mum"}
-						route={"categories"}
-					/>
-					<CategoriesCard
-						navigation={navigation}
-						pic={require("../../../assets/1.png")}
-						label={"mum"}
-						route={"categories"}
-					/>
-					<CategoriesCard
-						navigation={navigation}
-						pic={require("../../../assets/2.png")}
-						label={"baby"}
-						route={"categories"}
-					/>
-					<CategoriesCard
-						navigation={navigation}
-						pic={require("../../../assets/3.png")}
-						label={"electron"}
-						route={"categories"}
-					/>
 				</View>
-				<View
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "space-around",
-						alignItems: "center",
-						// marginHorizontal: 20,
-						marginVertical: 40,
-					}}
-				>
-					<CategoriesCard
-						navigation={navigation}
-						pic={require("../../../assets/4.png")}
-						label={"homeware"}
-						route={"categories"}
-					/>
-					<CategoriesCard
-						navigation={navigation}
-						pic={require("../../../assets/5.png")}
-						label={"health"}
-						route={"categories"}
-					/>
-					<CategoriesCard
-						navigation={navigation}
-						pic={require("../../../assets/6.png")}
-						label={"beauty"}
-						route={"categories"}
-					/>
-					<CategoriesCard
-						navigation={navigation}
-						pic={require("../../../assets/7.png")}
-						label={"fashion"}
-						route={"categories"}
-					/>
-				</View>
-				<View
-					style={{
-						marginTop: 30,
-					}}
-				></View>
-				<Text
-					style={{
-						fontWeight: "500",
-						fontSize: 16,
-						marginTop: 20,
-						marginHorizontal: 15,
-					}}
-				>
-					Special Offers
-				</Text>
+				<ScrollView style={[styles.scrollView]}>
+					<View
+						style={{
+							marginVertical: 10,
+							flexDirection: "row",
+							alignItems: "center",
+							paddingHorizontal: 12,
+						}}
+					>
+						<TextInput
+							style={[styles.input, { flex: 1 }]}
+							onChangeSearch={onChangeSearch}
+							value={search}
+							placeholder="Looking for something Amazing?"
+							keyboardType="numeric"
+						/>
+						<Ionicons
+							name="search-outline"
+							size={24}
+							color="#6A6B6C"
+							style={{ marginRight: 8 }}
+						/>
+					</View>
 
-				<FlatList
-					style={{ marginTop: 20 }}
-					data={DATA2}
-					renderItem={({ item }) => <SpecialCard navigation={navigation} />}
-					keyExtractor={(item) => item.id}
-					horizontal
-				/>
+					{loading && (
+						<View>
+							<ActivityIndicator />
+							{/* <Text>Loading...</Text> */}
+						</View>
+					)}
+					{_data && (
+						<View>
+							<FlatList
+								// style={{  }}
+								data={_data}
+								renderItem={({ item }) =>
+									item?.posttype === "status" ? (
+										<Item navigation={navigation} item={item} />
+									) : (
+										<></>
+									)
+								}
+								keyExtractor={(item) => item.id}
+								horizontal
+							/>
+						</View>
+					)}
 
-				<Text
-					style={{
-						fontWeight: "500",
-						fontSize: 16,
-						marginTop: 20,
-						marginHorizontal: 15,
-					}}
-				>
-					Sponsored
-				</Text>
+					<Text
+						style={{
+							fontWeight: "500",
+							fontSize: 16,
+							marginTop: 10,
+							marginHorizontal: 20,
+						}}
+					>
+						Categories
+					</Text>
 
-				{/*       
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "space-around",
+							alignItems: "center",
+						}}
+					>
+						<CategoriesCard
+							navigation={navigation}
+							pic={require("../../../assets/1.png")}
+							label={"mum"}
+							route={"categories"}
+						/>
+						<CategoriesCard
+							navigation={navigation}
+							pic={require("../../../assets/1.png")}
+							label={"mum"}
+							route={"categories"}
+						/>
+						<CategoriesCard
+							navigation={navigation}
+							pic={require("../../../assets/2.png")}
+							label={"baby"}
+							route={"categories"}
+						/>
+						<CategoriesCard
+							navigation={navigation}
+							pic={require("../../../assets/3.png")}
+							label={"electron"}
+							route={"categories"}
+						/>
+					</View>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "space-around",
+							alignItems: "center",
+							// marginHorizontal: 20,
+							marginVertical: 40,
+						}}
+					>
+						<CategoriesCard
+							navigation={navigation}
+							pic={require("../../../assets/4.png")}
+							label={"homeware"}
+							route={"categories"}
+						/>
+						<CategoriesCard
+							navigation={navigation}
+							pic={require("../../../assets/5.png")}
+							label={"health"}
+							route={"categories"}
+						/>
+						<CategoriesCard
+							navigation={navigation}
+							pic={require("../../../assets/6.png")}
+							label={"beauty"}
+							route={"categories"}
+						/>
+						<CategoriesCard
+							navigation={navigation}
+							pic={require("../../../assets/7.png")}
+							label={"fashion"}
+							route={"categories"}
+						/>
+					</View>
+					<View
+						style={{
+							marginTop: 30,
+						}}
+					></View>
+					<Text
+						style={{
+							fontWeight: "500",
+							fontSize: 16,
+							marginTop: 20,
+							marginHorizontal: 15,
+						}}
+					>
+						Special Offers
+					</Text>
+
+					<FlatList
+						style={{ marginTop: 20 }}
+						data={DATA2}
+						renderItem={({ item }) => <SpecialCard navigation={navigation} />}
+						keyExtractor={(item) => item.id}
+						horizontal
+					/>
+
+					<Text
+						style={{
+							fontWeight: "500",
+							fontSize: 16,
+							marginTop: 20,
+							marginHorizontal: 15,
+						}}
+					>
+						Sponsored
+					</Text>
+
+					{/*       
       {loading && <View>
         <Text>Loading...</Text>
         </View>}
@@ -473,27 +468,27 @@ const HomeContent = ({ navigation }) => {
       )}
  */}
 
-				{/* {loading && (
+					{/* {loading && (
 					<View>
 						<ActivityIndicator /> */}
-				{/* <Text>Loading...</Text> */}
-				{/* </View>
+					{/* <Text>Loading...</Text> */}
+					{/* </View>
 				)} */}
-				{data && (
-					<>
-						<FlatList
-							style={{ marginTop: 20 }}
-							data={data}
-							renderItem={({ item }) => (
-								<SponsorCard item={item} navigation={navigation} />
-							)}
-							keyExtractor={(item) => item.id}
-							horizontal
-						/>
-					</>
-				)}
+					{data && (
+						<>
+							<FlatList
+								style={{ marginTop: 20 }}
+								data={data}
+								renderItem={({ item }) => (
+									<SponsorCard item={item} navigation={navigation} />
+								)}
+								keyExtractor={(item) => item.id}
+								horizontal
+							/>
+						</>
+					)}
 
-				{/* 
+					{/* 
         <Text style={{ fontWeight: "500", fontSize: 16, marginTop: 20, marginHorizontal: 15 }}>Recommended For You</Text>
 
         <FlatList
@@ -504,7 +499,7 @@ const HomeContent = ({ navigation }) => {
           horizontal
         /> */}
 
-				{/* {loading && <View>
+					{/* {loading && <View>
           <Text>Loading...</Text>
         </View>}
         {data && (
@@ -518,7 +513,7 @@ const HomeContent = ({ navigation }) => {
           />
         )} */}
 
-				{/* {loading && <View>
+					{/* {loading && <View>
         <Text>Loading...</Text>
         </View>}
       {data && (
@@ -529,26 +524,27 @@ const HomeContent = ({ navigation }) => {
         />
       )} */}
 
-				<View style={{ marginTop: 400 }}></View>
-			</ScrollView>
-			<TouchableOpacity
-				onPress={() => {
-					mode_data?.switchMode("vendor");
-				}}
-				style={{
-					height: 42,
-					width: 120,
-					borderRadius: 20,
-					backgroundColor: "#FEDD00",
-					position: "absolute",
-					alignItems: "center",
-					justifyContent: "center",
-					bottom: 180,
-					right: 0,
-				}}
-			>
-				<Text style={{ fontSize: 11 }}>Switch to Seller</Text>
-			</TouchableOpacity>
+					<View style={{ marginTop: 400 }}></View>
+				</ScrollView>
+				<TouchableOpacity
+					onPress={() => {
+						mode_data?.switchMode("vendor");
+					}}
+					style={{
+						height: 42,
+						width: 120,
+						borderRadius: 20,
+						backgroundColor: "#FEDD00",
+						position: "absolute",
+						alignItems: "center",
+						justifyContent: "center",
+						bottom: 180,
+						right: 0,
+					}}
+				>
+					<Text style={{ fontSize: 11 }}>Switch to Seller</Text>
+				</TouchableOpacity>
+			</SafeAreaView>
 		</View>
 	);
 };
@@ -687,6 +683,31 @@ const styles = StyleSheet.create({
 	specialimage: {
 		marginHorizontal: 180,
 		marginTop: -73,
+	},
+	droidSafeArea: {
+		paddingTop: Platform.OS === "android" ? 25 : 0,
+	},
+	cart: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "flex-end",
+		padding: 10,
+	},
+	badgeContainer: {
+		position: "absolute",
+		top: -8,
+		right: -8,
+		minWidth: 16,
+		height: 16,
+		borderRadius: 8,
+		backgroundColor: "red",
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	badgeText: {
+		color: "white",
+		fontSize: 10,
+		fontWeight: "bold",
 	},
 });
 

@@ -110,8 +110,7 @@ const MyCart = ({ navigation, route }) => {
 	const [data, setData] = useState(null);
 
 	const { id, itemCount } = route.params;
-	console.log("!!!!!!!!!Product Id !!!!!!!");
-	console.log(id);
+	console.log("!!!!!!!!!My Cart Page !!!!!!!");
 
     
 	useEffect(() => {

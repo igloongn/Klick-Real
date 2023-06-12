@@ -106,13 +106,13 @@ const Cart = ({ productDetail, navigation }) => {
 };
 
 const CheckOut = ({ navigation, route }) => {
-	const { id, itemCount, deliveryPayload } = route.params;
+	const { id, itemCount, payload } = route.params;
 	const [data, setData] = useState(null);
 
 	console.log("!!!!!!!!!Product Id !!!!!!!");
 	console.log(id);
 	console.log(itemCount);
-	console.log(deliveryPayload);
+	console.log(payload);
 	useEffect(() => {
 		axios
 			.get("https://klick-api.onrender.com/product/" + id)
@@ -137,13 +137,13 @@ const CheckOut = ({ navigation, route }) => {
 					</View>
 
 					<DeliveryChange
-						name={deliveryPayload.fullName}
+						name={payload.fullName}
 						address={
-							deliveryPayload.address +
+							payload.address +
 							", " +
-							deliveryPayload.city +
+							payload.city +
 							", " +
-							deliveryPayload.state
+							payload.state
 						}
 					/>
 					<Cart productDetail={data} />

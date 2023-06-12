@@ -11,21 +11,24 @@ import GeneralInput from "../General/GeneralInput";
 import GeneralButton from "../General/GeneralButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 const AddDeliveryLocation = ({ navigation, route }) => {
 	const { id, itemCount } = route.params;
 	console.log("!!!!!!!!!Product Id !!!!!!!");
 	console.log(id);
-	const [country, setCountry] = useState('Nigeria');
-	const [address, setAddress] = useState('dpdmed');
-	const [city, setCity] = useState('Benin');
-	const [state, setState] = useState('Edo');
-	const [fullName, setFullName] = useState('Mufasa James');
+	const [country, setCountry] = useState("Nigeria");
+	const [address, setAddress] = useState("University of benin");
+	const [city, setCity] = useState("Benin");
+	const [state, setState] = useState("Edo");
+	const [fullName, setFullName] = useState("Mufasa James");
 
 	const deliveryPayload = {};
 	useEffect(() => {
-		AsyncStorage.getItem("isLoggedIn").then((res) => {
-			if (res === false) {
+		AsyncStorage.getItem("token").then((res) => {
+			if (!res) {
+				console.log("!!!!!!!!!");
+				console.log(res);
 				navigation.navigate("login");
 			} else {
 				console.log("User is logged in");
@@ -38,24 +41,59 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 		deliveryPayload.city = city;
 		deliveryPayload.address = address;
 		deliveryPayload.state = state;
-		// console.log("!!!!!!!!!!delivery Address Payload!!!!!!!!!!!");
-		// console.log(deliveryPayload);
-		AsyncStorage.getItem('token').then((token) => {
-			axios.post('https://klick-api.onrender.com/address/',{headers: {
-				"Authorization": "Bearer " + token
-			}}, deliveryPayload).then((res)=>{
-				console.log('!!!!!!!!Response!!!!!!!!')
-				console.log(res)
-			}).catch((err) => {
-				console.log('!!!!!!!!error!!!!!!!!!!')
-				console.log(err.message)
-			})
+		console.log("!!!!!!!!!!delivery Address Payload!!!!!!!!!!!");
+		console.log(deliveryPayload);
 
-		})
-		// navigation.navigate({
-		// 	name: "checkout",
-		// 	params: { id, itemCount: itemCount, deliveryPayload },
-		// });
+		AsyncStorage.getItem("token").then((token) => {
+			console.log(token);
+			axios
+				.get("https://klick-api.onrender.com/auth/user", {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + token,
+					},
+				})
+				.then((user) => {
+					// console.log(user.data.user.phone);
+
+					payload = {
+						address: deliveryPayload.address,
+						city: deliveryPayload.city,
+						state: deliveryPayload.state,
+						country: deliveryPayload.country,
+						// phone: "+" + user.data.user.phone,
+						phone: "+" + "2348140570059",
+						type: "other",
+						defaults: false,
+					};
+					console.log("!!!!!!!payload!!!!!!!");
+					console.log(payload);
+					axios
+						.post(
+							"https://klick-api.onrender.com/address/",
+							 payload,
+							{
+								headers: {
+									"Content-Type": "application/json",
+									Authorization: "Bearer " + token,
+								},
+							}
+						)
+						.then((res) => {
+							console.log("!!!!!!!!Response!!!!!!!!");
+							// console.log(payload);
+							// console.log(res.data);
+							navigation.navigate({
+								name: "checkout",
+								params: { id, itemCount: itemCount, payload },
+							});
+						})
+						.catch((err) => {
+							console.log("!!!!!!!!error!!!!!!!!!!");
+							console.log(err);
+						});
+				});
+		});
 	};
 
 	return (
