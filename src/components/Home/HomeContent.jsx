@@ -25,8 +25,7 @@ import { useGetLogginedUser } from "../../utils/apiHooks";
 import { useIsFocused } from "@react-navigation/native";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { AntDesign } from '@expo/vector-icons';
-
+import { AntDesign } from "@expo/vector-icons";
 
 const DATA2 = [
 	{
@@ -103,6 +102,12 @@ const HomeContent = ({ navigation }) => {
 	const focus = useIsFocused();
 	const [showGallery, setShowGallery] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	
+	AsyncStorage.getItem("cart").then((cart) => {
+		if (!cart) {
+			AsyncStorage.setItem("cart", JSON.stringify([]));
+		}
+	});
 
 	AsyncStorage.getItem("token").then((token) => {
 		axios
@@ -217,17 +222,17 @@ const HomeContent = ({ navigation }) => {
 
 	console.log(showGallery);
 	// Custom Badge component
-const Badge = ({ count }) => {
-  if (count === 0) {
-    return null;
-  }
+	const Badge = ({ count }) => {
+		if (count === 0) {
+			return null;
+		}
 
-  return (
-    <View style={styles.badgeContainer}>
-      <Text style={styles.badgeText}>{count}</Text>
-    </View>
-  );
-};
+		return (
+			<View style={styles.badgeContainer}>
+				<Text style={styles.badgeText}>{count}</Text>
+			</View>
+		);
+	};
 
 	return (
 		<View>
@@ -246,7 +251,7 @@ const Badge = ({ count }) => {
 						source={require("../../../assets/profile.jpg")}
 					></Image>
 					{isLoggedIn ? (
-						<View style={{ marginTop: 5,  }}>
+						<View style={{ marginTop: 5 }}>
 							<View style={styles.cart}>
 								<TouchableOpacity onPress={() => console.log("Open cart")}>
 									<AntDesign name="shoppingcart" size={24} color="black" />

@@ -54,6 +54,7 @@ const ProductDetails = ({ navigation, route }) => {
 	};
 
 	useEffect(() => {
+		// AsyncStorage.getItem("cart").then((keys) => console.log(keys));
 		axios
 			.get("https://klick-api.onrender.com/product/" + id)
 			.then((res) => {
@@ -75,92 +76,69 @@ const ProductDetails = ({ navigation, route }) => {
 		}
 	};
 	const addToCart = () => {
-		setButtonText({ text: "Added", color: "green" });
-		AsyncStorage.getItem("token")
-			.then((token) => {
-				axios
-					.get("https://klick-api.onrender.com/auth/user", {
-						headers: { Authorization: "Bearer " + token },
-					})
-					.then((user) => {
-						console.log("!!!!!!!!Cart id!!!!!!!!!");
-						console.log(user.data.user.Cart.id);
-						const cartId = user.data.user.Cart.id;
-						console.log("!!!!!!!!!Product ID!!!!!!!!!!");
-						const productId = data.id;
-						console.log(productId);
-						console.log("quantity: ", count);
-						const payload = {
-							items: {
-								[productId]: count,
-							},
-						};
-						console.log("!!!!!!!!!!!!!payload!!!!!!!!!!!");
-						console.log(payload);
-
-						// const products = [
-						// 	{
-						// 		productId: productId,
-						// 		quantity: 2,
-						// 	},
-						// 	{
-						// 		productId: productId,
-						// 		quantity: 2,
-						// 	},
-						// ];
-
-						// const payload = {
-						// 	items: {},
-						// };
-
-						// products.forEach((product, index) => {
-						// 	console.log('For Each Product')
-						// 	console.log(product)
-						// 	payload.items[product.productId] = product.quantity;
-						// });
-
-						// fetch(`https://klick-api.onrender.com/cart/update/${cartId}`, {
-						// 	method: "PUT",
-						// 	headers: {
-						// 		Authorization: `Bearer ${token}`,
-						// 		"Content-Type": "application/json", // Set the desired content type
-						// 	},
-						// 	body: JSON.stringify({ items: { productId: count } }),
-						// })
-						// 	.then((res) => res.json())
-						// 	.then((res) => console.log(res));
-
-						axios
-							.put(
-								`https://klick-api.onrender.com/cart/update/${cartId}`,
-								{
-									payload,
+		AsyncStorage.getItem("cart").then((cartData) => {
+			AsyncStorage.getItem("token")
+				.then((token) => {
+					axios
+						.get("https://klick-api.onrender.com/auth/user", {
+							headers: { Authorization: "Bearer " + token },
+						})
+						.then((user) => {
+							console.log("!!!!!!!!Cart id!!!!!!!!!");
+							console.log(user.data.user.Cart.id);
+							const cartId = user.data.user.Cart.id;
+							console.log("!!!!!!!!!Product ID!!!!!!!!!!");
+							const productId = data.id;
+							console.log(productId);
+							console.log("quantity: ", count);
+							const JSON_cartData = JSON.parse(cartData);
+							const payload = {
+								items: {
+									...JSON_cartData.items,
+									[productId]: count,
 								},
-								{
-									headers: {
-										"Content-Type": "application/json",
-										Authorization: "Bearer " + token,
-									},
-								}
-							)
-							.then((res) => {
-								console.log("!!!!!!Add to Cart Response!!!!!!!!!");
-								console.log(res.data);
-							})
-							.catch((err) => {
-								console.log("Add to cart Error!!!!!!!!!!");
-								console.log(err);
-							});
-					})
-					.catch(function (error) {
-						console.log(error);
-					});
-			})
-			.catch((error) => {
-				console.log("!!!!!!!!Get token Error!!!!!!!!");
-				console.log(error);
-			});
+							};
+							// AsyncStorage.setItem('cart', JSON.stringify([]))
+							AsyncStorage.setItem("cart", JSON.stringify(payload));
 
+							console.log("!!!!!!!!!!!!!payload!!!!!!!!!!!");
+							console.log(payload);
+
+							axios
+								.put(
+									`https://klick-api.onrender.com/cart/update/${cartId}`,
+									{
+										// items: {
+										// 	[productId]: count,
+										// },
+										...payload,
+									},
+									{
+										headers: {
+											"Content-Type": "application/json",
+											Authorization: "Bearer " + token,
+										},
+									}
+								)
+								.then((res) => {
+									console.log("!!!!!!Add to Cart Response!!!!!!!!!");
+									console.log(res.data);
+									setButtonText({ text: "Added", color: "green" });
+								})
+								.catch((err) => {
+									console.log("Add to cart Error!!!!!!!!!!");
+									console.log(err);
+								});
+						})
+						.catch(function (error) {
+							console.log(error);
+						});
+				})
+				.catch((error) => {
+					console.log("!!!!!!!!Get token Error!!!!!!!!");
+					console.log(error);
+				});
+		});
 		// navigation.navigate({
 		// 	name: "mycart",
 		// 	params: { id: data.id, itemCount: count },
