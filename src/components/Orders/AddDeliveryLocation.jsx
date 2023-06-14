@@ -14,9 +14,10 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 const AddDeliveryLocation = ({ navigation, route }) => {
-	const { id, itemCount } = route.params;
-	console.log("!!!!!!!!!Product Id !!!!!!!");
-	console.log(id);
+	// const { id, itemCount } = route.params;
+	const { cartData } = route.params;
+	// console.log("!!!!!!!!!Product Id !!!!!!!");
+	// console.log(id);
 	const [country, setCountry] = useState("Nigeria");
 	const [address, setAddress] = useState("University of benin");
 	const [city, setCity] = useState("Benin");
@@ -57,6 +58,7 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 					// console.log(user.data.user.phone);
 
 					payload = {
+						fullName: deliveryPayload.fullName,
 						address: deliveryPayload.address,
 						city: deliveryPayload.city,
 						state: deliveryPayload.state,
@@ -69,23 +71,19 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 					console.log("!!!!!!!payload!!!!!!!");
 					console.log(payload);
 					axios
-						.post(
-							"https://klick-api.onrender.com/address/",
-							 payload,
-							{
-								headers: {
-									"Content-Type": "application/json",
-									Authorization: "Bearer " + token,
-								},
-							}
-						)
+						.post("https://klick-api.onrender.com/address/", payload, {
+							headers: {
+								"Content-Type": "application/json",
+								Authorization: "Bearer " + token,
+							},
+						})
 						.then((res) => {
 							console.log("!!!!!!!!Response!!!!!!!!");
 							// console.log(payload);
 							// console.log(res.data);
 							navigation.navigate({
 								name: "checkout",
-								params: { id, itemCount: itemCount, payload },
+								params: { cartData, payload },
 							});
 						})
 						.catch((err) => {

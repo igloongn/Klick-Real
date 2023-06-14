@@ -6,10 +6,12 @@ import {
 	Image,
 	TouchableOpacity,
 	Pressable,
+	ScrollView,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import GeneralButton from "../General/GeneralButton";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Counter = ({ itemCount, navigation }) => {
 	// const [counter, setCounter] = useState(0);
@@ -24,9 +26,9 @@ const Counter = ({ itemCount, navigation }) => {
 	return (
 		<View
 			style={{
-				height: 38,
-				width: 113,
-				backgroundColor: "#E1E1E1",
+				height: 21,
+				width: 70,
+				backgroundColor: "#f0ecec",
 				borderRadius: 20,
 				marginTop: 10,
 				display: "flex",
@@ -46,7 +48,7 @@ const Counter = ({ itemCount, navigation }) => {
 				{/* <Pressable onPress={decrement}>
 					<Text style={{ fontSize: 30 }}>-</Text>
 				</Pressable> */}
-				<Text style={{ fontSize: 20 }}>{itemCount}</Text>
+				<Text style={{ fontSize: 16 }}>{itemCount}</Text>
 				{/* <Pressable onPress={increment}>
 					<Text style={{ fontSize: 30 }}>+</Text>
 				</Pressable> */}
@@ -55,107 +57,201 @@ const Counter = ({ itemCount, navigation }) => {
 	);
 };
 
-const Cart = ({ productDetail, itemCount, navigation }) => {
-	const { price, name, images } = productDetail;
+const Cart = ({ navigation, data }) => {
+	console.log("!!!!!!!!!!!!!!!!;");
+	console.log(data);
+
 	return (
-		<View style={{ marginBottom: 30 }}>
+		<View style={{ marginBottom: 0 }}>
 			<View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
-				<View
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "space-between",
-						alignItems: "center",
-					}}
-				>
-					<Image
-						style={{ width: 102, height: 102, marginTop: 15, borderRadius: 10 }}
-						// source={require("../../../assets/orderpic.png")}
-						source={{ uri: images[0] }}
-					></Image>
-					<View>
-						<Text
+				{Object.keys(data).map((key) => (
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "space-around",
+							alignItems: "center",
+							// backgroundColor: "red",
+							backgroundColor: "white",
+							borderRadius: 8,
+							marginBottom: 15,
+						}}
+						elevation={10}
+					>
+						<View style={{ paddingVertical: 10 }}>
+							<Image
+								style={{
+									width: 102,
+									height: 102,
+									marginTop: 15,
+									borderRadius: 10,
+								}}
+								source={{ uri: data[key].image[0] }}
+							></Image>
+						</View>
+						<View
 							style={{
-								marginHorizontal: 0,
-								marginTop: 0,
-								fontWeight: "500",
-								fontSize: 17,
-								marginRight: 100,
+								flex: 0.8,
+								display: "flex",
+								flexDirection: "column",
+								justifyContent: "flex-end",
+								alignItems: "flex-start",
+								// backgroundColor: 'red',
 							}}
 						>
-							{name}
-						</Text>
-						<Text
+							<Text style={{ fontSize: 18, fontWeight: "500" }}>
+								{data[key].name}
+							</Text>
+							<Text
+								style={{
+									color: "#0485E8",
+									marginHorizontal: 0,
+									fontWeight: "500",
+									fontSize: 13,
+									marginVertical: 7,
+								}}
+							>
+								N{data[key].UnitPrice}
+							</Text>
+							{/* <Text style={{marginHorizontal:0,fontWeight:"500",fontSize:15,marginTop:5}}>QTY:2</Text> */}
+							<Counter itemCount={data[key].quantity} />
+						</View>
+						<View
 							style={{
-								color: "#0485E8",
-								marginHorizontal: 0,
-								fontWeight: "500",
-								fontSize: 15,
-								marginTop: 5,
+								alignSelf: "flex-start",
+								padding: 15,
 							}}
 						>
-							N{price}
-						</Text>
-						{/* <Text style={{marginHorizontal:0,fontWeight:"500",fontSize:15,marginTop:5}}>QTY:2</Text> */}
-						<Counter itemCount={itemCount} />
+							<FontAwesome
+								onPress={() => console.log(data[key].id)}
+								name="trash"
+								size={20}
+								color="red"
+							/>
+						</View>
 					</View>
-					<FontAwesome name="trash" size={24} color="red" />
-				</View>
+				))}
 			</View>
 		</View>
 	);
 };
 
-const MyCart = ({ navigation, route }) => {
-	const [data, setData] = useState(null);
-
-	const { id, itemCount } = route.params;
+const MyCart = ({ navigation }) => {
 	console.log("!!!!!!!!!My Cart Page !!!!!!!");
 
-    
-	useEffect(() => {
-		axios
-			.get("https://klick-api.onrender.com/product/" + id)
-			.then((res) => {
-				console.log("!!!!!!!!!!Product Detail!!!!!!!!!!!");
-				console.log(res?.data.data);
-				setData(res?.data.data);
+	const [data, setData] = useState(null);
+	const [cartId, setCartId] = useState(null);
 
-				// setIsLoading(true);
+	const emptyCart = () => {
+		console.log(cartId);
+		// AsyncStorage.removeItem('cart');
+		AsyncStorage.getItem("token").then((token) => {
+			console.log(token);
+			axios
+				.put(
+					`https://klick-api.onrender.com/cart/update/${cartId}`,
+					{
+						// items: {
+						// 	[productId]: count,
+						// },
+						items: {},
+					},
+					{
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: "Bearer " + token,
+						},
+					}
+				)
+				.then((res) => {
+					console.log("!!!!!!Empty Cart Response!!!!!!!!!");
+					console.log(res.data);
+					AsyncStorage.setItem("cart", JSON.stringify([]));
+				})
+				.catch((err) => {
+					console.log("Add to cart Error!!!!!!!!!!");
+					console.log(err);
+				});
+		});
+	};
+
+	useEffect(() => {
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				axios
+					.get("https://klick-api.onrender.com/auth/user", {
+						headers: { Authorization: "Bearer " + token },
+					})
+					.then((user) => {
+						const data = user.data.user.Cart.items;
+						const dataLength = Object.entries(data).length;
+
+						setCartId(user.data.user.Cart.id);
+						setData(data);
+					})
+					.catch((error) => {
+						console.log(error);
+					});
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				console.log(err);
+			});
 	}, []);
 	return (
-		<View>
-			{data && (
-				<>
-					<Cart productDetail={data} itemCount={itemCount} />
-					{/* <TouchableOpacity
-						onPress={() => navigation.navigate("checkout")}
-						style={{ alignItems: "center" }}
-					> */}
-					<TouchableOpacity
-						// onPress={() => navigation.navigate("adddeliverylocation")}
-						onPress={() =>
-							navigation.navigate({
-								name: "adddeliverylocation",
-								params: { id: data.id, itemCount: itemCount },
-							})
-						}
-						style={{ alignItems: "center" }}
+		<View style={{}}>
+			<ScrollView style={{}}>
+				{data && (
+					<View
+						style={{
+							marginBottom: 100,
+							marginTop: 10,
+							// backgroundColor: 'red'
+						}}
 					>
-						<GeneralButton
-							message={"Checkout"}
-							marginLeft={140}
-							top={15}
-							backgroundColor={"#FEDD00"}
-							borderColor={"#FEDD00"}
-							height={45}
-							width={335}
-						/>
-					</TouchableOpacity>
-				</>
-			)}
+						<Cart data={data} />
+						<TouchableOpacity
+							onPress={() => emptyCart()}
+							style={{ alignItems: "center" }}
+						>
+							<GeneralButton
+								message={"Empty Cart"}
+								marginLeft={140}
+								top={15}
+								backgroundColor={"#EB270B"}
+								borderColor={"#FEDD00"}
+								height={45}
+								width={335}
+							/>
+						</TouchableOpacity>
+						<TouchableOpacity
+							onPress={() =>
+								navigation.navigate({
+									name: "adddeliverylocation",
+									params: { cartData: data },
+								})
+							}
+							style={{
+								marginTop: 20,
+								alignItems: "center",
+							}}
+						>
+							<GeneralButton
+								message={"Checkout"}
+								marginLeft={140}
+								top={15}
+								backgroundColor={"#FEDD00"}
+								borderColor={"#FEDD00"}
+								height={45}
+								width={335}
+							/>
+						</TouchableOpacity>
+					</View>
+				)}
+			</ScrollView>
 		</View>
 	);
 };

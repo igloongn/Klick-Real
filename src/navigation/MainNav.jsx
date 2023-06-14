@@ -200,7 +200,9 @@ export default function MainNav() {
 				component={SellerOnboarding}
 				options={{ title: "Create a Store" }}
 			/>
-			<Stack.Screen name="shippingmethod" component={ShippingMethod} />
+			<Stack.Screen name="shippingmethod" component={ShippingMethod} options={{
+				title: 'Shipping Method'
+			}} />
 			<Stack.Screen name="team" component={TeamMembers} />
 			<Stack.Screen name="addteam" component={AddTeamMembers} />
 			<Stack.Screen name="teampage" component={TeamPage} />

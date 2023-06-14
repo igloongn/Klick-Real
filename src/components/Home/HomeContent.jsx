@@ -26,6 +26,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { AntDesign } from "@expo/vector-icons";
+import jwtDecode from "jwt-decode";
 
 const DATA2 = [
 	{
@@ -102,10 +103,13 @@ const HomeContent = ({ navigation }) => {
 	const focus = useIsFocused();
 	const [showGallery, setShowGallery] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	
+	const [cartCount, setcartCount] = useState(null);
 	AsyncStorage.getItem("cart").then((cart) => {
 		if (!cart) {
 			AsyncStorage.setItem("cart", JSON.stringify([]));
+		} else {
+			console.log("cart");
+			console.log(JSON.parse(cart));
 		}
 	});
 
@@ -117,7 +121,7 @@ const HomeContent = ({ navigation }) => {
 				},
 			})
 			.then((res) => {
-				console.log("!!!!!!!!!!Store ID!!!!!!!!");
+				// console.log("!!!!!!!!!!Store ID!!!!!!!!");
 				console.log(res.data.stores[0].id);
 				AsyncStorage.setItem("StoreData", res.data.stores[0].id);
 			})
@@ -152,28 +156,54 @@ const HomeContent = ({ navigation }) => {
 	//   },[focus])
 
 	useEffect(() => {
-		AsyncStorage.getItem("token")
-			.then((token) => {
-				console.log("!!!!!!Token from the home page!!!!!!!!!!");
-				console.log(token);
-				axios
-					.get("https://klick-api.onrender.com/product/", {
-						headers: {
-							Authorization: "Bearer " + token,
-						},
-					})
-					.then((res) => {
-						console.log("!!!!!!!!!!Products!!!!!!!");
-						console.log(res.data.data.products);
-						setData(res.data.data.products);
-					})
-					.catch((err) => {
-						console.log("!!!!!!!!!Axios Error!!!!!!!");
-						console.log(res.err);
-					})
-					.finally((item) => setLoading(false));
-			})
-			.catch((err) => console.log(err));
+		// AsyncStorage.getItem("token")
+		// 	.then((token) => {
+		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
+		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
+		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
+		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
+		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
+		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
+		// 		console.log(token);
+		// 		axios
+		// 			.get("https://klick-api.onrender.com/auth/user", {
+		// 				headers: {
+		// 					Authorization: "Bearer " + token,
+		// 				},
+		// 			})
+		// 			.then((userData) => {
+		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
+		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
+		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
+		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
+		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
+		// 				// console.log(userData.data.user.Cart.id);
+		// 				// cartId = userData.data.user.Cart.id;
+		// 				console.log(Object.keys(userData.data.user.Cart.items).length);
+		// 				setcartCount(Object.keys(userData.data.user.Cart.items).length);
+		// 			})
+		// 			.catch((err) => {
+		// 				console.log("!!!!!!!!!errrrrrrrr!!!!!!!!");
+		// 				console.log(err);
+		// 			});
+		// 		axios
+		// 			.get("https://klick-api.onrender.com/product/", {
+		// 				headers: {
+		// 					Authorization: "Bearer " + token,
+		// 				},
+		// 			})
+		// 			.then((res) => {
+		// 				console.log("!!!!!!!!!!Products!!!!!!!");
+		// 				// console.log(res.data.data.products);
+		// 				setData(res.data.data.products);
+		// 			})
+		// 			.catch((err) => {
+		// 				console.log("!!!!!!!!!Axios Error!!!!!!!");
+		// 				console.log(res.err);
+		// 			})
+		// 			.finally((item) => setLoading(false));
+		// 	})
+		// 	.catch((err) => console.log(err));
 	}, []);
 
 	const getAllData = async () => {
@@ -214,6 +244,55 @@ const HomeContent = ({ navigation }) => {
 
 	useEffect(() => {
 		getLoginData();
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				console.log("!!!!!!Token from the home page!!!!!!!!!!");
+				console.log("!!!!!!Token from the home page!!!!!!!!!!");
+				console.log("!!!!!!Token from the home page!!!!!!!!!!");
+				console.log("!!!!!!Token from the home page!!!!!!!!!!");
+				console.log("!!!!!!Token from the home page!!!!!!!!!!");
+				console.log("!!!!!!Token from the home page!!!!!!!!!!");
+				console.log(token);
+
+				axios
+					.get("https://klick-api.onrender.com/auth/user", {
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					})
+					.then((userData) => {
+						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
+						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
+						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
+						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
+						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
+						// console.log(userData.data.user.Cart.id);
+						// cartId = userData.data.user.Cart.id;
+						console.log(Object.keys(userData.data.user.Cart.items).length);
+						setcartCount(Object.keys(userData.data.user.Cart.items).length);
+					})
+					.catch((err) => {
+						console.log("!!!!!!!!!errrrrrrrr!!!!!!!!");
+						console.log(err);
+					});
+				axios
+					.get("https://klick-api.onrender.com/product/", {
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					})
+					.then((res) => {
+						console.log("!!!!!!!!!!Products!!!!!!!");
+						// console.log(res.data.data.products);
+						setData(res.data.data.products);
+					})
+					.catch((err) => {
+						console.log("!!!!!!!!!Axios Error!!!!!!!");
+						console.log(res.err);
+					})
+					.finally((item) => setLoading(false));
+			})
+			.catch((err) => console.log(err));
 	}, [focus]);
 
 	useEffect(() => {
@@ -251,33 +330,36 @@ const HomeContent = ({ navigation }) => {
 						source={require("../../../assets/profile.jpg")}
 					></Image>
 					{isLoggedIn ? (
-						<View style={{ marginTop: 5 }}>
+						<View style={{ paddingRight: 10 }}>
 							<View style={styles.cart}>
-								<TouchableOpacity onPress={() => console.log("Open cart")}>
-									<AntDesign name="shoppingcart" size={24} color="black" />
-									<Badge count={12} />
+								<TouchableOpacity onPress={() => navigation.navigate("mycart")}>
+									<AntDesign name="shoppingcart" size={40} color="black" />
+									{cartCount ? (
+										<Badge count={cartCount} />
+									) : (
+										<Badge count={0} />
+									)}
 								</TouchableOpacity>
 							</View>
 						</View>
 					) : (
-						<>
-							<TouchableOpacity
-								style={{
-									marginLeft: 20,
-									display: "flex",
-									paddingHorizontal: 20,
-									borderRadius: 10,
-									justifyContent: "center",
-									alignItems: "center",
-									backgroundColor: "#FEDD00",
-								}}
-								onPress={() => navigation.navigate("login")}
-							>
-								<Text>Login</Text>
-							</TouchableOpacity>
-						</>
+						<TouchableOpacity
+							style={{
+								marginRight: 20,
+								display: "flex",
+								paddingHorizontal: 20,
+								borderRadius: 10,
+								justifyContent: "center",
+								alignItems: "center",
+								backgroundColor: "#FEDD00",
+								height: 40,
+							}}
+							onPress={() => navigation.navigate("login")}
+						>
+							<Text>Login</Text>
+						</TouchableOpacity>
 					)}
-					<View
+					{/* <View
 						style={{
 							width: 50,
 							height: 50,
@@ -293,7 +375,7 @@ const HomeContent = ({ navigation }) => {
 							color="black"
 							style={styles.bell}
 						/>
-					</View>
+					</View> */}
 				</View>
 				<ScrollView style={[styles.scrollView]}>
 					<View
