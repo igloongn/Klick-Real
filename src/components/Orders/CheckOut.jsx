@@ -145,6 +145,7 @@ const CheckOut = ({ navigation, route }) => {
 	const { cartData } = route.params;
 	const [data, setData] = useState(null);
 	const [address, setAddress] = useState(null);
+	const [cartID, setCartID] = useState(null);
 
 	useEffect(() => {
 		AsyncStorage.getItem("token").then((token) => {
@@ -156,8 +157,9 @@ const CheckOut = ({ navigation, route }) => {
 					console.log("userdata.data");
 					// console.log(userdata.data.DefaultAddress);
 					const decodeToken = jwtDecode(token);
-					console.log("decodeToken");
-					console.log(decodeToken.fullName);
+					// console.log("decodeToken");
+					// console.log(userdata.data.user.Cart.id);
+					setCartID(userdata.data.user.Cart.id);
 					const newObj = {
 						address: userdata.data.DefaultAddress.address,
 						city: userdata.data.DefaultAddress.city,
@@ -169,11 +171,41 @@ const CheckOut = ({ navigation, route }) => {
 		});
 	}, []);
 	const handleCheckout = () => {
-		console.log('CheckOut')
-		// navigation.navigate({
-		// 	name: "shippingmethod",
-		// 	params: { cartData: cartData, addressPayload: address },
-		// });
+		console.log("CheckOut");
+		AsyncStorage.getItem("token").then((token) => {
+			console.log(cartID);
+			console.log(token);
+			axios
+				.post(
+					`https://klick-api.onrender.com/cart/checkout/${cartID}`,
+					{},
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+							"Content-Type": "application/json",
+							// Add more headers as needed
+						},
+					}
+				)
+				.then((res) => {
+					console.log(res.data);
+					const checkoutData = res.data;
+					axios
+						.get("https://klick-api.onrender.com/cart/" + cartID)
+						.then((data) => {
+							const cartDetail = data.data.data;
+							navigation.navigate({
+								name: "shippingmethod",
+								params: { checkoutData, cartDetail, addressPayload: address },
+							});
+						})
+						.catch((err) => {});
+				})
+				.catch((err) => {
+					console.log("err");
+					console.log(err);
+				});
+		});
 	};
 
 	return (
@@ -201,7 +233,7 @@ const CheckOut = ({ navigation, route }) => {
 							style={{ alignItems: "center", marginBottom: 60 }}
 						>
 							<GeneralButton
-								message={"Continue to Shipping"}
+								message={"Check Out"}
 								marginLeft={110}
 								top={15}
 								backgroundColor={"#FEDD00"}

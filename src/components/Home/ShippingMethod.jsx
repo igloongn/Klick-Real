@@ -18,9 +18,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import PaymentModal from "../../utils/PaymentModal";
 
 const ShippingMethod = ({ navigation, route }) => {
-	const { cartData, addressPayload } = route.params;
-	console.log("!!!!!!!!!!!1cartData!!!!!!!!!");
-	console.log(addressPayload);
+	const { checkoutData, cartDetail, addressPayload } = route.params;
+	console.log("!!!!!!!!!!!!!!!!!!!!");
+	console.log(cartDetail);
+	// console.log(addressPayload);
 	const [shipWithSellerModal, setShipWithSellerModal] = useState(false);
 	const [shipWithKshipModal, setShipWithKshipModal] = useState(false);
 	const [shipWithKsecureModal, setShipWithKsecureModal] = useState(false);
@@ -146,9 +147,12 @@ const ShippingMethod = ({ navigation, route }) => {
 									borderRadius: 20,
 									marginLeft: 30,
 									marginTop: 12,
+									//  padding: 20
 								}}
 							>
-								<Text style={{ marginLeft: 15, marginTop: 10 }}>N1000</Text>
+								<Text style={{ marginLeft: 15, marginTop: 10 }}>
+									N{checkoutData.kship_fee}
+								</Text>
 							</View>
 						</View>
 					</TouchableOpacity>
@@ -266,7 +270,9 @@ const ShippingMethod = ({ navigation, route }) => {
 									marginTop: 12,
 								}}
 							>
-								<Text style={{ marginLeft: 15, marginTop: 10 }}>N1500</Text>
+								<Text style={{ marginLeft: 15, marginTop: 10 }}>
+									N{checkoutData.ksecure_fee}
+								</Text>
 							</View>
 						</View>
 					</TouchableOpacity>
@@ -280,9 +286,10 @@ const ShippingMethod = ({ navigation, route }) => {
 					navigation.navigate({
 						name: "paymentmethod",
 						params: {
-							cartData,
 							addressPayload,
-							sellerData: { name: "seller", price: 500 },
+							sellerData: { name: "seller", price: cartDetail.totalAmount },
+							subTotal: cartDetail.totalAmount,
+							shippingCharge: 0,
 						},
 					});
 				}}
@@ -295,17 +302,25 @@ const ShippingMethod = ({ navigation, route }) => {
 				state={shipWithKshipModal}
 				setState={setShipWithKshipModal}
 				onPress={() => {
+					
 					navigation.navigate({
 						name: "paymentmethod",
 						params: {
-							cartData,
+							// cartData,
 							addressPayload,
-							sellerData: { name: "kship", price: 1000 },
+							sellerData: {
+								name: "kship",
+								price: cartDetail.totalAmount + checkoutData.kship_fee,
+							},
+							shippingCharge: checkoutData.kship_fee,
+							subTotal: cartDetail.totalAmount,
 						},
 					});
 				}}
 				text={"Ship with K-Ship"}
-				secondText={"Ensure to know your Vendor! Klick is only responsible for the shipping and not the product."}
+				secondText={
+					"Ensure to know your Vendor! Klick is only responsible for the shipping and not the product."
+				}
 				button={"Continue"}
 				ButtonColor={"#FEDD00"}
 			/>
@@ -317,14 +332,21 @@ const ShippingMethod = ({ navigation, route }) => {
 					navigation.navigate({
 						name: "paymentmethod",
 						params: {
-							cartData,
+							// cartData,
 							addressPayload,
-							sellerData: { name: "ksecure", price: 1500 },
+							sellerData: {
+								name: "ksecure",
+								price: cartDetail.totalAmount + checkoutData.ksecure_fee,
+							},
+							shippingCharge: checkoutData.ksecure_fee,
+							subTotal: cartDetail.totalAmount,
 						},
 					});
 				}}
 				text={"Ship with K-Secure "}
-				secondText={"Klick will be in charge of your every transaction. Your payment is secured with Klick and will be released to the seller after product is delivered."}
+				secondText={
+					"Klick will be in charge of your every transaction. Your payment is secured with Klick and will be released to the seller after product is delivered."
+				}
 				button={"Make Payment"}
 				ButtonColor={"#FEDD00"}
 			/>

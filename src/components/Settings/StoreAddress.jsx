@@ -19,11 +19,10 @@ const StoreAddress = () => {
 			/>
 			<GeneralInput name={"State"} width={320} placeholder={"Lagos"} />
 			<GeneralInput name={"City"} width={320} placeholder={"Victoria Island"} />
-			<GeneralInput name={"Postal Code"} width={320} placeholder={"10023"} />
 
 			<GeneralButton
-				backgroundColor={"#E1E1E1"}
-				borderColor={"#E1E1E1"}
+				backgroundColor={"#FEDD00"}
+				borderColor={"#FEDD00"}
 				width={320}
 				marginTop={30}
 				marginHorizintal={43}

@@ -185,10 +185,34 @@ export default function MainNav() {
 			/>
 			<Stack.Screen name="productlist" component={SellerProductList} />
 			<Stack.Screen name="createpost" component={CreatePost} />
-			<Stack.Screen name="storesettings" component={StoreSettings} />
-			<Stack.Screen name="storedetails" component={StoreDetails} />
-			<Stack.Screen name="storeaddress" component={StoreAddress} />
-			<Stack.Screen name="socialaccounts" component={SocialAccounts} />
+			<Stack.Screen
+				name="storesettings"
+				component={StoreSettings}
+				options={{
+					title: "Store Settings",
+				}}
+			/>
+			<Stack.Screen
+				name="storedetails"
+				component={StoreDetails}
+				options={{
+					title: "Store Details",
+				}}
+			/>
+			<Stack.Screen
+				name="storeaddress"
+				component={StoreAddress}
+				options={{
+					title: "Store Address",
+				}}
+			/>
+			<Stack.Screen
+				name="socialaccounts"
+				component={SocialAccounts}
+				options={{
+					title: "Social Accounts",
+				}}
+			/>
 			<Stack.Screen name="discounts" component={Discounts} />
 			<Stack.Screen name="addnewdiscount" component={AddNewDiscount} />
 			<Stack.Screen

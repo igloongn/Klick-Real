@@ -57,43 +57,48 @@ const VendorDashboard = ({ navigation }) => {
 		AsyncStorage.getItem("token").then((token) => {
 			console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
 			console.log(token);
-			fetch(`https://klick-api.onrender.com/auth/user`, {
-				method: "GET",
-				mode: "no-cors",
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
-				.then((userresponse) => userresponse.json())
+			axios
+				.get(`https://klick-api.onrender.com/auth/user`, {
+					headers: {
+						Authorization: "Bearer " + token,
+					},
+				})
 				.then((userdata) => {
-					setUser(userdata);
-					console.log("!!!!!!!!!!User Data!!!!!!!!");
-					console.log(userdata);
+					setUser(userdata.data.stores);
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					console.log(user[0].logo );
+				})
+				.catch((err) => {
+					console.log(
+						"!!!!!!!!!!!!!!!!!USer store Lenght Error!!!!!!!!!!!!!!!!"
+					);
+					console.log(err);
 				});
 		});
-
-		// const response = await fetch(`https://klick-api.onrender.com/brand/${id}`, {
-		//     method: "GET",
-		//     mode: 'no-cors',
-		//     headers: {
-		//
-		//       'Authorization': `Bearer ${token}`
-		//     },
-		// })
-		// axios
-		// 	.get("https://klick-api.onrender.com/product/")
-		// 	.then((res) => setData(res.data.data))
-		// 	.catch((err) => console.log(res.err));
-		// //  .finally(item =>  setLoading(false))
 	}, []);
-
-	// async () =>  {
-	// axios
-	// 	.get("https://klick-api.onrender.com/product/")
-	// 	.then((res) => setData(res.data.data))
-	// 	.catch((err) => console.log(res.err));
-	// //  .finally(item =>  setLoading(false))
-	// }, []);
 
 	console.log("focused", focused);
 
@@ -120,7 +125,7 @@ const VendorDashboard = ({ navigation }) => {
 						paddingHorizontal: 10,
 					}}
 				>
-					{user ? (
+					{user && user.length > 0 ? (
 						<View style={{ display: "flex", flexDirection: "row" }}>
 							<View>
 								<Image
@@ -130,7 +135,7 @@ const VendorDashboard = ({ navigation }) => {
 										borderRadius: 50,
 										marginRight: 10,
 									}}
-									source={{ uri: user.stores[0].logo }} // Network image
+									source={{ uri: user[0].logo }} // Network image
 								></Image>
 							</View>
 							<View>
@@ -143,7 +148,7 @@ const VendorDashboard = ({ navigation }) => {
 										marginTop: 10,
 									}}
 								>
-									{user.stores[0].name}
+									{user[0].name}
 								</Text>
 								<Text
 									style={{
@@ -153,7 +158,7 @@ const VendorDashboard = ({ navigation }) => {
 										marginLeft: 10,
 									}}
 								>
-									{user.stores[0].role}
+									{user[0].role}
 								</Text>
 							</View>
 						</View>
@@ -180,7 +185,7 @@ const VendorDashboard = ({ navigation }) => {
 										marginTop: 10,
 									}}
 								>
-									Loading......
+									No Store Yet
 								</Text>
 								<Text
 									style={{
@@ -189,12 +194,11 @@ const VendorDashboard = ({ navigation }) => {
 										fontWeight: "400",
 										marginLeft: 10,
 									}}
-								>
-									Yaba, Lagos
-								</Text>
+								></Text>
 							</View>
 						</View>
 					)}
+
 					<Pressable onPress={() => navigation.navigate("notifications")}>
 						<AntDesign name="bells" size={24} color="black" style={{}} />
 					</Pressable>

@@ -53,7 +53,7 @@ const AddNewProduct = ({ navigation }) => {
 	// From Mufasa
 	const [myStoreCat, setMyStoreCat] = useState(null);
 	const [shippingCat, setShippingCat] = useState(null);
-	const [user, setUser] = useState(null)
+	const [user, setUser] = useState(null);
 
 	const [listofCat, setListofCat] = useState([]);
 	const [sheeplistofCat, setsheepListofCat] = useState([]);
@@ -91,15 +91,16 @@ const AddNewProduct = ({ navigation }) => {
 				})
 				.then((user) => {
 					const userData = user.data;
-					console.log('!!!!!!!!!user data!!!!!!!!!')
-					console.log(userData.stores[0].id)
-					setUser(userData)
+					console.log("!!!!!!!!!user data!!!!!!!!!");
+					console.log(userData.stores[0].id);
+					
+					setUser(userData);
 					axios
 						.get(
 							`https://klick-api.onrender.com/brand/${userData.stores[0].id}`
-						)
-						.then((res) => {
-							// console.log(res.data.data.industry);
+							)
+							.then((res) => {
+							console.log(res.data.data.industry);
 							axios
 								.get(
 									`https://klick-api.onrender.com/category/${res.data.data.industry}`
@@ -112,7 +113,8 @@ const AddNewProduct = ({ navigation }) => {
 								});
 						});
 					axios
-						.get("https://klick-api.onrender.com/product/shipping/category")
+						// .get("https://klick-api.onrender.com/product/shipping/category")
+						.get("https://klick-api.onrender.com/category/getAll")
 						.then((res) => {
 							console.log("!!!!!!!!!Shipping Categories!!!!!!!");
 							console.log(res.data.data);
@@ -268,8 +270,9 @@ const AddNewProduct = ({ navigation }) => {
 			try {
 				const token = await AsyncStorage.getItem("token");
 				console.log("tok-1", token);
-				console.log(myStoreCat.id)
-				const url = `https://klick-api.onrender.com/product/?category=${myStoreCat.id}&storeId=${user.stores[0].id}`;
+				console.log(myStoreCat);
+				const url = `https://klick-api.onrender.com/product/?category=${shipCategory}&storeId=${user.stores[0].id}`;
+				console.log(url)
 				// const response = await fetch("https://klick-api.onrender.com/product/?category=039c6ea9-45d7-493f-beb1-fd74fb40399d", {
 				const response = await fetch(url, {
 					method: "POST",
@@ -284,9 +287,9 @@ const AddNewProduct = ({ navigation }) => {
 
 				const res_state = await response?.status;
 				console.log("llls", res_state);
-				const jsonRes = await response.json()
+				const jsonRes = await response.json();
 				console.log("!!!!!!!Product Details!!!!!!!!");
-				console.log(jsonRes)
+				console.log(jsonRes);
 				if (parseInt(res_state) >= 200 && parseInt(res_state) < 203) {
 					// const _data = await response?.json();
 					const _data = await response?.data;
@@ -301,7 +304,7 @@ const AddNewProduct = ({ navigation }) => {
 				setSuccessModalVisible(true);
 			} catch (error) {
 				// Handle network or other errors
-				console.error('!!!!!!!Create Product Error!!!!!!!!');
+				console.error("!!!!!!!Create Product Error!!!!!!!!");
 				console.error(error);
 				// Alert.alert("Error", "An error occured ");
 				setFailedModalVisible(true);
@@ -441,7 +444,7 @@ const AddNewProduct = ({ navigation }) => {
 									Category
 								</Text>
 								<View>
-									<TextInput value={myStoreCat.name} editable={false} style />
+									<TextInput value={myStoreCat.id} editable={false} style />
 								</View>
 							</View>
 						)}
@@ -473,38 +476,11 @@ const AddNewProduct = ({ navigation }) => {
 									}
 								>
 									{shippingCat.map((item, index) => (
-										<Picker.Item label={item.category} value={item.category} />
+										<Picker.Item label={item.name} value={item.id} />
 									))}
 								</Picker>
 							</View>
 						)}
-						{/* <View style={{ marginTop: 20, width: 335 }}>
-							<SelectList
-								placeholder={"Shipping Catgory e.g Hot Food"}
-								setSelected={(val) => setShipCategory(val)}
-								data={dataSheepbubble}
-								save="value"
-							/>
-						</View> */}
-						{/* <FlatList
-data={images} 
-renderItem={({item}) =>(
-  <Image source={{uri:item.uri}} style={{width: width/2, height:height}} />
-  
-)}
-numColumns={2}
-keyExtractor={(item) => item.uri}
-contentContainerStyle={{marginVertical:50, paddingBottom:100}}
-ListHeaderComponent={
-  isLoading ? (
-    <View>
-      <Text style={{fontSize:20, textAlign:"center"}}>Loading... </Text>
-      <ActivityIndicator/>
-    </View>
-  ) : ( )
- 
-}
-/> */}
 
 						<View>
 							<TouchableOpacity
@@ -548,10 +524,12 @@ ListHeaderComponent={
 			{showGallery && (
 				<View
 					style={{
-						postion: "absolute",
-						top: 0,
-						height: Dimensions.get("screen").height,
+						position: "relative",
+						top: 12,
+						height: "100%",
+						// height: Dimensions.get("screen").height,
 						width: Dimensions.get("screen").width,
+						backgroundColor: "grey",
 					}}
 				>
 					<ImagePicker

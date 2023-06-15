@@ -35,10 +35,9 @@ const SettingsTiles = ({ name, route, navigation }) => {
 };
 
 const PaymentMethod = ({ navigation, route }) => {
-	const { cartData, addressPayload, sellerData } = route.params;
+	const { addressPayload, sellerData, shippingCharge, subTotal } = route.params;
 	console.log("!!!!!!!!!!!!DAta!!!!!!!!");
-	console.log(cartData);
-	console.log(addressPayload);
+	console.log(shippingCharge);
 
 	return (
 		<View>
@@ -114,7 +113,7 @@ const PaymentMethod = ({ navigation, route }) => {
 							fontWeight: "500",
 						}}
 					>
-						N83867
+						N{subTotal}
 					</Text>
 				</View>
 				{/* <View
@@ -149,7 +148,7 @@ const PaymentMethod = ({ navigation, route }) => {
 							fontWeight: "500",
 						}}
 					>
-						N2323
+						N{shippingCharge}
 					</Text>
 				</View>
 				<View
@@ -181,7 +180,7 @@ const PaymentMethod = ({ navigation, route }) => {
 							fontWeight: "500",
 						}}
 					>
-						N2323
+						N{sellerData.price}
 					</Text>
 				</View>
 			</View>
