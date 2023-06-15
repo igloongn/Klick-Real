@@ -71,6 +71,9 @@ import CheckOut from "../components/Orders/CheckOut";
 import ShipSeller from "../components/Orders/ShipSeller";
 import AddDeliveryLocation from "../components/Orders/AddDeliveryLocation";
 import AddAddress from "../components/Home/AddAddress";
+import SeacrhResult from "../components/Home/SeacrchResult";
+import PriceAd from "../components/Settings/PriceAd";
+import AddNewPriceAdd from "../components/Settings/AddNewPriceAdd";
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -122,11 +125,29 @@ export default function MainNav() {
 					// ),
 				}}
 			/>
+			<Stack.Screen
+				name="searchResults"
+				component={SeacrhResult}
+				options={{
+					title: "Search Results",
+					// headerRight: () => (
+					// 	<TouchableOpacity onPress={() => console.log("End Icon pressed")}>
+					// 		<Text>Hello</Text>
+					// 	</TouchableOpacity>
+					// ),
+				}}
+			/>
 			{/* <Stack.Screen name="home" component={Home} /> */}
 			<Stack.Screen name="orders" component={Orders} />
 			<Stack.Screen name="message" component={Message} />
 			<Stack.Screen name="ksocial" component={KSocial} />
-			<Stack.Screen name="settings" component={Settings} />
+			<Stack.Screen
+				name="settings"
+				component={Settings}
+				options={{
+					headerShown: false,
+				}}
+			/>
 			<Stack.Screen name="specialoffer" component={SpecialOffer} />
 			<Stack.Screen name="shoppage" component={ShopPage} />
 			<Stack.Screen
@@ -166,7 +187,13 @@ export default function MainNav() {
 					title: "Stories",
 				}}
 			/>
-			<Stack.Screen name="categories" component={FakeCategories} />
+			<Stack.Screen
+				name="categories"
+				component={FakeCategories}
+				options={{
+					title: "Category",
+				}}
+			/>
 			<Stack.Screen name="sellerorders" component={SellerOrders} />
 			<Stack.Screen name="sellermessage" component={SellerMessage} />
 			<Stack.Screen name="sellerksocial" component={SellerKSocial} />
@@ -214,7 +241,21 @@ export default function MainNav() {
 				}}
 			/>
 			<Stack.Screen name="discounts" component={Discounts} />
-			<Stack.Screen name="addnewdiscount" component={AddNewDiscount} />
+			<Stack.Screen
+				name="addnewdiscount"
+				component={AddNewDiscount}
+				options={{
+					title: "Add New Discount ",
+				}}
+			/>
+			<Stack.Screen name="priceAd" component={PriceAd} />
+			<Stack.Screen
+				name="addNewPriceAd"
+				component={AddNewPriceAdd}
+				options={{
+					title: "Price Adjustment ",
+				}}
+			/>
 			<Stack.Screen
 				name="login"
 				component={Login}

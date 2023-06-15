@@ -23,7 +23,7 @@ import { getToday, getFormatedDate } from "react-native-modern-datepicker";
 import { Button } from "react-native-paper";
 import MyModal from "../../utils/MyModal";
 
-const AddNewDiscount = ({ navigation }) => {
+const AddNewPriceAdd = ({ navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 
 	const [title, setTitle] = useState("");
@@ -55,14 +55,15 @@ const AddNewDiscount = ({ navigation }) => {
 		setIsLoading(true);
 		console.log({ title, value, endDate });
 		try {
-			const token = await AsyncStorage.getItem("token");
+			if (title !== '' ) {
+                const token = await AsyncStorage.getItem("token");
 			const userData = await getUserData();
 			console.log("data", typeof userData);
 			// const url = `https://klick-api.onrender.com/product/?category=${selectCatId}`
 			console.log("userData?.stores[0].id");
 			console.log(userData?.stores[0].id);
 			const response = await fetch(
-				`https://klick-api.onrender.com/brand/discount/${userData?.stores[0].id}`,
+				`https://klick-api.onrender.com/brand/increase/${userData?.stores[0].id}`,
 				{
 					method: "POST",
 					mode: "no-cors",
@@ -71,29 +72,24 @@ const AddNewDiscount = ({ navigation }) => {
 						Authorization: `Bearer ${token}`,
 					},
 					body: JSON.stringify({
-						title,
-						type: "percentage",
-						value,
-						endDate,
+						amount: title,
 					}),
 				}
 			);
 			if (response?.status >= 200 && response?.status < 203) {
 				const _data = await response.json();
 				console.log("y", _data);
-				// Alert.alert("Success", "Discount added");
 				setSuccessModalVisible(true);
-
 				setTimeout(() => {
-					navigation.navigate("discounts");
+					navigation.navigate("sellerstab");
 				}, 3000);
 			} else {
 				throw Error("");
 			}
+            }
 		} catch (error) {
 			// Handle network or other errors
 			setFailedModalVisible(true);
-			Alert.alert("Error", "An error occured ");
 			console.error("error");
 			console.error(error);
 		} finally {
@@ -123,12 +119,6 @@ const AddNewDiscount = ({ navigation }) => {
 							marginLeft: 70,
 						}}
 					>
-						{/* <SimpleLineIcons
-							name="trash"
-							size={44}
-							color="blue"
-							style={{ paddingTop: 40, marginLeft: 105 }}
-						/> */}
 						<Text
 							style={{
 								fontSize: 23,
@@ -180,93 +170,15 @@ const AddNewDiscount = ({ navigation }) => {
 					</View>
 				</View>
 			</Modal>
-			<Pressable onPress={() => setModalVisible(true)}>
-				{/* <SimpleLineIcons
-					name="trash"
-					size={24}
-					color="red"
-					style={{ marginLeft: 340, marginTop: 10 }}
-				/> */}
-			</Pressable>
 			<ScrollView>
 				<GeneralInput
-					name={"Discount Title"}
+					name={"Amount Increase"}
 					width={320}
-					placeholder={"e.g Easter sales"}
+					placeholder={"e.g 1,000"}
 					value={title}
 					onChangeValue={(text) => setTitle(text)}
+					mode={"tel"}
 				/>
-				{/* <GeneralInput name={"Coupon Amount"} width={320}  placeholder={"20%"}/> 
-     <GeneralInput name={"Minimum Spend"} width={320} placeholder={"0"}/>
-    <GeneralInput name={"Maximum Spend"} width={320} placeholder={"N20,000"}/> */}
-				<GeneralInput
-					name={"Discount Percentage"}
-					width={320}
-					placeholder={"e.g 20 "}
-					value={value}
-					onChangeValue={(text) => setValue(text)}
-				/>
-
-				<TouchableOpacity>
-					{/* <GeneralInput
-						name={"Usage End Date"}
-						width={320}
-						placeholder={"e.g 2023-04-17"}
-						value={endDate}
-						onChangeValue={(text) => setEndDate(text)}
-					/> */}
-
-					<View
-						style={{
-							marginTop: 20,
-						}}
-					>
-						<Button
-							title="Open Date Picker"
-							onPress={() => setEndDate("")} // Reset selected date before opening
-							// onPress={() => console.log("HEllo")} // Reset selected date before opening
-							// mode="contained"
-						>
-							Usage End Date
-						</Button>
-						<DatePicker
-							mode="calendar"
-							selected={endDate}
-							onSelectedChange={(date) => {
-								setEndDate(date);
-								console.log(endDate);
-							}}
-							options={{
-								backgroundColor: "#FFFFFF",
-								textHeaderColor: "#000000",
-								textDefaultColor: "#333333",
-								selectedTextColor: "#FFFFFF",
-								mainColor: "#009688",
-								// Custom styles
-								borderRadius: 8,
-								width: 100,
-								height: 100,
-							}}
-						/>
-					</View>
-				</TouchableOpacity>
-				<Modal animationType="slide" transparent={true} visible={open}>
-					<View style={styles.centeredView}>
-						<View style={styles.modalView}>
-							<DatePicker
-								mode="calender"
-								minimumDate={startDate}
-								selected={date}
-								onDateChange={handleChange}
-							/>
-							<TouchableOpacity onPress={handleOnPress}>
-								<Text>Close</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
-				</Modal>
-
-				{/* <GeneralInput name={"Usage Limit Per Person"} width={320} placeholder={"https://wa.me/9062056518"}/> */}
 
 				<TouchableOpacity
 					onPress={() => makeDiscount()}
@@ -290,11 +202,12 @@ const AddNewDiscount = ({ navigation }) => {
 
 				<View style={{ marginTop: 50 }} />
 			</ScrollView>
+
 			{/* Login Successful Modal */}
 			<MyModal
 				state={SuccessModalVisible}
 				setState={setSuccessModalVisible}
-				text={"Discount added"}
+				text={"Inscrease Added"}
 				button={"Thank You"}
 				ButtonColor={"#FEDD00"}
 			/>
@@ -302,7 +215,7 @@ const AddNewDiscount = ({ navigation }) => {
 			<MyModal
 				state={failedModalVisible}
 				setState={setFailedModalVisible}
-				text={"An error occured during login"}
+				text={"An error occured during Price Increase"}
 				button={"Try again"}
 				ButtonColor={"#EB270B"}
 			/>
@@ -335,4 +248,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default AddNewDiscount;
+export default AddNewPriceAdd;

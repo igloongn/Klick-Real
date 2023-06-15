@@ -24,9 +24,9 @@ const SeacrhResult = ({ route }) => {
 	const navigation = useNavigation();
 	const [store, setStore] = useState(null);
 	const [products, setProducts] = useState([]);
-	const { id } = route.params;
-	console.log("!!!!!!!!!!!ID!!!!!!!!!!!!!");
-	console.log(id);
+	const { query } = route.params;
+	console.log("!!!!!!!!!!!Query!!!!!!!!!!!!!");
+	console.log(query);
 
 	useEffect(() => {
 		// axios.get('https://klick-api.onrender.com/product/store/product?storeId=')
@@ -43,19 +43,24 @@ const SeacrhResult = ({ route }) => {
 				.then((userresponse) => userresponse.json())
 				.then((userdata) => {
 					const storeData = userdata.stores[0];
+					setStore(storeData);
 					// console.log("!!!!!!!!!!User Data!!!!!!!!");
 					// console.log(storeData.id);
 					axios
-						.get(`https://klick-api.onrender.com/product/?category=${id}`, {
+						.get(`https://klick-api.onrender.com/product/`, {
 							headers: { Authorization: `Bearer ${token}` },
 						})
 						.then((data) => {
 							console.log("!!!!!!Product Data!!!!!!!");
-							const productlist = data.data.data.products
+							const productlist = data.data.data.products.filter(
+								(item) => item.name === query
+							);
 							console.log(productlist);
 							setProducts(productlist);
 
 							console.log("!!!!!!Product Data!!!!!!!");
+							// console.log(data.data.data.products.map(item=> item.name = query));
+							// setProducts(data.data.data.products.map(item=> item.name = query));
 						})
 						.catch((error) => {
 							console.log("!!!!!!!!!Axios Error!!!!!!!");
@@ -117,7 +122,9 @@ const SeacrhResult = ({ route }) => {
 			<ScrollView>
 				{products ? (
 					products.length > 0 ? (
-						products.map((item) => <ProductCard productDetails={item} navigation={navigation} />)
+						products.map((item) => (
+							<ProductCard productDetails={item} navigation={navigation} />
+						))
 					) : (
 						<View>
 							<OpenBox />

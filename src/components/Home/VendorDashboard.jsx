@@ -66,30 +66,7 @@ const VendorDashboard = ({ navigation }) => {
 				.then((userdata) => {
 					setUser(userdata.data.stores);
 					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log(user[0].logo );
+					console.log(user[0].logo);
 				})
 				.catch((err) => {
 					console.log(
@@ -312,7 +289,7 @@ const VendorDashboard = ({ navigation }) => {
 						}}
 					>
 						<TouchableOpacity
-							onPress={() => navigation.navigate("productView")}
+							onPress={() => navigation.navigate("addNewPriceAd")}
 							style={{
 								display: "flex",
 								flexDirection: "column",
@@ -334,7 +311,7 @@ const VendorDashboard = ({ navigation }) => {
 						}}
 					>
 						<TouchableOpacity
-							onPress={() => navigation.navigate("discounts")}
+							onPress={() => navigation.navigate("settings")}
 							style={{
 								display: "flex",
 								flexDirection: "column",

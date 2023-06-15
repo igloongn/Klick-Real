@@ -44,7 +44,7 @@ const SettingsTiles = ({ name, route, icon, navigation, item }) => {
 	);
 };
 
-const Discounts = ({ navigation }) => {
+const PriceAd = ({ navigation }) => {
 	const [data, setData] = useState([]);
 	const [showGallery, setShowGallery] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -95,7 +95,7 @@ const Discounts = ({ navigation }) => {
 					/>
 				</View>
 				<Pressable
-					onPress={() => navigation.navigate("addnewdiscount")}
+					onPress={() => navigation.navigate("addNewPriceAd")}
 					style={{
 						width: "100%",
 						alignItems: "center",
@@ -107,7 +107,7 @@ const Discounts = ({ navigation }) => {
 						width={320}
 						marginTop={30}
 						marginHorizintal={43}
-						message={"+ Add New Discount offer"}
+						message={"+ Price Adjustment"}
 						marginLeft={100}
 						height={52}
 						top={15}
@@ -118,4 +118,4 @@ const Discounts = ({ navigation }) => {
 	);
 };
 
-export default Discounts;
+export default PriceAd;

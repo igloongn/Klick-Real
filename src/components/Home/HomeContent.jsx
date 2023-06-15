@@ -104,6 +104,7 @@ const HomeContent = ({ navigation }) => {
 	const [showGallery, setShowGallery] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [cartCount, setcartCount] = useState(null);
+	const [category, setCategory] = useState(null);
 	AsyncStorage.getItem("cart").then((cart) => {
 		if (!cart) {
 			AsyncStorage.setItem("cart", JSON.stringify([]));
@@ -111,31 +112,6 @@ const HomeContent = ({ navigation }) => {
 			console.log("cart");
 			console.log(JSON.parse(cart));
 		}
-	});
-
-	AsyncStorage.getItem("token").then((token) => {
-		console.log("!!!!!!!!!!TOKEN!!!!!!!!");
-		console.log(token);
-		axios
-			.get("https://klick-api.onrender.com/auth/user", {
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-			})
-			.then((res) => {
-				// console.log("!!!!!!!!!!Store ID!!!!!!!!");
-				// console.log(res.data.stores[0].id);
-				console.log(token);
-				if (res.data.stores.length > 0) {
-					AsyncStorage.setItem("StoreData", res.data.stores[0].id);
-				}
-				console.log("!!!!!!!!!!User Data!!!!!!!!");
-				// console.log(res.data);
-			})
-			.catch((err) => {
-				console.log("!!!!!!!Error for the user!!!!!!!");
-				console.log(navigation.navigate("login"));
-			});
 	});
 
 	const getLoginData = async (navigation, alternative = () => null) => {
@@ -163,54 +139,47 @@ const HomeContent = ({ navigation }) => {
 	//   },[focus])
 
 	useEffect(() => {
-		// AsyncStorage.getItem("token")
-		// 	.then((token) => {
-		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
-		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
-		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
-		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
-		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
-		// 		console.log("!!!!!!Token from the home page!!!!!!!!!!");
-		// 		console.log(token);
-		// 		axios
-		// 			.get("https://klick-api.onrender.com/auth/user", {
-		// 				headers: {
-		// 					Authorization: "Bearer " + token,
-		// 				},
-		// 			})
-		// 			.then((userData) => {
-		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
-		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
-		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
-		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
-		// 				console.log('!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!');
-		// 				// console.log(userData.data.user.Cart.id);
-		// 				// cartId = userData.data.user.Cart.id;
-		// 				console.log(Object.keys(userData.data.user.Cart.items).length);
-		// 				setcartCount(Object.keys(userData.data.user.Cart.items).length);
-		// 			})
-		// 			.catch((err) => {
-		// 				console.log("!!!!!!!!!errrrrrrrr!!!!!!!!");
-		// 				console.log(err);
-		// 			});
-		// 		axios
-		// 			.get("https://klick-api.onrender.com/product/", {
-		// 				headers: {
-		// 					Authorization: "Bearer " + token,
-		// 				},
-		// 			})
-		// 			.then((res) => {
-		// 				console.log("!!!!!!!!!!Products!!!!!!!");
-		// 				// console.log(res.data.data.products);
-		// 				setData(res.data.data.products);
-		// 			})
-		// 			.catch((err) => {
-		// 				console.log("!!!!!!!!!Axios Error!!!!!!!");
-		// 				console.log(res.err);
-		// 			})
-		// 			.finally((item) => setLoading(false));
-		// 	})
-		// 	.catch((err) => console.log(err));
+		AsyncStorage.getItem("token").then((token) => {
+			console.log("!!!!!!!!!!TOKEN!!!!!!!!");
+			console.log(token);
+			axios
+				.get("https://klick-api.onrender.com/auth/user", {
+					headers: {
+						Authorization: "Bearer " + token,
+					},
+				})
+				.then((res) => {
+					// console.log("!!!!!!!!!!Store ID!!!!!!!!");
+					// console.log(res.data.stores[0].id);
+					console.log(token);
+					if (res.data.stores.length > 0) {
+						AsyncStorage.setItem("StoreData", res.data.stores[0].id);
+					}
+					// console.log(res.data);
+					axios
+						.get("https://klick-api.onrender.com/category/getAll", {
+							headers: {
+								Authorization: "Bearer " + token,
+							},
+						})
+						.then((res) => {
+							// console.log(res.data.data);
+							setCategory({
+								firstRow: res.data.data.slice(0, 4),
+								secondRow: res.data.data.slice(5, 9),
+							});
+							// console.log("!!!!!!!!!!Category 1!!!!!!!!");
+							// console.log(category.firstRow);
+							// console.log("!!!!!!!!!!Category 2!!!!!!!!");
+							// console.log(category.secondRow);
+						})
+						.catch((err) => {});
+				})
+				.catch((err) => {
+					console.log("!!!!!!!Error for the user!!!!!!!");
+					console.log(navigation.navigate("login"));
+				});
+		});
 	}, []);
 
 	const getAllData = async () => {
@@ -228,6 +197,7 @@ const HomeContent = ({ navigation }) => {
 		})
 			.then((res) => res.json())
 			.then((_data) => {
+				// console.log(_data?.data?.rows);
 				set_Data(_data?.data?.rows);
 				// console.log("--all", data);
 			})
@@ -399,16 +369,22 @@ const HomeContent = ({ navigation }) => {
 					>
 						<TextInput
 							style={[styles.input, { flex: 1 }]}
-							onChangeSearch={onChangeSearch}
+							onChangeText={(text) => onChangeSearch(text)}
 							value={search}
 							placeholder="Looking for something Amazing?"
-							keyboardType="numeric"
 						/>
 						<Ionicons
 							name="search-outline"
 							size={24}
 							color="#6A6B6C"
 							style={{ marginRight: 8 }}
+							onPress={() => {
+								navigation.navigate({
+									name: "searchResults",
+									params: { query: search },
+								});
+								onChangeSearch("");
+							}}
 						/>
 					</View>
 
@@ -422,7 +398,7 @@ const HomeContent = ({ navigation }) => {
 						<View>
 							<FlatList
 								style={{ marginTop: 20 }}
-								data={data}
+								data={_data}
 								renderItem={({ item }) =>
 									item?.posttype === "status" ? (
 										<Item navigation={navigation} item={item} />
@@ -455,30 +431,16 @@ const HomeContent = ({ navigation }) => {
 							alignItems: "center",
 						}}
 					>
-						<CategoriesCard
-							navigation={navigation}
-							pic={require("../../../assets/1.png")}
-							label={"mum"}
-							route={"categories"}
-						/>
-						<CategoriesCard
-							navigation={navigation}
-							pic={require("../../../assets/1.png")}
-							label={"mum"}
-							route={"categories"}
-						/>
-						<CategoriesCard
-							navigation={navigation}
-							pic={require("../../../assets/2.png")}
-							label={"baby"}
-							route={"categories"}
-						/>
-						<CategoriesCard
-							navigation={navigation}
-							pic={require("../../../assets/3.png")}
-							label={"electron"}
-							route={"categories"}
-						/>
+						{category &&
+							category.firstRow.map((item) => (
+								<CategoriesCard
+									navigation={navigation}
+									pic={require("../../../assets/1.png")}
+									label={item.name}
+									route={"categories"}
+									params={item.id}
+								/>
+							))}
 					</View>
 					<View
 						style={{
@@ -490,30 +452,16 @@ const HomeContent = ({ navigation }) => {
 							marginVertical: 40,
 						}}
 					>
-						<CategoriesCard
-							navigation={navigation}
-							pic={require("../../../assets/4.png")}
-							label={"homeware"}
-							route={"categories"}
-						/>
-						<CategoriesCard
-							navigation={navigation}
-							pic={require("../../../assets/5.png")}
-							label={"health"}
-							route={"categories"}
-						/>
-						<CategoriesCard
-							navigation={navigation}
-							pic={require("../../../assets/6.png")}
-							label={"beauty"}
-							route={"categories"}
-						/>
-						<CategoriesCard
-							navigation={navigation}
-							pic={require("../../../assets/7.png")}
-							label={"fashion"}
-							route={"categories"}
-						/>
+						{category &&
+							category.secondRow.map((item) => (
+								<CategoriesCard
+									navigation={navigation}
+									pic={require("../../../assets/1.png")}
+									label={item.name}
+									route={"categories"}
+									params={item.id}
+								/>
+							))}
 					</View>
 					<View
 						style={{

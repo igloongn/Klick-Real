@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 		borderRadius: 16,
 		backgroundColor: "#FFF",
 		marginTop: 20,
-		marginHorizontal: 22,
+		marginHorizontal: 4,
 	},
 	sponsoredimage: {
 		marginHorizontal: 20,

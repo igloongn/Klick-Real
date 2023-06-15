@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Text,
 	View,
@@ -13,6 +13,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useBuyerSwitchVendorContext } from "../BuyerSwitchVendor";
+import axios from "axios";
 
 const SettingsTiles = ({ name, route, icon, navigation }) => {
 	return (
@@ -49,9 +50,35 @@ const SettingsTiles = ({ name, route, icon, navigation }) => {
 
 const SellerSettingsContent = ({ navigation }) => {
 	const [loading, setLoading] = useState(false);
+	const [userdata, setUserdata] = useState(null);
 
 	const { mode, setMode } = useBuyerSwitchVendorContext();
 
+	useEffect(() => {
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				axios
+					.get("https://klick-api.onrender.com/auth/user", {
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					})
+					.then((data) => {
+						console.log(data.data.user);
+						setUserdata(data.data.user);
+						console.log("userdata");
+						console.log("userdata");
+						console.log("userdata");
+						console.log(userdata.firstName);
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, []);
 	const logout = async () => {
 		try {
 			setLoading(true);
@@ -74,41 +101,83 @@ const SellerSettingsContent = ({ navigation }) => {
 
 	return (
 		<View>
-			<Text>SettingsContent</Text>
-			<View style={{ height: 100, width: 375, backgroundColor: "#191600" }}>
-				<Image
+			{userdata ? (
+				<View
 					style={{
-						borderRadius: 50,
-						height: 60,
-						width: 60,
-						marginLeft: 20,
-						marginTop: 20,
-					}}
-					source={require("../../../assets/profile.jpg")}
-				/>
-				<Text
-					style={{
-						marginLeft: 100,
-						marginTop: -50,
-						color: "#FFF",
-						fontWeight: "500",
-						fontSize: 16,
+						height: 100,
+						width: 375,
+						backgroundColor: "#191600",
+						alignItems: "center",
+						justifyContent: "center",
 					}}
 				>
-					The Cuddle Club
-				</Text>
-				<Text
-					style={{
-						marginLeft: 100,
-						marginTop: 0,
-						color: "#FFF",
-						fontWeight: "400",
-						fontSize: 12,
-					}}
-				>
-					+234 814 692 452
-				</Text>
-			</View>
+					{/* <Image
+						style={{
+							borderRadius: 50,
+							height: 60,
+							width: 60,
+							marginLeft: 20,
+							marginTop: 20,
+						}}
+						source={require("../../../assets/profile.jpg")}
+					/> */}
+					<Text
+						style={{
+							color: "#FFF",
+							fontWeight: "500",
+							fontSize: 16,
+							marginBottom: 10,
+						}}
+					>
+						{userdata.firstName + " " + userdata.lastName}
+					</Text>
+					<Text
+						style={{
+							color: "#FFF",
+							fontWeight: "400",
+							fontSize: 12,
+						}}
+					>
+						{"+" + userdata.phone}
+					</Text>
+				</View>
+			) : (
+				<View style={{ height: 100, width: 375, backgroundColor: "#191600" }}>
+					<Image
+						style={{
+							borderRadius: 50,
+							height: 60,
+							width: 60,
+							marginLeft: 20,
+							marginTop: 20,
+						}}
+						source={require("../../../assets/profile.jpg")}
+					/>
+					<Text
+						style={{
+							marginLeft: 100,
+							marginTop: -50,
+							color: "#FFF",
+							fontWeight: "500",
+							fontSize: 16,
+						}}
+					>
+						The Cuddle Club
+					</Text>
+					<Text
+						style={{
+							marginLeft: 100,
+							marginTop: 0,
+							color: "#FFF",
+							fontWeight: "400",
+							fontSize: 12,
+						}}
+					>
+						+234 814 692 452
+					</Text>
+				</View>
+			)}
+
 			<Text
 				style={{
 					marginLeft: 5,
