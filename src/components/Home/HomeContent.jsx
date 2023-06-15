@@ -114,6 +114,8 @@ const HomeContent = ({ navigation }) => {
 	});
 
 	AsyncStorage.getItem("token").then((token) => {
+		console.log("!!!!!!!!!!TOKEN!!!!!!!!");
+		console.log(token);
 		axios
 			.get("https://klick-api.onrender.com/auth/user", {
 				headers: {
@@ -122,12 +124,17 @@ const HomeContent = ({ navigation }) => {
 			})
 			.then((res) => {
 				// console.log("!!!!!!!!!!Store ID!!!!!!!!");
-				console.log(res.data.stores[0].id);
-				AsyncStorage.setItem("StoreData", res.data.stores[0].id);
+				// console.log(res.data.stores[0].id);
+				console.log(token);
+				if (res.data.stores.length > 0) {
+					AsyncStorage.setItem("StoreData", res.data.stores[0].id);
+				}
+				console.log("!!!!!!!!!!User Data!!!!!!!!");
+				// console.log(res.data);
 			})
 			.catch((err) => {
 				console.log("!!!!!!!Error for the user!!!!!!!");
-				console.log(err);
+				console.log(navigation.navigate("login"));
 			});
 	});
 
@@ -247,11 +254,6 @@ const HomeContent = ({ navigation }) => {
 		AsyncStorage.getItem("token")
 			.then((token) => {
 				console.log("!!!!!!Token from the home page!!!!!!!!!!");
-				console.log("!!!!!!Token from the home page!!!!!!!!!!");
-				console.log("!!!!!!Token from the home page!!!!!!!!!!");
-				console.log("!!!!!!Token from the home page!!!!!!!!!!");
-				console.log("!!!!!!Token from the home page!!!!!!!!!!");
-				console.log("!!!!!!Token from the home page!!!!!!!!!!");
 				console.log(token);
 
 				axios
@@ -266,10 +268,19 @@ const HomeContent = ({ navigation }) => {
 						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
 						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
 						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
+						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
 						// console.log(userData.data.user.Cart.id);
 						// cartId = userData.data.user.Cart.id;
-						console.log(Object.keys(userData.data.user.Cart.items).length);
+						// console.log(Object.keys(userData.data.user.Cart.items).length);
 						setcartCount(Object.keys(userData.data.user.Cart.items).length);
+						const isEmptyObject = (obj) => {
+							return Object.keys(obj).length === 0;
+						};
+						isEmptyObject(userData.data.DefaultAddress);
+						console.log(isEmptyObject(userData.data.DefaultAddress));
+						if (isEmptyObject(userData.data.DefaultAddress) === true) {
+							navigation.navigate("addaddress");
+						}
 					})
 					.catch((err) => {
 						console.log("!!!!!!!!!errrrrrrrr!!!!!!!!");
@@ -410,8 +421,8 @@ const HomeContent = ({ navigation }) => {
 					{_data && (
 						<View>
 							<FlatList
-								// style={{  }}
-								data={_data}
+								style={{ marginTop: 20 }}
+								data={data}
 								renderItem={({ item }) =>
 									item?.posttype === "status" ? (
 										<Item navigation={navigation} item={item} />

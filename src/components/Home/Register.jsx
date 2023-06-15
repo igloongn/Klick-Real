@@ -24,9 +24,9 @@ const Register = ({ navigation }) => {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [phone, setPhone] = useState("");
+	const [address, setAddress] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-
 	const [loading, setLoading] = useState(false);
 
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
@@ -197,7 +197,14 @@ const Register = ({ navigation }) => {
 							/>
 						</View>
 					</View>
-
+					<GeneralInput
+						placeholder={"dele6 Main St"}
+						name="Add Delivery Address"
+						width={335}
+						value={address}
+						onChangeValue={(text) => setAddress(text)}
+						// inputMode="email"
+					/>
 					{/* Password */}
 					<GeneralInput
 						name="Password"
@@ -307,6 +314,8 @@ const styles = StyleSheet.create({
 	inputContainer: {
 		flexDirection: "row",
 		alignItems: "center",
+		justifyContent: "flex-start",
+		// backgroundColor: 'red',
 		// borderColor: "gray",
 		// borderWidth: 1,
 		marginBottom: 10,
@@ -316,8 +325,9 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
-		alignItems: "center",
+		// alignItems: "center",
 		width: "100%",
+		paddingLeft: 10,
 	},
 	prefix: {
 		// paddingHorizontal: 10,
@@ -328,7 +338,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "#F8F8F8",
 		//borderColor: '#BABABA',
 		borderRadius: 10,
-		width: "70%",
+		// width: "90%",
+		flex: 1,
 		borderWidth: 1,
 		borderColor: "#C4C4C4",
 	},

@@ -12,6 +12,7 @@ import GeneralButton from "../General/GeneralButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const AddDeliveryLocation = ({ navigation, route }) => {
 	// const { id, itemCount } = route.params;
@@ -23,6 +24,7 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 	const [city, setCity] = useState("Benin");
 	const [state, setState] = useState("Edo");
 	const [fullName, setFullName] = useState("Mufasa James");
+	const [isDefault, setIsDefault] = useState(false);
 
 	const deliveryPayload = {};
 	useEffect(() => {
@@ -42,6 +44,9 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 		deliveryPayload.city = city;
 		deliveryPayload.address = address;
 		deliveryPayload.state = state;
+		deliveryPayload.isDefault = isDefault;
+		console.log('deliveryPayload.isDefault')
+		console.log(isDefault)
 		console.log("!!!!!!!!!!delivery Address Payload!!!!!!!!!!!");
 		console.log(deliveryPayload);
 
@@ -63,10 +68,10 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 						city: deliveryPayload.city,
 						state: deliveryPayload.state,
 						country: deliveryPayload.country,
+						defaults: deliveryPayload.isDefault,
 						// phone: "+" + user.data.user.phone,
 						phone: "+" + "2348140570059",
 						type: "other",
-						defaults: false,
 					};
 					console.log("!!!!!!!payload!!!!!!!");
 					console.log(payload);
@@ -123,6 +128,38 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 					value={address}
 					onChangeValue={(text) => setAddress(text)}
 				/>
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						marginTop: 30,
+						marginBottom: 0,
+						alignItems: "center",
+					}}
+				>
+					<BouncyCheckbox
+						size={22}
+						fillColor={!isDefault ? "red" : "green"}
+						unfillColor="#FFFFFF"
+						text="Default Address"
+						iconStyle={{ borderColor: !isDefault ? "red" : "green" }}
+						innerIconStyle={{ borderWidth: 2 }}
+						// textStyle={{ fontFamily: "JosefinSans-Regular" }}
+						onPress={(check) => {
+							setIsDefault(check);
+							// console.log(check)
+							// // console.log(isDefault)
+						}}
+						disableText
+					/>
+					<Text
+					style={{
+						fontWeight: "500",
+						fontSize: 15,
+						marginLeft: 10,
+
+					}}>Default Address?</Text>
+				</View>
 				<GeneralInput
 					name={"State"}
 					width={320}

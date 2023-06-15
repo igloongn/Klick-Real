@@ -6,11 +6,12 @@ import GeneralButton from "../General/GeneralButton";
 const StoreAddress = () => {
 	return (
 		<View
-    style={{
-      justifyContent: 'center',
-      alignItems: "center",
-    }}>
-			<GeneralInput name={"Country"} width={320} placeholder={"Nigeria"} />
+			style={{
+				justifyContent: "center",
+				alignItems: "center",
+			}}
+		>
+			<GeneralInput name={"Country"} width={320} placeholder={"Nigerida"} />
 			<GeneralInput
 				name={"Address"}
 				width={320}

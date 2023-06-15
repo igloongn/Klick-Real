@@ -63,30 +63,18 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 		// ];
 	}, []);
 
-	// fetch("https://klick-api.onrender.com/auth/registerstore", {
-	// 	method: "POST",
-	// 	headers: {
-	// 		"Content-Type": "application/json",
-	// 		// Add any additional headers if required
-	// 	},
-	// 	body: JSON.stringify({
-	// 		title: "New Post",
-	// 		content: "This is the content of the post.",
-	// 	}),
-	// })
-	// 	.then((response) => response.json())
-	// 	.then((data) => {
-	// 		console.log(data); // Handle the response data
-	// 	})
-	// 	.catch((error) => {
-	// 		console.error('!!!!!!!!'); // Handle any error that occurred
-	// 		console.error(error); // Handle any error that occurred
-	// 	});
-
 	const handleValidation = () => {
 		const regex = /^[a-zA-Z]+\s[a-zA-Z]+$/; // Regex pattern to validate two words
+		const regexPattern = /^(\w{4,}\s*)+$/;
+		// Split the input value into individual words
+		const words = storeName.split(" ");
 
-		if (regex.test(storeName)) {
+		// Check if each word has at least three letters
+		const allWordsValid = words.every((word) => word.length >= 3);
+
+		// if (regex.test(storeName)) {
+		// if (regexPattern.test(storeName)) {
+		if (allWordsValid) {
 			// Input value is valid
 			//   Alert.alert('Success', 'Valid input!');
 			//   setSuccessModalVisible(true)
@@ -140,14 +128,14 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 						onChangeValue={(text) => setPhone(text)}
 						mode="tel"
 					/>
-					<View style={{ marginTop: 20, width: 335 }}>
-						{/* <SelectList
+					{/* <View style={{ marginTop: 20, width: 335 }}>
+						<SelectList
 							placeholder={"e.g Food"}
 							setSelected={(val) => setIndustry(val)}
 							// data={data?data:[]}
 							data={data}
 							save="value"
-						/> */}
+						/>
 						<Text
 							style={{
 								fontSize: 13,
@@ -156,7 +144,7 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 								fontSize: 16,
 							}}
 						>
-							Category
+							Industry
 						</Text>
 
 						<Picker
@@ -164,10 +152,17 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 							onValueChange={(itemValue, itemIndex) => setIndustry(itemValue)}
 						>
 							{data.map((item, index) => (
-								<Picker.Item label={item.name} value={item.id} />
+								<Picker.Item label={item.name} value={item.name} />
 							))}
 						</Picker>
-					</View>
+					</View> */}
+					<GeneralInput
+						placeholder={"What industry do you wanna work with"}
+						name="Industry"
+						width={335}
+						value={industry}
+						onChangeValue={(text) => setIndustry(text)}
+					/>
 
 					{/* <GeneralInput name="Which industry will you be primarily operating in?" width={335}/> */}
 
@@ -201,9 +196,11 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 			<MyModal
 				state={failedModalVisible}
 				setState={setFailedModalVisible}
-				text={"Please the store must have two words"}
+				text={
+					"Please your store name should have at least two word with at least four letters each"
+				}
 				button={"Try again"}
-				ButtonColor={"#EB270B"}
+				ButtonColor={"#FEDD00"}
 			/>
 		</View>
 	);

@@ -167,6 +167,7 @@ const MyCart = ({ navigation }) => {
 					console.log("!!!!!!Empty Cart Response!!!!!!!!!");
 					console.log(res.data);
 					AsyncStorage.setItem("cart", JSON.stringify([]));
+					setData([]);
 				})
 				.catch((err) => {
 					console.log("Add to cart Error!!!!!!!!!!");
@@ -227,28 +228,30 @@ const MyCart = ({ navigation }) => {
 								width={335}
 							/>
 						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={() =>
-								navigation.navigate({
-									name: "adddeliverylocation",
-									params: { cartData: data },
-								})
-							}
-							style={{
-								marginTop: 20,
-								alignItems: "center",
-							}}
-						>
-							<GeneralButton
-								message={"Checkout"}
-								marginLeft={140}
-								top={15}
-								backgroundColor={"#FEDD00"}
-								borderColor={"#FEDD00"}
-								height={45}
-								width={335}
-							/>
-						</TouchableOpacity>
+						{data.length !== 0 && (
+							<TouchableOpacity
+								onPress={() =>
+									navigation.navigate({
+										name: "checkout",
+										params: { cartData: data },
+									})
+								}
+								style={{
+									marginTop: 20,
+									alignItems: "center",
+								}}
+							>
+								<GeneralButton
+									message={"Checkout"}
+									marginLeft={140}
+									top={15}
+									backgroundColor={"#FEDD00"}
+									borderColor={"#FEDD00"}
+									height={45}
+									width={335}
+								/>
+							</TouchableOpacity>
+						)}
 					</View>
 				)}
 			</ScrollView>

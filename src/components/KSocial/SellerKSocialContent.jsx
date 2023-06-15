@@ -619,4 +619,4 @@ const styles = StyleSheet.create({
 
 const stylesSocial = StyleSheet.create({});
 
-export default SellerKSocialContent;
+export default SellerKSocialContent ;

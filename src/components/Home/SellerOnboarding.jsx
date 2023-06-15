@@ -32,6 +32,7 @@ const SellerOnboarding = ({ navigation }) => {
 
 	const submit = async (navigation) => {
 		setLoading(true);
+		console.log('!!!!!!!!!!!!!!!!!!!!!!!!')
 		console.log({
 			storeName,
 			phone,

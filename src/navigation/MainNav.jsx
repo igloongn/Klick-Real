@@ -20,7 +20,7 @@ import EmailSettings from "../components/Settings/EmailSettings";
 import PhoneSettings from "../components/Settings/PhoneSettings";
 import PasswordSettings from "../components/Settings/PasswordSettings";
 import Address from "../components/Settings/Address";
-import AddAddress from "../components/Settings/AddAddress";
+// import AddAddress from "../components/Settings/AddAddress";
 import PaymentMethod from "../components/Settings/PaymentMethod";
 import AddNewCard from "../components/Settings/AddNewCard";
 import Notification from "../components/Settings/Notification";
@@ -70,6 +70,7 @@ import MyCart from "../components/Orders/MyCart";
 import CheckOut from "../components/Orders/CheckOut";
 import ShipSeller from "../components/Orders/ShipSeller";
 import AddDeliveryLocation from "../components/Orders/AddDeliveryLocation";
+import AddAddress from "../components/Home/AddAddress";
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -82,6 +83,7 @@ export default function MainNav() {
 		<Stack.Navigator screenOptions={{ headerShown: true }}>
 			{/* <Stack.Screen name="auth" component={Auth}/> */}
 			{/* <Stack.Screen name="test" component={MessagingScreen} /> */}
+
 			<Stack.Screen
 				name="hometab"
 				component={HomeTabs}
@@ -89,6 +91,14 @@ export default function MainNav() {
 					headerShown: false,
 					headerStyle: { elevation: 0 },
 					title: "",
+				}}
+			/>
+			<Stack.Screen
+				name="addaddress"
+				component={AddAddress}
+				options={{
+					headerStyle: { elevation: 0 },
+					title: "Add Address",
 				}}
 			/>
 			<Stack.Screen
@@ -100,7 +110,6 @@ export default function MainNav() {
 					title: "",
 				}}
 			/>
-
 			<Stack.Screen
 				name="productView"
 				component={ProductList}
@@ -113,7 +122,6 @@ export default function MainNav() {
 					// ),
 				}}
 			/>
-
 			{/* <Stack.Screen name="home" component={Home} /> */}
 			<Stack.Screen name="orders" component={Orders} />
 			<Stack.Screen name="message" component={Message} />
@@ -121,9 +129,13 @@ export default function MainNav() {
 			<Stack.Screen name="settings" component={Settings} />
 			<Stack.Screen name="specialoffer" component={SpecialOffer} />
 			<Stack.Screen name="shoppage" component={ShopPage} />
-			<Stack.Screen name="productdetails" component={ProductDetails} options={{
-				title: 'Product Details'
-			}} />
+			<Stack.Screen
+				name="productdetails"
+				component={ProductDetails}
+				options={{
+					title: "Product Details",
+				}}
+			/>
 			<Stack.Screen name="orderdetails" component={OrderDetails} />
 			<Stack.Screen name="profilesettings" component={ProfileSettings} />
 			<Stack.Screen name="manageaccount" component={ManageAccount} />
@@ -131,8 +143,12 @@ export default function MainNav() {
 			<Stack.Screen name="phonesettings" component={PhoneSettings} />
 			<Stack.Screen name="passwordsettings" component={PasswordSettings} />
 			<Stack.Screen name="address" component={Address} />
-			<Stack.Screen name="addaddress" component={AddAddress} />
-			<Stack.Screen name="paymentmethod" component={PaymentMethod} />
+			{/* <Stack.Screen name="addaddress" component={AddAddress} /> */}
+			<Stack.Screen
+				name="paymentmethod"
+				component={PaymentMethod}
+				options={{ title: "Payment Method" }}
+			/>
 			<Stack.Screen name="addnewcard" component={AddNewCard} />
 			<Stack.Screen name="notification" component={Notification} />
 			<Stack.Screen name="socialpage" component={SocialPage} />
@@ -150,9 +166,7 @@ export default function MainNav() {
 					title: "Stories",
 				}}
 			/>
-
 			<Stack.Screen name="categories" component={FakeCategories} />
-
 			<Stack.Screen name="sellerorders" component={SellerOrders} />
 			<Stack.Screen name="sellermessage" component={SellerMessage} />
 			<Stack.Screen name="sellerksocial" component={SellerKSocial} />
@@ -162,7 +176,6 @@ export default function MainNav() {
 			<Stack.Screen name="selleraddaddress" component={SellerAddAddress} />
 			<Stack.Screen name="selleraddlogo" component={SellerAddLogo} />
 			<Stack.Screen name="notifications" component={Notifications} />
-
 			<Stack.Screen
 				name="addnewproduct"
 				component={AddNewProduct}
@@ -170,7 +183,6 @@ export default function MainNav() {
 					title: "Add New Product",
 				}}
 			/>
-
 			<Stack.Screen name="productlist" component={SellerProductList} />
 			<Stack.Screen name="createpost" component={CreatePost} />
 			<Stack.Screen name="storesettings" component={StoreSettings} />
@@ -200,9 +212,13 @@ export default function MainNav() {
 				component={SellerOnboarding}
 				options={{ title: "Create a Store" }}
 			/>
-			<Stack.Screen name="shippingmethod" component={ShippingMethod} options={{
-				title: 'Shipping Method'
-			}} />
+			<Stack.Screen
+				name="shippingmethod"
+				component={ShippingMethod}
+				options={{
+					title: "Shipping Method",
+				}}
+			/>
 			<Stack.Screen name="team" component={TeamMembers} />
 			<Stack.Screen name="addteam" component={AddTeamMembers} />
 			<Stack.Screen name="teampage" component={TeamPage} />
@@ -214,20 +230,28 @@ export default function MainNav() {
 			<Stack.Screen name="wallet" component={Wallet} />
 			<Stack.Screen name="topup" component={TopUp} />
 			<Stack.Screen name="withdraw" component={Withdraw} />
-
-			<Stack.Screen name="mycart" component={MyCart} options={{
-				title: 'My Cart',
-			}} />
-			<Stack.Screen name="checkout" component={CheckOut} options={{
-				title: 'Check out',
-			}} />
+			<Stack.Screen
+				name="mycart"
+				component={MyCart}
+				options={{
+					title: "My Cart",
+				}}
+			/>
+			<Stack.Screen
+				name="checkout"
+				component={CheckOut}
+				options={{
+					title: "Check out",
+				}}
+			/>
 			<Stack.Screen name="shipseller" component={ShipSeller} />
-
-
-
-			<Stack.Screen name="adddeliverylocation" component={AddDeliveryLocation} options={{
-				title: 'Add Delivery Location',
-			}} />
+			<Stack.Screen
+				name="adddeliverylocation"
+				component={AddDeliveryLocation}
+				options={{
+					title: "Add Delivery Location",
+				}}
+			/>
 		</Stack.Navigator>
 	);
 }

@@ -62,6 +62,7 @@ const Login = ({ navigation }) => {
 			//Login Susscessful
 			const data = await response.json();
 			// Store the authentication token in AsyncStorage
+			console.log('!!!!!!!!!!!!!Login Response!!!!!!!!!!!!');
 			console.log(data);
 			await AsyncStorage.setItem("token", data.access_token);
 			await AsyncStorage.setItem("isLoggedIn", "true");

@@ -33,12 +33,12 @@ const HomeTabs = () => {
                     ),
                 }} />
 
-            <Tabs.Screen name="Orders" component={Orders}
+            {/* <Tabs.Screen name="Orders" component={Orders}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <NavbarTab message={'Orders'} imageuri={require('../../assets/Vector-15.png')} focused={focused} id='2' />
                     ),
-                }} />
+                }} /> */}
 
 
             <Tabs.Screen name="Message" component={Message}

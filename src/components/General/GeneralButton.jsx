@@ -25,18 +25,16 @@ function GeneralButton({
 				borderColor: borderColor,
 				height: height,
 				width: width,
-				marginHorizontal: marginHorizintal,
-				marginTop: marginTop,
-				marginBottom: marginBottom
+				alignItems: "center",
+				justifyContent: "center",
 			}}
 		>
 			<Text
 				style={{
-					...styles.buttontext,
+					// ...styles.buttontext,
 					color: color,
-					marginLeft: marginLeft,
+					// marginLeft: marginLeft,
 					fontSize: size,
-					marginTop: top,
 				}}
 			>
 				{message}
@@ -47,20 +45,16 @@ function GeneralButton({
 
 const styles = StyleSheet.create({
 	button: {
-		height: 63,
-		width: 329,
-		backgroundColor: "#273B4A",
 		borderRadius: 80,
 		marginTop: 25,
-		borderColor: "#808080",
 		borderWidth: 1,
 	},
 	buttontext: {
 		fontWeight: "400",
 		fontSize: 20,
 		color: "#FFFFFF",
-		marginTop: 18,
-		marginLeft: 130,
+		// marginTop: 18,
+		// marginLeft: 130,
 	},
 });
 
