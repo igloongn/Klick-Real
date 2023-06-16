@@ -84,7 +84,7 @@ const ProductCard = ({ productDetails, navigation  }) => {
 					>
 						<Text
 							style={{
-								fontSize: 19,
+								fontSize: 18,
 								fontWeight: 500,
 								color: "#0485E8",
 							}}
@@ -100,7 +100,7 @@ const ProductCard = ({ productDetails, navigation  }) => {
 						>
 							<Text
 								style={{
-									fontSize: 13,
+									fontSize: 10,
 									color: "#988400",
 								}}
 							>

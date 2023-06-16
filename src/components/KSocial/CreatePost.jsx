@@ -17,8 +17,9 @@ import { ImagePicker } from "expo-image-multiple-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
+import MyModal from "../../utils/MyModal";
 
-const CreatePost = () => {
+const CreatePost = ({ navigation }) => {
 	const [text, setText] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
@@ -26,51 +27,10 @@ const CreatePost = () => {
 	const [file, setFile] = useState([]);
 	const [user, setUser] = useState(null);
 
-	// const onSubmit = async () => {
-	//   setIsLoading(true)
-	//   try {
-	//     // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1Yjc4ZmMzLTRmNjEtNDI1MS04YTBhLTBjNGZkNGQ0MjE3NiIsImZ1bGxOYW1lIjoiVGVzdDYgVGVzdGVyNiIsImVtYWlsIjoidGVzdDZAZnVsbGFuZ2xlLm9yZyIsInJvbGUiOiJndWVzdCIsImlzQWN0aXZhdGVkIjp0cnVlLCJ2ZW5kb3JNb2RlIjp0cnVlLCJ3ZWJzaXRlIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwianRpIjoiZDVhNmYyZTYtYzM3OS00ODU2LTlhMDItNzJkNTEwMGZhMWFjIiwic3RvcmVJZCI6IjkzNTYxMDNlLTcwYTktNDM5NS1hNmE3LTEwYTU5MWFhMmEzMiIsImlhdCI6MTY4NTA4NjQyNSwiZXhwIjoxNjg1MTU4NDI1fQ.gShUMOGsX97sVv0DeBe5ZZRvm6XqUndj89My_hh7EHk' //await AsyncStorage.getItem('token');
+	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
+	const [failedModalVisible, setFailedModalVisible] = useState(false);
 
-	//     const token = await AsyncStorage.getItem('token');
-	//     console.log(token)
-	//     const response = await fetch("https://klick-api.onrender.com/post/", {
-	//       method: "POST",
-	//       mode: 'no-cors',
-	//       headers: {
-	//         'Content-Type': 'application/json',
-	//         'Authorization': `Bearer ${token}`
-	//       },
-	//       body: JSON.stringify({
-	//         caption: text,
-	//         "post_type": 'ksocial'
-	//       })
-	//     })
-	//     const _data = await response.json();
-	//     console.log(_data)
-	//     Alert.alert('Success', 'Post created');
-	//     setText('')
-	//   } catch (error) {
-	//     // Handle network or other errors
-	//     console.error(error);
-	//     Alert.alert('Error', 'An error occured during login.');
-	//   } finally {
-	//     setIsLoading(false);
-	//   }
-
-	// }
-	useEffect(() => {
-		// axios
-		// 	.get("https://klick-api.onrender.com/auth/user", {
-		// 		header: {
-		// 			"Authorization": "Bearer " + token,
-		// 		},
-		// 	})
-		// 	.then((res) => {
-		// 		console.log("!!!!!!!!USer Data!!!!!!!!");
-		// 		console.log(res);
-		// 	})
-		// 	.catch((err) => console.log(err));
-	}, []);
+	useEffect(() => {}, []);
 
 	const onSubmit = async () => {
 		setIsLoading(true);
@@ -107,7 +67,12 @@ const CreatePost = () => {
 			if (response?.status >= 200 && response?.status < 203) {
 				const _data = await response.json();
 				console.log("y----", _data);
-				Alert.alert("Success", "Status added successfully");
+				// Alert.alert("Success", "Status added successfully");
+				setSuccessModalVisible(true);
+				setTimeout(() => {
+					navigation.pop();
+				}, 3000);
+
 				// navigation.navigate('sellerksocialcontent')
 			} else {
 				throw Error("statsuc code not 200");
@@ -115,7 +80,8 @@ const CreatePost = () => {
 		} catch (error) {
 			// Handle network or other errors
 			console.error(error);
-			Alert.alert("Error", "An error occured ");
+			// Alert.alert("Error", "An error occured ");
+			setFailedModalVisible(true);
 		} finally {
 			setIsLoading(false);
 		}
@@ -227,6 +193,21 @@ const CreatePost = () => {
 					source={{ uri: file[0]?.uri ? file[0]?.uri : "" }}
 				></Image>
 			</View>
+			<MyModal
+				state={SuccessModalVisible}
+				setState={setSuccessModalVisible}
+				text={"Status added successfully"}
+				button={"Thank You"}
+				ButtonColor={"#FEDD00"}
+			/>
+			{/* Login Failed Modal */}
+			<MyModal
+				state={failedModalVisible}
+				setState={setFailedModalVisible}
+				text={"An error occured "}
+				button={"Try again"}
+				ButtonColor={"#EB270B"}
+			/>
 		</>
 	);
 };

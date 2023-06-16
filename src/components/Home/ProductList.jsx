@@ -149,7 +149,9 @@ const ProductList = () => {
 			{/* Body */}
 			<ScrollView>
 				{products.length > 0 ? (
-					products.map((item) => <ProductCard productDetails={item} />)
+					products.map((item) => (
+						<ProductCard productDetails={item} navigation={navigation} />
+					))
 				) : (
 					<View>
 						<OpenBox />

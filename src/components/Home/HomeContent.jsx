@@ -174,7 +174,7 @@ const HomeContent = ({ navigation }) => {
 						// 	navigation.navigate("addaddress");
 						// }
 						if (userdata.data.stores.length > 0) {
-							AsyncStorage.setItem("StoreData", res.data.stores[0].id);
+							AsyncStorage.setItem("StoreData", userdata.data.stores[0].id);
 						}
 						// console.log(res.data);
 						axios
@@ -184,10 +184,10 @@ const HomeContent = ({ navigation }) => {
 								},
 							})
 							.then((res) => {
-								// console.log(res.data.data);
 								setCategory({
 									firstRow: res.data.data.slice(0, 4),
 									secondRow: res.data.data.slice(5, 9),
+									thirdRow: res.data.data.slice(8),
 								});
 							})
 							.catch((err) => {});
@@ -233,6 +233,7 @@ const HomeContent = ({ navigation }) => {
 					setCategory({
 						firstRow: res.data.data.slice(0, 4),
 						secondRow: res.data.data.slice(5, 9),
+						thirdRow: res.data.data.slice(8),
 					});
 				})
 				.catch((err) => {});
@@ -429,6 +430,27 @@ const HomeContent = ({ navigation }) => {
 					>
 						{category &&
 							category.secondRow.map((item) => (
+								<CategoriesCard
+									navigation={navigation}
+									pic={{ uri: item.image }}
+									label={item.name}
+									route={"categories"}
+									params={item.id}
+								/>
+							))}
+					</View>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "space-around",
+							alignItems: "center",
+							// marginHorizontal: 20,
+							marginVertical: 40,
+						}}
+					>
+						{category &&
+							category.thirdRow.map((item) => (
 								<CategoriesCard
 									navigation={navigation}
 									pic={{ uri: item.image }}

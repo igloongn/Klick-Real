@@ -160,49 +160,26 @@ const SellerKSocialContent = ({ navigation }) => {
 	const [data, setData] = useState([]);
 	const [showGallery, setShowGallery] = useState(false);
 	const [storeId, setStoreId] = useState(null);
+	const [postData, setPostData] = useState(null);
 	// const [isLoading, setIsLoading] = useState(false);
 	const focus = useIsFocused();
 	const { user, Loading, isErorr, getUserData } = useGetLogginedUser();
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
 
+	useEffect(() => {
+		getAllData();
+	}, []);
+
 	const getAllData = () => {
 		console.log("loading data");
-		AsyncStorage.getItem("token")
-			.then((token) => {
-				console.log("tok", token);
-				AsyncStorage.getItem("StoreData")
-					.then((userData) => {
-						// console.log("!!!!!!Data!!!!!!!!");
-						// console.log(userData);
 
-						fetch("https://klick-api.onrender.com/post/", {
-							method: "GET",
-							mode: "no-cors",
-							headers: {
-								"Content-Type": "application/json",
-								Authorization: `Bearer ${token}`,
-							},
-						})
-							.then((res) => res.json())
-							.then((data) => {
-								// console.log("!!!!!!!!!Post Data!!!!!!!!!!!!!!!");
-								// console.log(data.data.rows);
-								// console.log(data?.data?.rows);
-								setData(data?.data?.rows);
-								console.log("--all", data);
-							})
-							.catch((e) => console.log(e));
-					})
-					.catch((e) => {
-						console.log("!!!!!!!!USer Data Error!!!!!!!");
-						console.log(e);
-					});
-			})
-			.catch((err) => {
-				console.log("Token Error");
-				console.log(err);
-			});
+		axios.get('https://klick-api.onrender.com/post/').then((res) => {
+			// console.log(res.data.data)
+			setPostData(res.data.data)
+		}).catch((err) => {
+			console.log(err)
+		});
 	};
 
 	// useEffect(() => {
@@ -218,13 +195,12 @@ const SellerKSocialContent = ({ navigation }) => {
 				mode: "no-cors",
 				headers: {
 					// 'Content-Type': 'multipart/form-data',
-					Authorization: `Bearer ${token}`,
 				},
 			});
 			if (response?.status >= 200 && response?.status < 203) {
 				const _data = await response.json();
 				console.log(_data);
-				setData(_data);
+				setPostData(_data);
 			} else {
 				throw Error("status code not 200");
 			}
@@ -239,9 +215,8 @@ const SellerKSocialContent = ({ navigation }) => {
 		}
 	};
 
-
-// This is for Video Upload
-const handleSelectMedia = async () => {
+	// This is for Video Upload
+	const handleSelectMedia = async () => {
 		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 		if (status !== "granted") {
 			console.log("Permission to access media library denied");
@@ -253,15 +228,13 @@ const handleSelectMedia = async () => {
 			allowsEditing: true,
 			quality: 1,
 		});
-		console.log('!!!!!!!!Result!!!!!!!')
-		console.log(result)
+		console.log("!!!!!!!!Result!!!!!!!");
+		console.log(result);
 
 		if (!result.cancelled) {
 			setSelectedMedia(result);
 		}
 	};
-
-
 
 	const uploadStatus = async (assets) => {
 		// setIsLoading(true);
@@ -300,9 +273,9 @@ const handleSelectMedia = async () => {
 				console.log("y----", _data);
 				setSuccessModalVisible(true);
 				// Alert.alert("Success", "Status added successfully");
-				setTimeout(() => {
-					navigation.navigate("sellerksocialcontent");
-				}, 2000);
+				// setTimeout(() => {
+				// 	navigation.navigate("sellerksocialcontent");
+				// }, 2000);
 			} else {
 				throw Error("statsuc code not 200");
 			}
@@ -315,10 +288,6 @@ const handleSelectMedia = async () => {
 			// setIsLoading(false);
 		}
 	};
-
-	useEffect(() => {
-		getAllData();
-	}, [focus]);
 
 	console.log(showGallery);
 
@@ -369,7 +338,7 @@ const handleSelectMedia = async () => {
 					<ScrollView style={styles.scrollView}>
 						<FlatList
 							style={{ marginTop: 20 }}
-							data={data}
+							data={postData}
 							renderItem={({ item }) =>
 								item?.posttype === "status" ? (
 									<Item navigation={navigation} item={item} />
@@ -403,6 +372,7 @@ const handleSelectMedia = async () => {
 							>
 								{<Ionicons name="person-add-outline" size={20} color="black" />}
 							</TouchableOpacity>
+
 							<Pressable onPress={() => navigation.navigate("createpost")}>
 								{/* <GeneralInput width={275} placeholder={"Start a post..."} marginLeft={-30}/> */}
 								<View
@@ -427,7 +397,7 @@ const handleSelectMedia = async () => {
 						<FlatList
 							style={{ marginTop: 10 }}
 							// data={data.map((item)=>{return {user: user , data: item}})}
-							data={data}
+							data={postData}
 							renderItem={({ item }) =>
 								item?.posttype === "ksocial" ? (
 									<SocialCard
@@ -619,4 +589,4 @@ const styles = StyleSheet.create({
 
 const stylesSocial = StyleSheet.create({});
 
-export default SellerKSocialContent ;
+export default SellerKSocialContent;
