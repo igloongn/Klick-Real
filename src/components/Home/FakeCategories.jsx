@@ -20,13 +20,13 @@ import ProductCard from "./ProductCard";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const SeacrhResult = ({ route }) => {
+const FakeCategories = ({ route }) => {
 	const navigation = useNavigation();
 	const [store, setStore] = useState(null);
 	const [products, setProducts] = useState([]);
 	const { id } = route.params;
-	console.log("!!!!!!!!!!!ID!!!!!!!!!!!!!");
-	console.log(id);
+	// console.log("!!!!!!!!!!!ID!!!!!!!!!!!!!");
+	// console.log(id);
 
 	useEffect(() => {
 		// axios.get('https://klick-api.onrender.com/product/store/product?storeId=')
@@ -50,12 +50,13 @@ const SeacrhResult = ({ route }) => {
 							headers: { Authorization: `Bearer ${token}` },
 						})
 						.then((data) => {
-							console.log("!!!!!!Product Data!!!!!!!");
-							const productlist = data.data.data.products
+							console.log("!!!!!!Product Data Yputube!!!!!!!");
+							const productlist = data.data.data.products;
 							console.log(productlist);
 							setProducts(productlist);
+							// console.log(products);
 
-							console.log("!!!!!!Product Data!!!!!!!");
+							console.log("!!!!!!Product Data Yputube!!!!!!!");
 						})
 						.catch((error) => {
 							console.log("!!!!!!!!!Axios Error!!!!!!!");
@@ -81,34 +82,85 @@ const SeacrhResult = ({ route }) => {
 				<View
 					style={{
 						display: "flex",
-						flexDirection: "row",
-						justifyContent: "space-between",
-						width: "30%",
+						justifyContent: "center",
+						alignContent: "center",
+						width: "100%",
 					}}
 				>
-					{/* Search */}
-					<TouchableOpacity
-						style={{
-							width: 50,
-							height: 50,
-							// borderWidth: 1,
-							borderColor: "#98999A",
-							borderRadius: 10,
-						}}
-					>
-						<Text></Text>
-					</TouchableOpacity>
 					{/* Settings */}
 					<TouchableOpacity
 						style={{
-							width: 50,
+							// width: 50,
 							height: 50,
 							// borderWidth: 1,
 							borderColor: "#98999A",
 							borderRadius: 10,
+							alignSelf: "center",
+							padding: 2,
 						}}
 					>
-						<Text></Text>
+						{/* {products ? (
+							products.length > 0 ? (
+								<Text
+									style={{
+										fontSize: 24,
+										fontWeight: "bold",
+									}}
+								>
+									{products[0].category.name}
+								</Text>
+							)  :
+						<Text
+								style={{
+									fontSize: 24,
+									fontWeight: "bold",
+								}}
+							>
+								{products[0].category.name}
+							</Text>
+						: (
+							<Text
+							style={{
+								fontSize: 24,
+									fontWeight: "bold",
+								}}
+							>
+								{products[0].category.name}
+							</Text>
+						)
+						) 
+						
+						} */}
+						{products ? (
+							products.length > 0 ? (
+								<Text
+									style={{
+										fontSize: 24,
+										fontWeight: "bold",
+									}}
+								>
+									{products[0].category.name}
+								</Text>
+							) : (
+								<Text
+									style={{
+										fontSize: 24,
+										fontWeight: "bold",
+									}}
+								>
+									{'No Product'}
+								</Text>
+							)
+						) : (
+							<Text
+								style={{
+									fontSize: 24,
+									fontWeight: "bold",
+								}}
+							>
+								{'Loading'}
+							</Text>
+						)}
 					</TouchableOpacity>
 				</View>
 				<TouchableOpacity></TouchableOpacity>
@@ -117,7 +169,9 @@ const SeacrhResult = ({ route }) => {
 			<ScrollView>
 				{products ? (
 					products.length > 0 ? (
-						products.map((item) => <ProductCard productDetails={item} navigation={navigation} />)
+						products.map((item) => (
+							<ProductCard productDetails={item} navigation={navigation} />
+						))
 					) : (
 						<View>
 							<OpenBox />
@@ -128,7 +182,7 @@ const SeacrhResult = ({ route }) => {
 									textAlign: "center",
 								}}
 							>
-								Search Not Found
+								No Item in this Category...
 							</Text>
 							<Text
 								style={{
@@ -137,8 +191,8 @@ const SeacrhResult = ({ route }) => {
 									color: "#6A6B6C",
 								}}
 							>
-								You’re yet to add any product to your store. Products that you
-								add will appear here
+								{/* You’re yet to add any product to your store. Products that you
+								add will appear here */}
 							</Text>
 						</View>
 					)
@@ -152,7 +206,7 @@ const SeacrhResult = ({ route }) => {
 								textAlign: "center",
 							}}
 						>
-							Search Not Found
+							Loading Category...
 						</Text>
 						<Text
 							style={{
@@ -161,8 +215,8 @@ const SeacrhResult = ({ route }) => {
 								color: "#6A6B6C",
 							}}
 						>
-							You’re yet to add any product to your store. Products that you add
-							will appear here
+							{/* You’re yet to add any product to your store. Products that you add
+							will appear here */}
 						</Text>
 					</View>
 				)}
@@ -171,7 +225,7 @@ const SeacrhResult = ({ route }) => {
 	);
 };
 
-export default SeacrhResult;
+export default FakeCategories;
 
 const styles = StyleSheet.create({
 	container: {

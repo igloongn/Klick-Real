@@ -1,42 +1,43 @@
 {
   "expo": {
-    "plugins": [],
-    "name": "klick2",
-    "slug": "n",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff",
+        "foregroundImage": "./assets/adaptive-icon.png"
+      },
+      "package": "com.greytiles.klick2",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "assetBundlePatterns": [
       "**/*"
     ],
+    "icon": "./assets/icon.png",
     "ios": {
       "supportsTablet": true
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ],
-      "package": "com.greytiles.klick2"
+    "name": "klick2",
+    "orientation": "portrait",
+    "plugins": [],
+    "sdkVersion": "48.0.0",
+    "slug": "n",
+    "splash": {
+      "backgroundColor": "#ffffff",
+      "image": "./assets/splash.png",
+      "resizeMode": "contain"
     },
+    "userInterfaceStyle": "light",
+    "version": "1.0.0",
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "a3dc4bd6-c0d9-46c0-a8bc-5ae550013a2a"
+        "projectId": "af78537c-b690-48b6-8661-07b4b3c7f34c"
       }
     },
-    "sdkVersion": "48.0.0"
+    "owner": "igloop"
   },
   "name": "klick2"
 }

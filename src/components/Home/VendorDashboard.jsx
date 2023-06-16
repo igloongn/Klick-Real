@@ -53,6 +53,29 @@ const VendorDashboard = ({ navigation }) => {
 	});
 
 	useEffect(() => {
+		AsyncStorage.getItem("token").then((token) => {
+			console.log("!!!!!!!!!!TOKEN!!!!!!!!");
+			console.log(token);
+			axios
+				.get("https://klick-api.onrender.com/auth/user", {
+					headers: {
+						Authorization: "Bearer " + token,
+					},
+				})
+				.then((res) => {
+					// console.log("!!!!!!!!!!Store ID!!!!!!!!");
+					// console.log(res.data.stores[0].id);
+					console.log(token);
+					if (res.data.stores.length > 0) {
+						AsyncStorage.setItem("StoreData", res.data.stores[0].id);
+					}
+					// console.log(res.data);
+				})
+				.catch((err) => {
+					console.log("!!!!!!!Error for the user!!!!!!!");
+					console.log(navigation.navigate("login"));
+				});
+		});
 		// Get User Data
 		AsyncStorage.getItem("token").then((token) => {
 			console.log("!!!!!!!!!!Token Inside!!!!!!!!!");

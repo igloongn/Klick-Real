@@ -71,7 +71,7 @@ const Login = ({ navigation }) => {
 			setSuccessModalVisible(true);
 			setTimeout(() => {
 				navigation.navigate("hometab");
-			}, 3000);
+			}, 2000);
 		} catch (error) {
 			// Handle network or other errors
 			console.error("!!!!!!!!!!!!!");

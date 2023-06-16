@@ -18,7 +18,7 @@ const SponsorCard = ({ item, name, location, rate, image, navigation }) => {
 				{item?.name}
 			</Text>
 			<View style={{ flexDirection: "row", display: "flex" }}>
-				<Text style={styles.sponsorsmalltext}>N{item?.price}</Text>
+				<Text style={styles.sponsorsmalltext}>₦{item?.price}</Text>
 				<Text style={styles.sponsorsmalltext}>{item?.discount}</Text>
 			</View>
 		</TouchableOpacity>

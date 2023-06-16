@@ -76,7 +76,7 @@ const VerifyToken = ({ navigation, route }) => {
 				// ]);
 				setSuccessModalVisible(true);
 				setTimeout(() => {
-					navigation.navigate("1111111");
+					navigation.navigate("hometab");
 				}, 3000);
 			} catch (error) {
 				// Handle network or other errors

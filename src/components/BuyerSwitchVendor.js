@@ -3,9 +3,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert, Text } from "react-native";
 import MyModal from "../utils/MyModal";
 import ModalFunc from "../utils/ModalFunc";
+import { useNavigation } from "@react-navigation/native";
 const BuyerSwitchVendorContext = React.createContext();
 
 export const BuyerSwitchVendor = ({ children }) => {
+	const navigation = useNavigation();
+
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
 
@@ -39,6 +42,9 @@ export const BuyerSwitchVendor = ({ children }) => {
 			}
 		} catch (err) {
 			// Alert.alert("Error", "An error occured during switching");
+			// navigation.navigate({
+			// 	name: "login",
+			// });
 			setFailedModalVisible(true);
 		}
 	};
@@ -55,12 +61,14 @@ export const BuyerSwitchVendor = ({ children }) => {
 				button="Good"
 				state={SuccessModalVisible}
 				setState={setSuccessModalVisible}
+				onPress={() => {}}
 			/>
 			<ModalFunc
-				text="An error occured during switching"
-				button="Try Again"
+				text="User must be logged in"
+				button="Login"
 				state={failedModalVisible}
 				setState={setFailedModalVisible}
+				onPress={() => navigation.navigate("login")}
 			/>
 			<BuyerSwitchVendorContext.Provider value={value}>
 				{children}

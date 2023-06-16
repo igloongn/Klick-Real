@@ -19,11 +19,7 @@ import API_URL from "../../settings";
 import { TextInput } from "react-native-paper";
 import MyModal from "../../utils/MyModal";
 
-const Register = ({ navigation }) => {
-	const [email, setEmail] = useState("");
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [phone, setPhone] = useState("");
+const RegistrationSecond = ({ navigation, route }) => {
 	const [address, setAddress] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -33,61 +29,53 @@ const Register = ({ navigation }) => {
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
 	const [fillAllFields, setFillAllFields] = useState(false);
 
-	const [inputError, setInputError] = useState({
-		phone: false,
-	});
-
-	const validatePhone = () => {
-		if (phone.length !== 10) {
-			inputError.phone = true;
-		} else {
-			inputError.phone = false;
-		}
-	};
-	const validateEmail = (email) => {
-		// Regular expression for email validation
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-		return emailRegex.test(email);
-	};
-	validatePhone();
+	const { regPayload } = route.params;
+	console.log(regPayload);
 
 	// const navigate = useNavigation()
 
 	const registerUser = async () => {
 		// To Check for White Spaces
-		phone_number = "+234" + phone;
 		const payload = {
-			firstName,
-			lastName,
-			email,
-			phone: phone_number,
+			...regPayload,
+			address,
+			password,
 		};
+
+		console.log("payload");
 		console.log(payload);
 		// This is the Full Validation for all the textInputs
-		if (
-			firstName.trim() === "" ||
-			lastName.trim() === "" ||
-			email.trim() === "" ||
-			phone.trim() === ""
-		) {
+		if (address.trim() === "" || password.trim() === "") {
+			// Alert.alert("Please fill in all fields");
 			setFillAllFields(true);
 		} else {
-			if (!validateEmail(email)) {
-				Alert.alert("Please enter a valid email");
+			if (password.length < 8) {
+				Alert.alert("Password must be at least 8 characters");
 			} else {
-				if (phone.length !== 10) {
-					Alert.alert("Please enter a valid Phone Number");
+				if (password !== confirmPassword) {
+					Alert.alert("Please the password must be the same");
 				} else {
 					try {
 						setLoading(true);
-						navigation.navigate({
-							name: "registrationsecond",
-							params: {
-								regPayload: payload,
+						const response = await fetch(API_URL + "/auth/signup", {
+							method: "POST",
+
+							headers: {
+								"Content-Type": "application/json",
 							},
+							body: JSON.stringify(payload),
 						});
-						// setSuccessModalVisible(true);
+						const res_status_code = response.status;
+						const res_data = await response.json();
+
+						if (res_status_code != 201) {
+							throw new Error(res_data.message);
+						}
+
+						// Store the authentication token in AsyncStorage
+
+						navigation.navigate("verify", { email });
+						setSuccessModalVisible(true);
 					} catch (error) {
 						// Handle network or other errors
 						console.log("This is the Error that occurred");
@@ -132,50 +120,37 @@ const Register = ({ navigation }) => {
 					>
 						Register an account so you can start selling on Klick.
 					</Text>
+
 					<GeneralInput
-						placeholder={"John"}
-						name="FirstName"
+						placeholder={"dele6 Main St"}
+						name="Add Delivery Address"
 						width={335}
-						value={firstName}
-						onChangeValue={(text) => setFirstName(text)}
+						value={address}
+						onChangeValue={(text) => setAddress(text)}
+						// inputMode="email"
 					/>
+					{/* Password */}
 					<GeneralInput
-						placeholder={"Doe"}
-						name="LastName"
+						name="Password"
 						width={335}
-						value={lastName}
-						onChangeValue={(text) => setLastName(text)}
-					/>
-					<GeneralInput
-						placeholder={"johndoe@gmail.com"}
-						name="Email"
-						width={335}
-						value={email}
-						onChangeValue={(text) => setEmail(text)}
-						inputMode="email"
+						value={password}
+						onChangeValue={(text) => setPassword(text)}
+						password={true}
 					/>
 
-					<View style={styles.innerContainer}>
-						<View style={{ width: "85%" }}>
-							<Text style={styles.text}>{"Phone number"}</Text>
-						</View>
-						<View style={styles.inputContainer}>
-							<Text style={styles.prefix}>+234</Text>
-							<TextInput
-								placeholder={"e.g 9062056518 (whatsapp no.)"}
-								style={styles.input}
-								onChangeText={(text) => setPhone(text)}
-								value={phone}
-								inputMode="tel"
-								error={inputError.phone}
-							/>
-						</View>
-					</View>
+					{/* Confirm Password */}
+					<GeneralInput
+						name="Confirm Password"
+						width={335}
+						value={confirmPassword}
+						onChangeValue={(text) => setConfirmPassword(text)}
+						password={true}
+					/>
 
 					<TouchableOpacity onPress={() => registerUser()}>
 						<GeneralButton
 							backgroundColor={"#FEDD00"}
-							message={loading ? "Loading ....." : "Continue to address"}
+							message={loading ? "Loading ....." : "Continue"}
 							width={335}
 							height={54}
 							borderColor={"#FEDD00"}
@@ -227,8 +202,8 @@ const Register = ({ navigation }) => {
 			<MyModal
 				state={SuccessModalVisible}
 				setState={setSuccessModalVisible}
-				text={"Confirmed"}
-				button={"Continue to Address"}
+				text={"Registration Successful"}
+				button={"Thank You"}
 				ButtonColor={"#FEDD00"}
 			/>
 			{/* Login Successful Modal */}
@@ -299,4 +274,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Register;
+export default RegistrationSecond;

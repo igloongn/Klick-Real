@@ -74,6 +74,7 @@ import AddAddress from "../components/Home/AddAddress";
 import SeacrhResult from "../components/Home/SeacrchResult";
 import PriceAd from "../components/Settings/PriceAd";
 import AddNewPriceAdd from "../components/Settings/AddNewPriceAdd";
+import RegistrationSecond from "../components/Home/Registration_second";
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -102,6 +103,14 @@ export default function MainNav() {
 				options={{
 					headerStyle: { elevation: 0 },
 					title: "Add Address",
+				}}
+			/>		
+				<Stack.Screen
+				name="registrationsecond"
+				component={RegistrationSecond}
+				options={{
+					headerStyle: { elevation: 0 },
+					title: "Complete your registration",
 				}}
 			/>
 			<Stack.Screen

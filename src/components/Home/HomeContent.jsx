@@ -24,6 +24,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetLogginedUser } from "../../utils/apiHooks";
 import { useIsFocused } from "@react-navigation/native";
 import { useFocusEffect } from "@react-navigation/native";
+import KlickLogo from "../../utils/SVGs/KlickLogo";
 
 import { AntDesign } from "@expo/vector-icons";
 import jwtDecode from "jwt-decode";
@@ -42,19 +43,19 @@ const DATA2 = [
 		title: "Third Item",
 	},
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+		id: "bd7acbea-c1b1-46c2-aed5-3ad53ab28ba",
 		title: "Fourth Item",
 	},
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+		id: "bd7acbea-c1b1-46c2-aed5-3adabb28ba",
 		title: "Fifth Item",
 	},
 	{
-		id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+		id: "bd7acbea-c1b1-46c2-aed5-3aabb28ba",
 		title: "First Item",
 	},
 	{
-		id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+		id: "3ac68afc-c605-48d3-a4f8-fbda97f63",
 		title: "Second Item",
 	},
 ];
@@ -63,7 +64,7 @@ const Item = ({ title, navigation, onPress, item }) => (
 	<>
 		<TouchableOpacity
 			onPress={() =>
-				navigation.navigate({ name: "stories", params: { id: item?.id } })
+				navigation.navigate({ name: "newstories", params: { id: item?.id } })
 			}
 			style={styles.items}
 		>
@@ -81,7 +82,6 @@ const Item = ({ title, navigation, onPress, item }) => (
 				source={{ uri: item?.contentUrl[0] ?? "" }}
 			/>
 		</TouchableOpacity>
-		{/* <Text style={{fontSize: 8}}>{item.contentUrl[0]}</Text> */}
 	</>
 );
 
@@ -94,17 +94,18 @@ const Item2 = ({ title }) => (
 const HomeContent = ({ navigation }) => {
 	const [search, onChangeSearch] = React.useState("");
 
-	const { user, Loading, isErorr, getUserData } = useGetLogginedUser();
-	const [data, setData] = useState([]);
+	const { user, isErorr, getUserData } = useGetLogginedUser();
 	const [_data, set_Data] = useState([]);
+	const [postData, setPostData] = useState(null);
+	const [productData, setProductData] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [isLoggedIn, setisLogginedIn] = useState(false);
 	const [buysell, setBuySell] = useState(true);
 	const focus = useIsFocused();
 	const [showGallery, setShowGallery] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
 	const [cartCount, setcartCount] = useState(null);
 	const [category, setCategory] = useState(null);
+
 	AsyncStorage.getItem("cart").then((cart) => {
 		if (!cart) {
 			AsyncStorage.setItem("cart", JSON.stringify([]));
@@ -114,14 +115,13 @@ const HomeContent = ({ navigation }) => {
 		}
 	});
 
-	const getLoginData = async (navigation, alternative = () => null) => {
-		try {
-			const value = await AsyncStorage.getItem("isLoggedIn");
-			if (value) setisLogginedIn(true);
-			else setisLogginedIn(false);
-		} catch (e) {
-			// error reading value
-		}
+	const getLoginData = (navigation, alternative = () => null) => {
+		AsyncStorage.getItem("isLoggedIn")
+			.then((value) => {
+				if (value) setisLogginedIn(true);
+				else setisLogginedIn(false);
+			})
+			.catch((error) => console.log(error));
 	};
 
 	const mode_data = useBuyerSwitchVendorContext();
@@ -129,79 +129,131 @@ const HomeContent = ({ navigation }) => {
 	if (mode_data?.mode === "vendor") {
 		navigation.navigate({ name: "sellerstab" });
 	}
-	// useEffect(() => {
-
-	//   if(mode_data?.mode === "buyer"){ navigation.navigate({ name: "sellerstab"})}
-	//   return () => {
-	//     // will run on every unmount.
-	//     console.log("component is unmounting");
-	//     }
-	//   },[focus])
-
+	getLoginData();
 	useEffect(() => {
-		AsyncStorage.getItem("token").then((token) => {
-			console.log("!!!!!!!!!!TOKEN!!!!!!!!");
-			console.log(token);
+		getStatus();
+		if (isLoggedIn) {
 			axios
-				.get("https://klick-api.onrender.com/auth/user", {
-					headers: {
-						Authorization: "Bearer " + token,
-					},
-				})
+				.get("https://klick-api.onrender.com/product/", {})
 				.then((res) => {
-					// console.log("!!!!!!!!!!Store ID!!!!!!!!");
-					// console.log(res.data.stores[0].id);
-					console.log(token);
-					if (res.data.stores.length > 0) {
-						AsyncStorage.setItem("StoreData", res.data.stores[0].id);
-					}
-					// console.log(res.data);
-					axios
-						.get("https://klick-api.onrender.com/category/getAll", {
-							headers: {
-								Authorization: "Bearer " + token,
-							},
-						})
-						.then((res) => {
-							// console.log(res.data.data);
-							setCategory({
-								firstRow: res.data.data.slice(0, 4),
-								secondRow: res.data.data.slice(5, 9),
-							});
-							// console.log("!!!!!!!!!!Category 1!!!!!!!!");
-							// console.log(category.firstRow);
-							// console.log("!!!!!!!!!!Category 2!!!!!!!!");
-							// console.log(category.secondRow);
-						})
-						.catch((err) => {});
+					console.log("!!!!!!!!!!Products Loggedin!!!!!!!");
+					// console.log(res.data.data.products);
+					setProductData(res.data.data.products);
 				})
 				.catch((err) => {
-					console.log("!!!!!!!Error for the user!!!!!!!");
-					console.log(navigation.navigate("login"));
+					console.log("!!!!!!!!!Axios Error Loggedin!!!!!!!");
+					console.log(res.err);
 				});
-		});
+			AsyncStorage.getItem("token").then((token) => {
+				console.log("!!!!!!!!!!TOKEN!!!!!!!!");
+				console.log(token);
+				axios
+					.get("https://klick-api.onrender.com/auth/user", {
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					})
+					.then((userdata) => {
+						setcartCount(Object.keys(userdata.data.user.Cart.items).length);
+						// const isEmptyObject = (obj) => {
+						// 	return Object.keys(obj).length === 0;
+						// 	// return console.log(Object.keys(obj));
+						// };
+						const isEmptyObject = (obj) => {
+							if (obj == null) return true;
+							return Object.keys(obj).length === 0;
+							// return console.log(Object.keys(obj));
+						};
+						console.log(isEmptyObject("userdata.data.DefaultAddress"));
+						console.log(isEmptyObject(userdata.data.DefaultAddress));
+						console.log(isEmptyObject(userdata.data.DefaultAddress));
+						console.log(isEmptyObject(userdata.data.DefaultAddress));
+						console.log(isEmptyObject(userdata.data.DefaultAddress));
+						isEmptyObject(userdata.data.DefaultAddress);
+						// if (isEmptyObject(userdata.data.DefaultAddress) === true) {
+						// 	navigation.navigate("addaddress");
+						// }
+						if (userdata.data.stores.length > 0) {
+							AsyncStorage.setItem("StoreData", res.data.stores[0].id);
+						}
+						// console.log(res.data);
+						axios
+							.get("https://klick-api.onrender.com/category/getAll", {
+								headers: {
+									Authorization: "Bearer " + token,
+								},
+							})
+							.then((res) => {
+								// console.log(res.data.data);
+								setCategory({
+									firstRow: res.data.data.slice(0, 4),
+									secondRow: res.data.data.slice(5, 9),
+								});
+							})
+							.catch((err) => {});
+						axios
+							.get("https://klick-api.onrender.com/auth/user", {
+								headers: {
+									Authorization: "Bearer " + token,
+								},
+							})
+							.then((userData) => {
+								setcartCount(Object.keys(userData.data.user.Cart.items).length);
+								const isEmptyObject = (obj) => {
+									return Object.keys(obj).length === 0;
+								};
+								isEmptyObject(userData.data.DefaultAddress);
+								console.log(isEmptyObject(userData.data.DefaultAddress));
+								if (isEmptyObject(userData.data.DefaultAddress) === true) {
+									navigation.navigate("addaddress");
+								}
+							})
+							.catch((err) => {
+								console.log(err);
+							});
+					});
+			});
+		} else {
+			setcartCount(0);
+			axios
+				.get("https://klick-api.onrender.com/product/")
+				.then((res) => {
+					console.log("!!!!!!!!!!Products NOt Loggedin!!!!!!!");
+					// console.log(res.data.data.products);
+					setProductData(res.data.data.products);
+				})
+				.catch((err) => {
+					console.log("!!!!!!!!!Axios Error!!!!!!!");
+					console.log(res.err);
+				});
+			axios
+				.get("https://klick-api.onrender.com/category/getAll", {})
+				.then((res) => {
+					// console.log(res.data.data);
+					setCategory({
+						firstRow: res.data.data.slice(0, 4),
+						secondRow: res.data.data.slice(5, 9),
+					});
+				})
+				.catch((err) => {});
+		}
+		// }, [isLoggedIn]);
 	}, []);
 
-	const getAllData = async () => {
-		console.log("loading data");
-		const token = await AsyncStorage.getItem("token");
-		console.log("tok", token);
-
-		fetch("https://klick-api.onrender.com/post/", {
-			method: "GET",
-			mode: "no-cors",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-		})
-			.then((res) => res.json())
-			.then((_data) => {
-				// console.log(_data?.data?.rows);
-				set_Data(_data?.data?.rows);
-				// console.log("--all", data);
+	const getStatus = () => {
+		axios
+			.get("https://klick-api.onrender.com/post/")
+			.then((res) => {
+				console.log("!!!!!!!!!!!!!!Post NOt Loggedin!!!!!!!!!!!!!!!!!!");
+				console.log(res.data.data);
+				setPostData(res.data.data);
+				setLoading(false);
+				console.log(loading);
 			})
-			.catch((e) => console.log(e));
+			.catch((err) => {
+				console.log("!!!!!!!!!!!!!!Post Error!!!!!!!!!!!!!!!!!!");
+				console.log(err);
+			});
 	};
 
 	const renderItem = ({ item }) => {
@@ -219,69 +271,6 @@ const HomeContent = ({ navigation }) => {
 		);
 	};
 
-	useEffect(() => {
-		getLoginData();
-		AsyncStorage.getItem("token")
-			.then((token) => {
-				console.log("!!!!!!Token from the home page!!!!!!!!!!");
-				console.log(token);
-
-				axios
-					.get("https://klick-api.onrender.com/auth/user", {
-						headers: {
-							Authorization: "Bearer " + token,
-						},
-					})
-					.then((userData) => {
-						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
-						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
-						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
-						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
-						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
-						console.log("!!!!!!!!!!!!!Cart.data!!!!!!!!!!!!!!");
-						// console.log(userData.data.user.Cart.id);
-						// cartId = userData.data.user.Cart.id;
-						// console.log(Object.keys(userData.data.user.Cart.items).length);
-						setcartCount(Object.keys(userData.data.user.Cart.items).length);
-						const isEmptyObject = (obj) => {
-							return Object.keys(obj).length === 0;
-						};
-						isEmptyObject(userData.data.DefaultAddress);
-						console.log(isEmptyObject(userData.data.DefaultAddress));
-						if (isEmptyObject(userData.data.DefaultAddress) === true) {
-							navigation.navigate("addaddress");
-						}
-					})
-					.catch((err) => {
-						console.log("!!!!!!!!!errrrrrrrr!!!!!!!!");
-						console.log(err);
-					});
-				axios
-					.get("https://klick-api.onrender.com/product/", {
-						headers: {
-							Authorization: "Bearer " + token,
-						},
-					})
-					.then((res) => {
-						console.log("!!!!!!!!!!Products!!!!!!!");
-						// console.log(res.data.data.products);
-						setData(res.data.data.products);
-					})
-					.catch((err) => {
-						console.log("!!!!!!!!!Axios Error!!!!!!!");
-						console.log(res.err);
-					})
-					.finally((item) => setLoading(false));
-			})
-			.catch((err) => console.log(err));
-	}, [focus]);
-
-	useEffect(() => {
-		getAllData();
-	}, [focus, isLoading]);
-
-	console.log(showGallery);
-	// Custom Badge component
 	const Badge = ({ count }) => {
 		if (count === 0) {
 			return null;
@@ -306,10 +295,13 @@ const HomeContent = ({ navigation }) => {
 						paddingVertical: 10,
 					}}
 				>
-					<Image
-						style={styles.stretch}
-						source={require("../../../assets/profile.jpg")}
-					></Image>
+					<View
+						style={{
+							marginLeft: 20,
+						}}
+					>
+						<KlickLogo />
+					</View>
 					{isLoggedIn ? (
 						<View style={{ paddingRight: 10 }}>
 							<View style={styles.cart}>
@@ -340,23 +332,6 @@ const HomeContent = ({ navigation }) => {
 							<Text>Login</Text>
 						</TouchableOpacity>
 					)}
-					{/* <View
-						style={{
-							width: 50,
-							height: 50,
-							backgroundColor: "#E6E6FA",
-							borderRadius: 50,
-							marginRight: 30,
-							//marginLeft: 150,
-						}}
-					>
-						<Ionicons
-							name="notifications-outline"
-							size={17}
-							color="black"
-							style={styles.bell}
-						/>
-					</View> */}
 				</View>
 				<ScrollView style={[styles.scrollView]}>
 					<View
@@ -394,11 +369,11 @@ const HomeContent = ({ navigation }) => {
 							{/* <Text>Loading...</Text> */}
 						</View>
 					)}
-					{_data && (
+					{postData && (
 						<View>
 							<FlatList
 								style={{ marginTop: 20 }}
-								data={_data}
+								data={postData}
 								renderItem={({ item }) =>
 									item?.posttype === "status" ? (
 										<Item navigation={navigation} item={item} />
@@ -415,7 +390,7 @@ const HomeContent = ({ navigation }) => {
 					<Text
 						style={{
 							fontWeight: "500",
-							fontSize: 16,
+							fontSize: 20,
 							marginTop: 10,
 							marginHorizontal: 20,
 						}}
@@ -435,7 +410,7 @@ const HomeContent = ({ navigation }) => {
 							category.firstRow.map((item) => (
 								<CategoriesCard
 									navigation={navigation}
-									pic={require("../../../assets/1.png")}
+									pic={{ uri: item.image }}
 									label={item.name}
 									route={"categories"}
 									params={item.id}
@@ -456,7 +431,7 @@ const HomeContent = ({ navigation }) => {
 							category.secondRow.map((item) => (
 								<CategoriesCard
 									navigation={navigation}
-									pic={require("../../../assets/1.png")}
+									pic={{ uri: item.image }}
 									label={item.name}
 									route={"categories"}
 									params={item.id}
@@ -471,7 +446,7 @@ const HomeContent = ({ navigation }) => {
 					<Text
 						style={{
 							fontWeight: "500",
-							fontSize: 16,
+							fontSize: 20,
 							marginTop: 20,
 							marginHorizontal: 15,
 						}}
@@ -479,18 +454,24 @@ const HomeContent = ({ navigation }) => {
 						Special Offers
 					</Text>
 
-					<FlatList
-						style={{ marginTop: 20 }}
-						data={DATA2}
-						renderItem={({ item }) => <SpecialCard navigation={navigation} />}
-						keyExtractor={(item) => item.id}
-						horizontal
-					/>
+					<View
+						style={{
+							height: 250,
+						}}
+					>
+						<FlatList
+							style={{ marginTop: 20 }}
+							data={DATA2}
+							renderItem={({ item }) => <SpecialCard navigation={navigation} />}
+							keyExtractor={(item) => item.id}
+							horizontal
+						/>
+					</View>
 
 					<Text
 						style={{
 							fontWeight: "500",
-							fontSize: 16,
+							fontSize: 20,
 							marginTop: 20,
 							marginHorizontal: 15,
 						}}
@@ -498,33 +479,11 @@ const HomeContent = ({ navigation }) => {
 						Sponsored
 					</Text>
 
-					{/*       
-      {loading && <View>
-        <Text>Loading...</Text>
-        </View>}
-      {data && (
-    <FlatList
-       style={{marginTop: 20}}
-        data={data}
-        renderItem={({item}) =>  <ScrollCard  item={item} navigation={navigation}/>}
-       // renderItem={ScrollCard}
-        keyExtractor={item => item.id}
-      
-      /> 
-      )}
- */}
-
-					{/* {loading && (
-					<View>
-						<ActivityIndicator /> */}
-					{/* <Text>Loading...</Text> */}
-					{/* </View>
-				)} */}
-					{data && (
+					{productData && (
 						<>
 							<FlatList
 								style={{ marginTop: 20 }}
-								data={data}
+								data={productData}
 								renderItem={({ item }) => (
 									<SponsorCard item={item} navigation={navigation} />
 								)}
@@ -533,43 +492,6 @@ const HomeContent = ({ navigation }) => {
 							/>
 						</>
 					)}
-
-					{/* 
-        <Text style={{ fontWeight: "500", fontSize: 16, marginTop: 20, marginHorizontal: 15 }}>Recommended For You</Text>
-
-        <FlatList
-          style={{ marginTop: 20 }}
-          data={DATA2}
-          renderItem={({ item }) => <Item2 title={"women"} />}
-          keyExtractor={item => item.id}
-          horizontal
-        /> */}
-
-					{/* {loading && <View>
-          <Text>Loading...</Text>
-        </View>}
-        {data && (
-          <FlatList
-            style={{ marginTop: 20 }}
-            data={data?.rows}
-            renderItem={({ item }) => <ScrollCard item={item} navigation={navigation} />}
-            // renderItem={ScrollCard}
-            keyExtractor={item => item.id}
-
-          />
-        )} */}
-
-					{/* {loading && <View>
-        <Text>Loading...</Text>
-        </View>}
-      {data && (
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      )} */}
-
 					<View style={{ marginTop: 400 }}></View>
 				</ScrollView>
 				<TouchableOpacity

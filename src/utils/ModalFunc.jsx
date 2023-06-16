@@ -1,7 +1,14 @@
 import React from "react";
 import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
-const ModalFunc = ({ text, button, state, setState, ButtonColor='#FEDD00' }) => {
+const ModalFunc = ({
+	text,
+	button,
+	state,
+	setState,
+	onPress,
+	ButtonColor = "#FEDD00",
+}) => {
 	return (
 		<View style={styles.centeredView}>
 			<Modal
@@ -19,7 +26,10 @@ const ModalFunc = ({ text, button, state, setState, ButtonColor='#FEDD00' }) => 
 						<Text style={styles.modalText}>{text}</Text>
 						<Pressable
 							style={[styles.button, { backgroundColor: ButtonColor }]}
-							onPress={() => setState(!state)}
+							onPress={() => {
+								setState(!state);
+								onPress();
+							}}
 						>
 							<Text style={styles.textStyle}>{button}</Text>
 						</Pressable>
@@ -36,8 +46,8 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		marginTop: 22,
-		height: '100%',
-		width: '100%',
+		height: "100%",
+		width: "100%",
 	},
 	modalView: {
 		margin: 20,

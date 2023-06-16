@@ -89,7 +89,7 @@ const ProductCard = ({ productDetails, navigation  }) => {
 								color: "#0485E8",
 							}}
 						>
-							{price}
+							₦{price}
 						</Text>
 						<View
 							style={{

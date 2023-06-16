@@ -187,7 +187,7 @@ const ProductDetails = ({ navigation, route }) => {
 								marginTop: 5,
 							}}
 						>
-							{data?.price}
+							₦{data?.price}
 						</Text>
 						<Text
 							style={{
@@ -198,7 +198,7 @@ const ProductDetails = ({ navigation, route }) => {
 								marginTop: 5,
 							}}
 						>
-							{data.quantity.total}
+							Total in stock: {data.quantity.total}
 						</Text>
 						<View
 							style={{
@@ -405,23 +405,11 @@ const ProductDetails = ({ navigation, route }) => {
 					position: "absolute",
 					display: "flex",
 					flexDirection: "row",
-					bottom: 5,
+					// bottom: 5,
+					right: 2,
+					bottom: 119
 				}}
 			>
-				<GeneralButton
-					style={styles.shift}
-					message="Buy Later"
-					backgroundColor={"#FFF"}
-					color="black"
-					width={159.5}
-					height={54}
-					borderColor={"#FEDD00"}
-					size={15}
-					top={10}
-					marginLeft={45}
-					marginTop={80}
-					marginHorizintal={25}
-				/>
 				{/* <Pressable onPress={() => navigation.navigate("mycart")}> */}
 				<Pressable onPress={() => addToCart()}>
 					{/* <Pressable onPress={() => {}}> */}
