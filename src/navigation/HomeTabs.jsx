@@ -9,6 +9,8 @@ import Message from '../screens/Message';
 import Settings from '../screens/Settings';
 import NavbarTab from './NavbarTab';
 import { AntDesign } from '@expo/vector-icons';
+import BuyerKSocial from '../components/KSocial/KSocialContent';
+import BuyerSettingsContent from '../components/Settings/SettingsContent';
 
 
 
@@ -49,7 +51,7 @@ const HomeTabs = () => {
                 }} />
 
 
-            <Tabs.Screen name="KSocial" component={KSocial}
+            <Tabs.Screen name="KSocial" component={BuyerKSocial}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <NavbarTab message={'KSocial'} imageuri={require('../../assets/Vector-16.png')} focused={focused} id='4' />
@@ -57,7 +59,7 @@ const HomeTabs = () => {
                 }} />
 
 
-            <Tabs.Screen name="Settings" component={Settings}
+            <Tabs.Screen name="Settings" component={BuyerSettingsContent}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <NavbarTab message={'Settings'} imageuri={require('../../assets/Vector-16.png')} focused={focused} id='5' />

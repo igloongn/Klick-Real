@@ -1,7 +1,7 @@
 import React from 'react'
 import {SafeAreaView, Text} from "react-native"
 import KSocialContent from '../components/KSocial/KSocialContent'
-import SellerKSocialContent from '../components/KSocial/SellerKSocialContent'
+import BuyerKSocial from '../components/KSocial/KSocialContent'
 
 const KSocial = ({navigation}) => {
   return (
@@ -11,7 +11,7 @@ const KSocial = ({navigation}) => {
   
        }}>
       {/* <KSocialContent navigation={navigation}/> */}
-      <SellerKSocialContent navigation={navigation}/>
+      <BuyerKSocial navigation={navigation}/>
     </SafeAreaView>
   )
 }

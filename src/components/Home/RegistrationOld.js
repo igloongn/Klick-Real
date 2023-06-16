@@ -35,8 +35,6 @@ const Register = ({ navigation }) => {
 
 	const [inputError, setInputError] = useState({
 		phone: false,
-		password: false,
-		confirmPassword: false,
 	});
 
 	const validatePhone = () => {
@@ -64,7 +62,6 @@ const Register = ({ navigation }) => {
 			lastName,
 			email,
 			phone: phone_number,
-			password,
 		};
 		console.log(payload);
 		// This is the Full Validation for all the textInputs
@@ -72,55 +69,32 @@ const Register = ({ navigation }) => {
 			firstName.trim() === "" ||
 			lastName.trim() === "" ||
 			email.trim() === "" ||
-			phone.trim() === "" ||
-			password.trim() === ""
+			phone.trim() === ""
 		) {
-			// Alert.alert("Please fill in all fields");
 			setFillAllFields(true);
 		} else {
-			if (password.length < 8) {
-				Alert.alert("Password must be at least 8 characters");
+			if (!validateEmail(email)) {
+				Alert.alert("Please enter a valid email");
 			} else {
-				if (password !== confirmPassword) {
-					Alert.alert("Please the password must be the same");
+				if (phone.length !== 10) {
+					Alert.alert("Please enter a valid Phone Number");
 				} else {
-					if (!validateEmail(email)) {
-						Alert.alert("Please enter a valid email");
-					} else {
-						if (phone.length !== 10) {
-							Alert.alert("Please enter a valid Phone Number");
-						} else {
-							try {
-								setLoading(true);
-								const response = await fetch(API_URL + "/auth/signup", {
-									method: "POST",
-
-									headers: {
-										"Content-Type": "application/json",
-									},
-									body: JSON.stringify(payload),
-								});
-								const res_status_code = response.status;
-								const res_data = await response.json();
-
-								if (res_status_code != 201) {
-									throw new Error(res_data.message);
-								}
-
-								// Store the authentication token in AsyncStorage
-								await AsyncStorage.setItem("token", res_data.access_token);
-
-								navigation.navigate("verify", { email });
-								setSuccessModalVisible(true);
-							} catch (error) {
-								// Handle network or other errors
-								console.log("This is the Error that occurred");
-								console.log(error);
-								setFailedModalVisible(true);
-							} finally {
-								setLoading(false);
-							}
-						}
+					try {
+						setLoading(true);
+						navigation.navigate({
+							name: "registrationsecond",
+							params: {
+								regPayload: payload,
+							},
+						});
+						// setSuccessModalVisible(true);
+					} catch (error) {
+						// Handle network or other errors
+						console.log("This is the Error that occurred");
+						console.log(error);
+						setFailedModalVisible(true);
+					} finally {
+						setLoading(false);
 					}
 				}
 			}
@@ -197,37 +171,11 @@ const Register = ({ navigation }) => {
 							/>
 						</View>
 					</View>
-					<GeneralInput
-						placeholder={"dele6 Main St"}
-						name="Add Delivery Address"
-						width={335}
-						value={address}
-						onChangeValue={(text) => setAddress(text)}
-						// inputMode="email"
-					/>
-					{/* Password */}
-					<GeneralInput
-						name="Password"
-						width={335}
-						value={password}
-						onChangeValue={(text) => setPassword(text)}
-						error={inputError.password}
-						password={true}
-					/>
-
-					{/* Confirm Password */}
-					<GeneralInput
-						name="Confirm Password"
-						width={335}
-						value={confirmPassword}
-						onChangeValue={(text) => setConfirmPassword(text)}
-						password={true}
-					/>
 
 					<TouchableOpacity onPress={() => registerUser()}>
 						<GeneralButton
 							backgroundColor={"#FEDD00"}
-							message={loading ? "Loading ....." : "Continue"}
+							message={loading ? "Loading ....." : "Continue to address"}
 							width={335}
 							height={54}
 							borderColor={"#FEDD00"}
@@ -279,8 +227,8 @@ const Register = ({ navigation }) => {
 			<MyModal
 				state={SuccessModalVisible}
 				setState={setSuccessModalVisible}
-				text={"Registration Successful"}
-				button={"Thank You"}
+				text={"Confirmed"}
+				button={"Continue to Address"}
 				ButtonColor={"#FEDD00"}
 			/>
 			{/* Login Successful Modal */}

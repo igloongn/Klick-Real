@@ -10,6 +10,7 @@ import {
 	ActivityIndicator,
 	ScrollView,
 	RefreshControl,
+	SafeAreaView,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
@@ -58,17 +59,7 @@ const SellerSettingsContent = ({ navigation }) => {
 
 	const { mode, setMode } = useBuyerSwitchVendorContext();
 
-	const onRefresh = () => {
-		// Perform your refresh logic here
-		console.log("Refresh");
-		// setUserdata(null)
-		// Simulate a delay for demonstration purposes
-		setTimeout(() => {
-			setRefreshing(false);
-		}, 2000);
-	};
-
-	useEffect(() => {
+	const getData = () => {
 		AsyncStorage.getItem("token")
 			.then((token) => {
 				axios
@@ -78,8 +69,8 @@ const SellerSettingsContent = ({ navigation }) => {
 						},
 					})
 					.then((data) => {
-						console.log(data.data.user);
-						setUserdata(data.data.user);
+						console.log(data.data.stores);
+						setUserdata(data.data.stores);
 						console.log("userdata");
 						console.log("userdata");
 						console.log("userdata");
@@ -91,15 +82,55 @@ const SellerSettingsContent = ({ navigation }) => {
 			})
 			.catch((err) => {
 				console.log(err);
-			});
+			}); // setUserdata(null)
+	};
+
+	// On Refresh event
+	const onRefresh = () => {
+		// Perform your refresh logic here
+
+		console.log("Refresh");
+
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				console.log(token);
+				axios
+					.get("https://klick-api.onrender.com/auth/user", {
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					})
+					.then((data) => {
+						console.log(data.data.stores);
+						setUserdata(data.data.stores);
+						console.log("userdata");
+						console.log("userdata");
+						console.log("userdata");
+						console.log(userdata.firstName);
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			})
+			.catch((err) => {
+				console.log(err);
+			}); // setUserdata(null)
+
+		setTimeout(() => {
+			setRefreshing(false);
+		}, 2000);
+	};
+
+	useEffect(() => {
+		getData();
 	}, []);
 	const logout = async () => {
 		try {
-			console.log('Logout')
-			console.log('Logout')
-			console.log('Logout')
-			console.log('Logout')
-			console.log('Logout')
+			console.log("Logout");
+			console.log("Logout");
+			console.log("Logout");
+			console.log("Logout");
+			console.log("Logout");
 			setLoading(true);
 
 			//clearthe stored token from AsyncStorage
@@ -119,23 +150,30 @@ const SellerSettingsContent = ({ navigation }) => {
 	};
 
 	return (
-		<View>
-			<ScrollView
-				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				}
-			>
-				{userdata ? (
-					<View
-						style={{
-							height: 100,
-							width: "100%",
-							backgroundColor: "#191600",
-							alignItems: "center",
-							justifyContent: "center",
-						}}
-					>
-						{/* <Image
+		<SafeAreaView
+			style={{
+				marginHorizontal: 20,
+				marginTop: 50,
+			}}
+		>
+			<View>
+				<ScrollView
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					}
+				>
+					{userdata ? (
+						userdata.length > 0 ? (
+							<View
+								style={{
+									height: 150,
+									width: "100%",
+									backgroundColor: "#191600",
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+							>
+								{/* <Image
 						style={{
 							borderRadius: 50,
 							height: 60,
@@ -145,91 +183,100 @@ const SellerSettingsContent = ({ navigation }) => {
 						}}
 						source={require("../../../assets/profile.jpg")}
 					/> */}
-						<Text
-							style={{
-								color: "#FFF",
-								fontWeight: "500",
-								fontSize: 16,
-								marginBottom: 10,
-							}}
-						>
-							{userdata.firstName + " " + userdata.lastName}
-						</Text>
-						<Text
-							style={{
-								color: "#FFF",
-								fontWeight: "400",
-								fontSize: 12,
-							}}
-						>
-							{"+" + userdata.phone}
-						</Text>
-					</View>
-				) : (
-					<View
-						style={{ height: 13, width: "100%", backgroundColor: "white" }}
-					></View>
-				)}
+								<View
+									style={{
+										color: "#FFF",
+										marginBottom: 10,
+									}}
+								>
+									<Image
+										source={{
+											uri: userdata[0].logo,
+										}} // Remote image source
+										style={{ width: 80, height: 80, borderRadius: 50 }} // Set the width and height of the image
+									/>
+								</View>
+								<Text
+									style={{
+										color: "#FFF",
+										fontWeight: "400",
+										fontSize: 20,
+									}}
+								>
+									{userdata[0].name}
+								</Text>
+							</View>
+						) : (
+							<View
+								style={{ height: 13, width: "100%", backgroundColor: "white" }}
+							></View>
+						)
+					) : (
+						<View
+							style={{ height: 13, width: "100%", backgroundColor: "white" }}
+						></View>
+					)}
 
-				<Text
-					style={{
-						marginLeft: 5,
-						marginTop: 20,
-						color: "#000",
-						fontWeight: "600",
-						fontSize: 16,
-					}}
-				>
-					Buyer Mode
-				</Text>
-
-				<SettingsTiles
-					name={"Store Settings"}
-					icon={"settings"}
-					navigation={navigation}
-					route={"storesettings"}
-				/>
-				<SettingsTiles
-					name={"Wallet"}
-					icon={"wallet"}
-					navigation={navigation}
-					route={"wallet"}
-				/>
-				<SettingsTiles
-					name={"Discounts"}
-					icon={"badge"}
-					navigation={navigation}
-					route={"discounts"}
-				/>
-				<SettingsTiles
-					name={"Teams & staffs"}
-					icon={"people"}
-					navigation={navigation}
-					route={"team"}
-				/>
-				<SettingsTiles
-					name={"Password & Security"}
-					icon={"lock"}
-					navigation={navigation}
-					route={"passwordsettings"}
-				/>
-
-				<Pressable onPress={logout}>
 					<Text
 						style={{
-							marginLeft: 20,
+							marginLeft: 5,
 							marginTop: 20,
-							color: "#EB270B",
-							fontWeight: "400",
+							color: "#000",
+							fontWeight: "600",
 							fontSize: 16,
 						}}
 					>
-						Log Out
+						Seller Mode
 					</Text>
-				</Pressable>
-				{loading && <ActivityIndicator size="large" />}
-			</ScrollView>
-		</View>
+
+					<SettingsTiles
+						name={"Store Settings"}
+						icon={"settings"}
+						navigation={navigation}
+						route={"storesettings"}
+					/>
+					<SettingsTiles
+						name={"Wallet"}
+						icon={"wallet"}
+						navigation={navigation}
+						route={"wallet"}
+					/>
+					<SettingsTiles
+						name={"Discounts"}
+						icon={"badge"}
+						navigation={navigation}
+						route={"discounts"}
+					/>
+					<SettingsTiles
+						name={"Teams & staffs"}
+						icon={"people"}
+						navigation={navigation}
+						route={"team"}
+					/>
+					<SettingsTiles
+						name={"Password & Security"}
+						icon={"lock"}
+						navigation={navigation}
+						route={"passwordsettings"}
+					/>
+
+					<Pressable onPress={logout}>
+						<Text
+							style={{
+								marginLeft: 20,
+								marginTop: 20,
+								color: "#EB270B",
+								fontWeight: "400",
+								fontSize: 16,
+							}}
+						>
+							Log Out
+						</Text>
+					</Pressable>
+					{loading && <ActivityIndicator size="large" />}
+				</ScrollView>
+			</View>
+		</SafeAreaView>
 	);
 };
 

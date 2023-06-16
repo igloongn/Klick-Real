@@ -8,6 +8,8 @@ import SellerKSocial from '../screens/KSocial';
 import SellerMessage from '../screens/Message';
 import SellerSettings from '../screens/Settings';
 import NavbarTab from './NavbarTab';
+import SellerKSocialContent from '../components/KSocial/SellerKSocialContent';
+import SellerSettingsContent from '../components/Settings/SellerSettingsContent';
 
 
 
@@ -48,7 +50,8 @@ const SellersTabs = () => {
                 }} />
 
 
-            <Tabs.Screen name="KSocial" component={SellerKSocial}
+            {/* <Tabs.Screen name="KSocial" component={SellerKSocial} */}
+            <Tabs.Screen name="KSocial" component={SellerKSocialContent}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <NavbarTab message={'KSocial'} imageuri={require('../../assets/Vector-16.png')} focused={focused} id='4' />
@@ -56,7 +59,7 @@ const SellersTabs = () => {
                 }} />
 
 
-            <Tabs.Screen name="Settings" component={SellerSettings}
+            <Tabs.Screen name="Settings" component={SellerSettingsContent}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <NavbarTab message={'Settings'} imageuri={require('../../assets/Vector-16.png')} focused={focused} id='5' />

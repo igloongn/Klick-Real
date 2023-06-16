@@ -30,6 +30,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetLogginedUser } from "../../utils/apiHooks";
 import { Entypo } from "@expo/vector-icons";
 import MyModal from "../../utils/MyModal";
+import { SafeAreaView } from "react-native";
 
 const Item = ({ title, navigation, onPress, item }) => (
 	<>
@@ -174,12 +175,15 @@ const SellerKSocialContent = ({ navigation }) => {
 	const getAllData = () => {
 		console.log("loading data");
 
-		axios.get('https://klick-api.onrender.com/post/').then((res) => {
-			// console.log(res.data.data)
-			setPostData(res.data.data)
-		}).catch((err) => {
-			console.log(err)
-		});
+		axios
+			.get("https://klick-api.onrender.com/post/")
+			.then((res) => {
+				// console.log(res.data.data)
+				setPostData(res.data.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	// useEffect(() => {
@@ -292,7 +296,12 @@ const SellerKSocialContent = ({ navigation }) => {
 	console.log(showGallery);
 
 	return (
-		<>
+		<SafeAreaView
+			style={{
+				marginHorizontal: 20,
+				marginTop: 50,
+			}}
+		>
 			{/* {isLoading && (
 				<View
 					style={{
@@ -431,7 +440,7 @@ const SellerKSocialContent = ({ navigation }) => {
 					/>
 				</View>
 			}
-		</>
+		</SafeAreaView>
 	);
 };
 
