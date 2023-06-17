@@ -89,7 +89,8 @@ const VendorDashboard = ({ navigation }) => {
 				.then((userdata) => {
 					setUser(userdata.data.stores);
 					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
-					console.log(user[0].logo);
+					// console.log(user[0].logo);
+					console.log(user);
 				})
 				.catch((err) => {
 					console.log(
@@ -237,7 +238,7 @@ const VendorDashboard = ({ navigation }) => {
 						}}
 					>
 						<TouchableOpacity
-							onPress={() => navigation.navigate("productView")}
+							onPress={() => navigation.navigate("addnewproduct")}
 							style={{
 								display: "flex",
 								flexDirection: "column",
@@ -293,6 +294,7 @@ const VendorDashboard = ({ navigation }) => {
 								backgroundColor: "#FEDD00",
 								borderRadius: 50,
 							}}
+							onPress={() => navigation.navigate("productView")}
 						>
 							<FontAwesome5 name="store" size={24} color="white" />
 						</TouchableOpacity>

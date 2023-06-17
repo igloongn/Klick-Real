@@ -169,7 +169,7 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 					<TouchableOpacity onPress={() => handleValidation()}>
 						<GeneralButton
 							backgroundColor={"#FEDD00"}
-							message={"Continue"}
+							message={"Next"}
 							width={335}
 							height={54}
 							borderColor={"#FEDD00"}
@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFF",
 		//   alignItems: 'center',
 		justifyContent: "center",
+		marginTop: 50
 	},
 	containerStyle: {
 		// flex: 1,

@@ -175,7 +175,7 @@ const BuyerSettingsContent = ({ navigation }) => {
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
 				>
-					<Text>SettingsContent</Text>
+					{/* <Text>SettingsContent</Text> */}
 					{userdata ? (
 						<View
 							style={{
@@ -226,7 +226,7 @@ const BuyerSettingsContent = ({ navigation }) => {
 					<SettingsTiles
 						name={"View Wallet"}
 						navigation={navigation}
-						route={"profilesettings"}
+						route={"wallet"}
 					/>
 					<SettingsTiles
 						name={"Address"}
@@ -243,31 +243,31 @@ const BuyerSettingsContent = ({ navigation }) => {
 						navigation={navigation}
 						route={"manageaccount"}
 					/>
-					<SettingsTiles
+					{/* <SettingsTiles
 						name={"Payment Methods"}
 						navigation={navigation}
 						route={"paymentmethod"}
-					/>
-					<SettingsTiles
+					/> */}
+					{/* <SettingsTiles
 						name={"Notification Settings"}
 						navigation={navigation}
 						route={"notification"}
-					/>
-					<SettingsTiles
+					/> */}
+					{/* <SettingsTiles
 						name={"Help Center"}
 						navigation={navigation}
 						route={"profilesettings"}
-					/>
+					/> */}
 					<SettingsTiles
 						name={"Privacy Policy"}
 						navigation={navigation}
 						route={"profilesettings"}
 					/>
-					<SettingsTiles
+					{/* <SettingsTiles
 						name={"Invite friends"}
 						navigation={navigation}
 						route={"profilesettings"}
-					/>
+					/> */}
 
 					<Pressable
 						onPress={() => {

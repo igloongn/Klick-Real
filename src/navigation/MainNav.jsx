@@ -75,6 +75,7 @@ import SeacrhResult from "../components/Home/SeacrchResult";
 import PriceAd from "../components/Settings/PriceAd";
 import AddNewPriceAdd from "../components/Settings/AddNewPriceAdd";
 import RegistrationSecond from "../components/Home/Registration_second";
+import StoreList from "../components/Home/StoreList";
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -87,7 +88,6 @@ export default function MainNav() {
 		<Stack.Navigator screenOptions={{ headerShown: true }}>
 			{/* <Stack.Screen name="auth" component={Auth}/> */}
 			{/* <Stack.Screen name="test" component={MessagingScreen} /> */}
-
 			<Stack.Screen
 				name="hometab"
 				component={HomeTabs}
@@ -104,8 +104,8 @@ export default function MainNav() {
 					headerStyle: { elevation: 0 },
 					title: "Add Address",
 				}}
-			/>		
-				<Stack.Screen
+			/>
+			<Stack.Screen
 				name="registrationsecond"
 				component={RegistrationSecond}
 				options={{
@@ -126,7 +126,7 @@ export default function MainNav() {
 				name="productView"
 				component={ProductList}
 				options={{
-					title: "My Products",
+					title: "My Store",
 					// headerRight: () => (
 					// 	<TouchableOpacity onPress={() => console.log("End Icon pressed")}>
 					// 		<Text>Hello</Text>
@@ -201,6 +201,13 @@ export default function MainNav() {
 				component={FakeCategories}
 				options={{
 					title: "Category",
+				}}
+			/>
+			<Stack.Screen
+				name="storelist"
+				component={StoreList}
+				options={{
+					title: "My Stores",
 				}}
 			/>
 			<Stack.Screen name="sellerorders" component={SellerOrders} />
@@ -284,7 +291,7 @@ export default function MainNav() {
 			<Stack.Screen
 				name="selleronboard"
 				component={SellerOnboarding}
-				options={{ title: "Create a Store" }}
+				options={{ title: "Create a Store", headerShown: false }}
 			/>
 			<Stack.Screen
 				name="shippingmethod"

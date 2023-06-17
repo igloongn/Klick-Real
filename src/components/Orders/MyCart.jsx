@@ -177,10 +177,6 @@ const MyCart = ({ navigation }) => {
 	};
 
 	useEffect(() => {
-		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
 		AsyncStorage.getItem("token")
 			.then((token) => {
 				axios
@@ -188,11 +184,18 @@ const MyCart = ({ navigation }) => {
 						headers: { Authorization: "Bearer " + token },
 					})
 					.then((user) => {
-						const data = user.data.user.Cart.items;
-						const dataLength = Object.entries(data).length;
+						const cartdata = user.data.user.Cart.items;
+						const dataLength = Object.entries(cartdata).length;
+
+						console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+						console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+						console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+						console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+						console.log(cartdata);
 
 						setCartId(user.data.user.Cart.id);
-						setData(data);
+						setData(cartdata);
+						AsyncStorage.setItem("cart", JSON.stringify(cartdata));
 					})
 					.catch((error) => {
 						console.log(error);

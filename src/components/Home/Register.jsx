@@ -58,13 +58,14 @@ const Register = ({ navigation }) => {
 
 	const registerUser = async () => {
 		// To Check for White Spaces
-		phone_number = "+234" + phone;
+		phone_number = "+234" + phone.trim();
 		const payload = {
-			firstName,
-			lastName,
-			email,
+			firstName: firstName.trim(),
+			lastName: lastName.trim(),
+			email: email.trim(),
 			phone: phone_number,
-			password,
+			address,
+			password: password.trim(),
 		};
 		console.log(payload);
 		// This is the Full Validation for all the textInputs
@@ -176,7 +177,7 @@ const Register = ({ navigation }) => {
 						placeholder={"johndoe@gmail.com"}
 						name="Email"
 						width={335}
-						value={email}
+						value={email.trim()}
 						onChangeValue={(text) => setEmail(text)}
 						inputMode="email"
 					/>
@@ -198,7 +199,7 @@ const Register = ({ navigation }) => {
 						</View>
 					</View>
 					<GeneralInput
-						placeholder={"dele6 Main St"}
+						placeholder={"17 dele6 Main St"}
 						name="Add Delivery Address"
 						width={335}
 						value={address}

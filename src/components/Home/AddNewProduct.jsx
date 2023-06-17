@@ -116,8 +116,8 @@ const AddNewProduct = ({ navigation }) => {
 						// .get("https://klick-api.onrender.com/product/shipping/category")
 						.get("https://klick-api.onrender.com/category/getAll")
 						.then((res) => {
-							console.log("!!!!!!!!!Shipping Categories!!!!!!!");
-							console.log(res.data.data);
+							// console.log("!!!!!!!!!Shipping Categories!!!!!!!");
+							// console.log(res.data.data);
 							setShippingCat(res.data.data);
 						});
 				});
@@ -221,18 +221,18 @@ const AddNewProduct = ({ navigation }) => {
 			let formdata = new FormData();
 			setIsLoading(true);
 
-			formdata.append("name", name);
-			formdata.append("description", description);
-			formdata.append("price", price);
-			formdata.append("quantity[total]", total);
-			formdata.append("quantity[instock]", instock);
-			formdata.append("specifications[type]", type);
-			formdata.append("specifications[colors]", colors);
+			formdata.append("name", name.trim());
+			formdata.append("description", description.trim());
+			formdata.append("price", price.trim());
+			formdata.append("quantity[total]", total.trim());
+			formdata.append("quantity[instock]", instock.trim());
+			formdata.append("specifications[type]", type.trim());
+			formdata.append("specifications[colors]", colors.trim());
 			formdata.append("specifications[shippingcategory_id]", shipCategoryId);
-			formdata.append("specifications[weight]", weight);
-			formdata.append("specifications[dimensions][length]", length);
-			formdata.append("specifications[dimensions][height]", height);
-			formdata.append("specifications[dimensions][width]", width);
+			formdata.append("specifications[weight]", weight.trim());
+			formdata.append("specifications[dimensions][length]", length.trim());
+			formdata.append("specifications[dimensions][height]", height.trim());
+			formdata.append("specifications[dimensions][width]", width.trim());
 			formdata.append("shippingcategory", shipCategory);
 			images.forEach((element) => {
 				formdata.append("images", {
@@ -243,6 +243,7 @@ const AddNewProduct = ({ navigation }) => {
 			});
 			// formdata.append.images
 
+			console.log("!!!!!!!Product Payload!!!!!!!!");
 			console.log({
 				name,
 				description,
@@ -270,7 +271,11 @@ const AddNewProduct = ({ navigation }) => {
 			try {
 				const token = await AsyncStorage.getItem("token");
 				console.log("tok-1", token);
-				console.log(myStoreCat);
+				// console.log(myStoreCat);
+				console.log('!!!!!!!!!!!!!!Create!!!!!!!!!!!');
+				// console.log(myStoreCat);
+				console.log(shipCategory);
+				console.log(user.stores[0].id);
 				const url = `https://klick-api.onrender.com/product/?category=${shipCategory}&storeId=${user.stores[0].id}`;
 				console.log(url)
 				// const response = await fetch("https://klick-api.onrender.com/product/?category=039c6ea9-45d7-493f-beb1-fd74fb40399d", {
@@ -302,6 +307,9 @@ const AddNewProduct = ({ navigation }) => {
 
 				// Alert.alert("Success", "Product added");
 				setSuccessModalVisible(true);
+				setTimeout(() => {
+					navigation.navigate('sellerstab')
+				}, 2000);
 			} catch (error) {
 				// Handle network or other errors
 				console.error("!!!!!!!Create Product Error!!!!!!!!");
@@ -425,14 +433,8 @@ const AddNewProduct = ({ navigation }) => {
 							onChangeValue={(text) => setHeight(text)}
 							mode={"numeric"}
 						/>
-						{myStoreCat && (
+						{/* {myStoreCat && (
 							<View style={{ marginTop: 20, width: 335 }}>
-								{/* <SelectList
-								placeholder={"Category e.g Hot Food"}
-								setSelected={(val) => setCategory(val)}
-								data={data}
-								save="value"
-							/> */}
 								<Text
 									style={{
 										fontSize: 13,
@@ -447,17 +449,10 @@ const AddNewProduct = ({ navigation }) => {
 									<TextInput value={myStoreCat.id} editable={false} style />
 								</View>
 							</View>
-						)}
+						)} */}
 
 						{shippingCat && (
 							<View style={{ marginTop: 20, width: 335 }}>
-								{/* <SelectList
-							placeholder={"e.g Food"}
-							setSelected={(val) => setIndustry(val)}
-							// data={data?data:[]}
-							data={data}
-							save="value"
-						/> */}
 								<Text
 									style={{
 										fontSize: 13,

@@ -19,19 +19,16 @@ const SellerAddAddress = ({ navigation, prevStage, nextStage }) => {
 		setAddress,
 		setState,
 		setCity,
-		setPostal,
 		country,
 		address,
 		state,
 		city,
-		postal,
 	} = useSellerOnboardingContext();
 	const handleSubmit = () => {
 		if (
 			country.length !== 0 &&
 			address.length !== 0 &&
 			state.length !== 0 &&
-			postal.length !== 0 &&
 			city.length !== 0
 		) {
 			nextStage();
@@ -84,47 +81,54 @@ const SellerAddAddress = ({ navigation, prevStage, nextStage }) => {
 						onChangeValue={(text) => setState(text)}
 					/>
 					<GeneralInput
-						placeholder={"e.g "}
+						placeholder={"e.g Ikeja"}
 						name="City"
 						width={335}
 						value={city}
 						onChangeValue={(text) => setCity(text)}
 					/>
-					<GeneralInput
-						placeholder={"e.g 01573"}
-						name="Postal"
-						width={335}
-						value={postal}
-						onChangeValue={(text) => setPostal(text)}
-						mode="tel"
-					/>
-					<TouchableOpacity onPress={() => handleSubmit()}>
-						<GeneralButton
-							backgroundColor={"#FEDD00"}
-							message={"Continue"}
-							width={335}
-							height={54}
-							borderColor={"#FEDD00"}
-							marginLeft={130}
-							top={15}
-							marginHorizintal={40}
-							marginTop={30}
-						/>
-					</TouchableOpacity>
-					<TouchableOpacity onPress={() => prevStage()}>
-						<GeneralButton
-							backgroundColor={"#FEDD00"}
-							message={"Previous"}
-							width={335}
-							height={54}
-							borderColor={"#FEDD00"}
-							marginLeft={130}
-							top={15}
-							marginHorizintal={40}
-							marginTop={30}
-						/>
-					</TouchableOpacity>
 
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "center",
+							alignItems: "center",
+							marginTop: 20,
+						}}
+					>
+						<TouchableOpacity
+							style={{
+								marginRight: 10,
+							}}
+							onPress={() => prevStage()}
+						>
+							<GeneralButton
+								backgroundColor={"#FEDD00"}
+								message={"Back"}
+								width={160}
+								height={54}
+								borderColor={"#FEDD00"}
+								marginLeft={130}
+								top={15}
+								marginHorizintal={40}
+								marginTop={30}
+							/>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => handleSubmit()}>
+							<GeneralButton
+								backgroundColor={"#FEDD00"}
+								message={"Next"}
+								width={160}
+								height={54}
+								borderColor={"#FEDD00"}
+								marginLeft={130}
+								top={15}
+								marginHorizintal={40}
+								marginTop={30}
+							/>
+						</TouchableOpacity>
+					</View>
 					<View style={{ marginTop: 70 }} />
 				</View>
 			</ScrollView>
@@ -145,6 +149,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFF",
 		//   alignItems: 'center',
 		justifyContent: "center",
+		marginTop: 50,
 	},
 });
 

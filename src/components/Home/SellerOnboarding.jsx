@@ -21,7 +21,6 @@ const SellerOnboarding = ({ navigation }) => {
 	const [address, setAddress] = useState("");
 	const [state, setState] = useState("");
 	const [city, setCity] = useState("");
-	const [postal, setPostal] = useState("");
 	const [file, setFile] = useState("");
 	const [country, setCountry] = useState("");
 	const [error, setError] = useState(null);
@@ -32,12 +31,11 @@ const SellerOnboarding = ({ navigation }) => {
 
 	const submit = async (navigation) => {
 		setLoading(true);
-		console.log('!!!!!!!!!!!!!!!!!!!!!!!!')
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
 		console.log({
 			storeName,
 			phone,
 			state,
-			postal,
 			city,
 			address,
 			industry,
@@ -45,22 +43,15 @@ const SellerOnboarding = ({ navigation }) => {
 		});
 		// if (true) return;
 		let formData = new FormData();
-		formData.append("storeName", storeName);
-		formData.append("phone", phone);
-		formData.append("state", state);
-		formData.append("postal", postal);
-		formData.append("city", city);
-		formData.append("address", address);
-		formData.append("industry", industry);
-		formData.append("country", country);
+		formData.append("storeName", storeName.trim());
+		formData.append("phone", phone.trim());
+		formData.append("state", state.trim());
+		formData.append("city", city.trim());
+		formData.append("address", address.trim());
+		formData.append("industry", industry.trim());
+		formData.append("country", country.trim());
 		// formData.append('UPLOADCARE_PUB_KEY', 'c271ff5c8a4f6b806c36');
-		// file.forEach(element => {
-		//
-		//       uri: element.uri,
-		//       name: element.filename,
-		//       type: element.mediaType,
-		//     })
-		//   });
+
 
 		formData.append("file", {
 			uri: file[0]?.uri,
@@ -83,7 +74,6 @@ const SellerOnboarding = ({ navigation }) => {
 						Authorization: `Bearer ${token}`,
 					},
 					body: formData,
-					
 				}
 			);
 			const _data = await response.json();
@@ -117,8 +107,7 @@ const SellerOnboarding = ({ navigation }) => {
 		setState,
 		city,
 		setCity,
-		postal,
-		setPostal,
+
 		file,
 		setFile,
 		country,

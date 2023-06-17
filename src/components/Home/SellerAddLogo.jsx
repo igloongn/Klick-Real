@@ -46,6 +46,10 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 							borderColor: file && file.length > 0 ? "none" : "black",
 							borderStyle: "dashed",
 							backgroundColor: "#E1E1E1",
+							// backgroundColor: "red",
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
 						}}
 					>
 						{file && file.length > 0 ? (
@@ -58,12 +62,19 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 								source={{ uri: file[0]?.uri }}
 							/>
 						) : (
-							<Ionicons
-								name="person-add-outline"
-								size={24}
-								color="black"
-								style={{ marginLeft: 35, marginTop: 35 }}
-							/>
+							// <Ionicons
+							// 	name="person-add-outline"
+							// 	size={24}
+							// 	color="black"
+							// 	style={{ marginLeft: 35, marginTop: 35 }}
+							// />
+							<Text
+								style={{
+									fontSize: 20,
+								}}
+							>
+								Tap Here
+							</Text>
 						)}
 					</TouchableOpacity>
 
@@ -89,13 +100,53 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 						to easily discover you and connect with you.
 					</Text>
 
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "flex-end",
+							alignItems: "center",
+							marginTop: 20,
+							paddingTop: 40,
+							// paddingBottom: 10,
+							width: "100%",
+						}}
+					>
+						<TouchableOpacity onPress={() => submit()}>
+							{!loading && (
+								<Text
+									style={{
+										fontSize: 16,
+										paddingRight: 30,
+									}}
+								>
+									Skip Image
+								</Text>
+							)}
+						</TouchableOpacity>
+					</View>
 					{/* <GeneralInput placeholder={""} name="Business Logo" width={335} value={file} onChangeValue={text => setFile(text)} /> */}
-					<TouchableOpacity onPress={() => submit()}>
-						{!loading ? (
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "center",
+							alignItems: "center",
+							// marginTop: 20,
+							// paddingTop: 40,
+							paddingBottom: 100,
+						}}
+					>
+						<TouchableOpacity
+							style={{
+								marginRight: 10,
+							}}
+							onPress={() => prevStage()}
+						>
 							<GeneralButton
 								backgroundColor={"#FEDD00"}
-								message={"Continue"}
-								width={335}
+								message={"Previous"}
+								width={160}
 								height={54}
 								borderColor={"#FEDD00"}
 								marginLeft={130}
@@ -103,25 +154,39 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 								marginHorizintal={40}
 								marginTop={30}
 							/>
-						) : (
-							<>
-								<ActivityIndicator />
-							</>
-						)}
-					</TouchableOpacity>
-					<TouchableOpacity onPress={() => prevStage()}>
-						<GeneralButton
-							backgroundColor={"#FEDD00"}
-							message={"Previous"}
-							width={335}
-							height={54}
-							borderColor={"#FEDD00"}
-							marginLeft={130}
-							top={15}
-							marginHorizintal={40}
-							marginTop={30}
-						/>
-					</TouchableOpacity>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => submit()}>
+							{!loading ? (
+								<GeneralButton
+									backgroundColor={"#FEDD00"}
+									message={"Finish"}
+									width={160}
+									height={54}
+									borderColor={"#FEDD00"}
+									marginLeft={130}
+									top={15}
+									marginHorizintal={40}
+									marginTop={30}
+								/>
+							) : (
+								<View
+									style={{
+										backgroundColor: "#FEDD00",
+										width: 160,
+										height: 54,
+										// marginLeft: 130,
+										borderRadius: 80,
+										marginTop: 25,
+										// borderWidth: 1,
+										alignItems: 'center',
+										justifyContent: 'center',
+									}}
+								>
+									<ActivityIndicator />
+								</View>
+							)}
+						</TouchableOpacity>
+					</View>
 				</View>
 			</View>
 			{showGallery && (
@@ -130,7 +195,7 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 						backgroundColor: "grey",
 						postion: "absolute",
 						marginTop: 200,
-						bottom: Dimensions.get("screen").height,
+						bottom: Dimensions.get("screen").height / 1.1,
 						height: Dimensions.get("screen").height,
 						width: Dimensions.get("screen").width,
 					}}
@@ -158,6 +223,7 @@ const styles = StyleSheet.create({
 		// 	  alignItems: 'center',
 		// 	justifyContent: 'center',
 		// paddingHorizontal: 20
+		marginTop: 50,
 	},
 	centeredView: {
 		// flex: 1,

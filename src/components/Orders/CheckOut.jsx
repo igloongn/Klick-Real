@@ -175,21 +175,21 @@ const CheckOut = ({ navigation, route }) => {
 		AsyncStorage.getItem("token").then((token) => {
 			console.log(cartID);
 			console.log(token);
+			let config = {
+				method: "post",
+				// maxBodyLength: Infinity,
+				url: `https://klick-api.onrender.com/cart/checkout/${cartID}`,
+				headers: {
+					Authorization: "Bearer " + token,
+				},
+			};
+
 			axios
-				.post(
-					`https://klick-api.onrender.com/cart/checkout/${cartID}`,
-					{},
-					{
-						headers: {
-							Authorization: `Bearer ${token}`,
-							"Content-Type": "application/json",
-							// Add more headers as needed
-						},
-					}
-				)
+				.request(config)
 				.then((res) => {
 					console.log(res.data);
 					const checkoutData = res.data;
+					console.log("res.data", checkoutData);
 					axios
 						.get("https://klick-api.onrender.com/cart/" + cartID)
 						.then((data) => {
@@ -199,10 +199,13 @@ const CheckOut = ({ navigation, route }) => {
 								params: { checkoutData, cartDetail, addressPayload: address },
 							});
 						})
-						.catch((err) => {});
+						.catch((err) => {
+							console.log("Checkout Error");
+							console.log(err);
+						});
 				})
 				.catch((err) => {
-					console.log("err");
+					console.log("Cart Error");
 					console.log(err);
 				});
 		});

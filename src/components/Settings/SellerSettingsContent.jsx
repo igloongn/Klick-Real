@@ -139,7 +139,7 @@ const SellerSettingsContent = ({ navigation }) => {
 			const token = await AsyncStorage.getItem("token");
 			console.log("tok", token);
 			Alert.alert("Logout", "Logged out successfully.");
-			navigation.navigate("Home");
+			navigation.navigate("hometab");
 			// setMode("buyer");
 		} catch (error) {
 			console.error(error);

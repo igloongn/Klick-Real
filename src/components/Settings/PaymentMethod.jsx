@@ -113,7 +113,7 @@ const PaymentMethod = ({ navigation, route }) => {
 							fontWeight: "500",
 						}}
 					>
-						N{subTotal}
+						₦{subTotal}
 					</Text>
 				</View>
 				{/* <View
@@ -148,7 +148,7 @@ const PaymentMethod = ({ navigation, route }) => {
 							fontWeight: "500",
 						}}
 					>
-						N{shippingCharge}
+						₦{shippingCharge}
 					</Text>
 				</View>
 				<View
@@ -180,7 +180,7 @@ const PaymentMethod = ({ navigation, route }) => {
 							fontWeight: "500",
 						}}
 					>
-						N{sellerData.price}
+						₦{sellerData.price}
 					</Text>
 				</View>
 			</View>

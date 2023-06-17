@@ -11,6 +11,7 @@ import {
 	ActivityIndicator,
 	Platform,
 	SafeAreaView,
+	Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CategoriesCard from "./CategoriesCard";
@@ -93,6 +94,7 @@ const Item2 = ({ title }) => (
 
 const HomeContent = ({ navigation }) => {
 	const [search, onChangeSearch] = React.useState("");
+	const [searchResults, setSearchResults] = useState([]);
 
 	const { user, isErorr, getUserData } = useGetLogginedUser();
 	const [_data, set_Data] = useState([]);
@@ -130,9 +132,35 @@ const HomeContent = ({ navigation }) => {
 		navigation.navigate({ name: "sellerstab" });
 	}
 	getLoginData();
+
+	// Smart Search
+	const performSearch = (query) => {
+		// Perform your search logic here
+		// This can involve fetching data from an API or filtering an existing dataset
+		// Update the searchResults state with the filtered or fetched results
+		const filteredResults = productData.filter(
+			(item) => item.name.toLowerCase().includes(search.toLowerCase())
+			// item.name.toLowerCase().includes(search)
+		);
+		console.log("Search Result");
+		console.log("Search Result");
+		console.log("Search Result");
+		console.log(filteredResults.length);
+
+		setSearchResults(filteredResults);
+	};
+
+	const handleSearchInput = (text) => {
+		onChangeSearch(text);
+		performSearch(text);
+	};
+
 	useEffect(() => {
 		getStatus();
+		onChangeSearch('')
 		if (isLoggedIn) {
+			setcartCount(0);
+
 			axios
 				.get("https://klick-api.onrender.com/product/", {})
 				.then((res) => {
@@ -335,33 +363,90 @@ const HomeContent = ({ navigation }) => {
 					)}
 				</View>
 				<ScrollView style={[styles.scrollView]}>
-					<View
-						style={{
-							marginVertical: 10,
-							flexDirection: "row",
-							alignItems: "center",
-							paddingHorizontal: 12,
-						}}
-					>
-						<TextInput
-							style={[styles.input, { flex: 1 }]}
-							onChangeText={(text) => onChangeSearch(text)}
-							value={search}
-							placeholder="Looking for something Amazing?"
-						/>
-						<Ionicons
-							name="search-outline"
-							size={24}
-							color="#6A6B6C"
-							style={{ marginRight: 8 }}
-							onPress={() => {
-								navigation.navigate({
-									name: "searchResults",
-									params: { query: search },
-								});
-								onChangeSearch("");
+					<View>
+						<View
+							style={{
+								marginVertical: 10,
+								flexDirection: "row",
+								alignItems: "center",
+								paddingHorizontal: 12,
 							}}
-						/>
+						>
+							<TextInput
+								style={[styles.input, { flex: 1 }]}
+								onChangeText={(text) => handleSearchInput(text)}
+								// onChange={handleSearchInput}
+								value={search}
+								placeholder="Looking for something Amazing?"
+							/>
+							<Ionicons
+								name="search-outline"
+								size={24}
+								color="#6A6B6C"
+								style={{ marginRight: 8 }}
+								onPress={() => {
+									navigation.navigate({
+										name: "searchResults",
+										params: { query: search },
+									});
+									onChangeSearch("");
+								}}
+							/>
+						</View>
+						<View
+							style={{
+								// // position: "absolute",
+								// top: 60,
+								// left: 0,
+								width: "100%",
+								// backgroundColor: "red",
+							}}
+						>
+							{search.length > 0 && searchResults.length > 0 ? (
+								<View
+									style={{
+										paddingBottom: 30000,
+									}}
+								>
+									{searchResults.map((result) => (
+										<View
+											style={{
+												marginVertical: 15,
+												width: "100%",
+												flexDirection: "row",
+												justifyContent: "center",
+											}}
+										>
+											<Pressable
+												onPress={() =>
+													navigation.navigate({
+														name: "productdetails",
+														params: {
+															id: result.id,
+														},
+													})
+												}
+											>
+												<Text
+													style={{
+														fontSize: 20,
+													}}
+													key={result.id}
+												>
+													{result.name}
+												</Text>
+											</Pressable>
+										</View>
+									))}
+								</View>
+							) : (
+								// Render the search results
+
+								// Show a message when no results are found
+								// <Text>No results found</Text>
+								<View></View>
+							)}
+						</View>
 					</View>
 
 					{loading && (
@@ -446,7 +531,7 @@ const HomeContent = ({ navigation }) => {
 							justifyContent: "space-around",
 							alignItems: "center",
 							// marginHorizontal: 20,
-							marginVertical: 40,
+							marginBottom: 40,
 						}}
 					>
 						{category &&
@@ -459,6 +544,10 @@ const HomeContent = ({ navigation }) => {
 									params={item.id}
 								/>
 							))}
+						<View></View>
+						<View></View>
+						<View></View>
+						<View></View>
 					</View>
 					<View
 						style={{

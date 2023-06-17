@@ -9,6 +9,7 @@ import {
 	ScrollView,
 	Button,
 	Pressable,
+	Linking,
 } from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import GeneralButton from "../General/GeneralButton";
@@ -20,6 +21,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { useRoute, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome } from "@expo/vector-icons";
 
 // const DATA2 = [
 // 	{
@@ -46,7 +48,7 @@ const ProductDetails = ({ navigation, route }) => {
 		color: "#FEDD00",
 	});
 	const { id } = route.params;
-	// const {id} = useParams();
+	console.log(id);
 	const [expanded, setExpanded] = useState(false);
 
 	const toggleAccordion = () => {
@@ -61,7 +63,6 @@ const ProductDetails = ({ navigation, route }) => {
 				// console.log("!!!!!!!!!!Product Detail!!!!!!!!!!!");
 				// console.log(res?.data.data);
 				setData(res?.data.data);
-
 				// setIsLoading(true);
 			})
 			.catch((err) => console.log(err));
@@ -116,7 +117,7 @@ const ProductDetails = ({ navigation, route }) => {
 									{
 										headers: {
 											"Content-Type": "application/json",
-											Authorization: "Bearer " + token,
+											// Authorization: "Bearer " + token,
 										},
 									}
 								)
@@ -131,6 +132,7 @@ const ProductDetails = ({ navigation, route }) => {
 								});
 						})
 						.catch(function (error) {
+							console.log("!!!!!!!!!User Error!!!!!!!!!!");
 							console.log(error);
 						});
 				})
@@ -143,6 +145,19 @@ const ProductDetails = ({ navigation, route }) => {
 		// 	name: "mycart",
 		// 	params: { id: data.id, itemCount: count },
 		// })
+	};
+
+	// Handle External Link
+	const handleExternalLinkWhatsApp = async (url) => {
+		// Check if the device supports opening the URL
+		const supported = await Linking.canOpenURL(url);
+
+		if (supported) {
+			// Open the URL in the device's default browser
+			await Linking.openURL(url);
+		} else {
+			console.log(`Cannot open URL: ${url}`);
+		}
 	};
 
 	return (
@@ -300,7 +315,7 @@ const ProductDetails = ({ navigation, route }) => {
 						<View style={styles.acontainer}>
 							<TouchableOpacity onPress={toggleAccordion}>
 								<View style={styles.aheader}>
-									<Text style={styles.atitle}>{"Contact Store Owner"}</Text>
+									<Text style={styles.atitle}>Contact Store Owner </Text><AntDesign name="caretdown" size={24} color="black" />
 								</View>
 							</TouchableOpacity>
 							{expanded && (
@@ -314,20 +329,30 @@ const ProductDetails = ({ navigation, route }) => {
 									}}
 								>
 									<TouchableOpacity
+										onPress={() =>
+											handleExternalLinkWhatsApp(
+												`https://wa.me/${data.store.businessPhone}`
+											)
+										}
+										style={{
+											marginVertical: 10,
+										}}
+									>
+										<Text>
+											<FontAwesome name="whatsapp" size={24} color="black" />
+											{"  WhatsApp"}
+										</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
 										onPress={() => console.log("Instagram Link Clicked")}
 										style={{
 											marginVertical: 10,
 										}}
 									>
-										<Text>{"Instagram"}: Mufasa</Text>
-									</TouchableOpacity>
-									<TouchableOpacity
-										onPress={() => console.log("WhatsApp Link Clicked")}
-										style={{
-											marginVertical: 10,
-										}}
-									>
-										<Text>{"WhatsApp"}: 081394958736</Text>
+										<Text>
+											<AntDesign name="instagram" size={24} color="black" />
+											{"  Instagram"}: Mufasa
+										</Text>
 									</TouchableOpacity>
 								</View>
 							)}
@@ -372,30 +397,34 @@ const ProductDetails = ({ navigation, route }) => {
 							</View>
 						</TouchableOpacity>
 
-						<Text
-							style={{
-								color: "#0B0B0E",
-								fontSize: 14,
-								fontWeight: "500",
-								marginLeft: 20,
-								marginTop: 20,
-							}}
-						>
-							It's Lovely
-						</Text>
-						<Text
-							style={{
-								color: "#0B0B0E",
-								fontSize: 12,
-								fontWeight: "400",
-								marginLeft: 20,
-								marginTop: 0,
-							}}
-						>
-							However rare side effects observed among children{"\n"}can be
-							metabolic acidosis, coma, respiratory{"\n"}depression, and
-							hypoglycemia
-						</Text>
+						<View style={{
+							marginBottom: 30
+						}}>
+							<Text
+								style={{
+									color: "#0B0B0E",
+									fontSize: 14,
+									fontWeight: "500",
+									marginLeft: 20,
+									marginTop: 20,
+								}}
+							>
+								It's Lovely
+							</Text>
+							<Text
+								style={{
+									color: "#0B0B0E",
+									fontSize: 12,
+									fontWeight: "400",
+									marginLeft: 20,
+									marginTop: 0,
+								}}
+							>
+								However rare side effects observed among children{"\n"}can be
+								metabolic acidosis, coma, respiratory{"\n"}depression, and
+								hypoglycemia
+							</Text>
+						</View>
 					</>
 				)}
 			</ScrollView>
@@ -407,7 +436,7 @@ const ProductDetails = ({ navigation, route }) => {
 					flexDirection: "row",
 					// bottom: 5,
 					right: 2,
-					bottom: 119
+					bottom: 119,
 				}}
 			>
 				{/* <Pressable onPress={() => navigation.navigate("mycart")}> */}
@@ -486,6 +515,9 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 	},
 	aheader: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-around',
 		padding: 10,
 		backgroundColor: "#f2f2f2",
 	},

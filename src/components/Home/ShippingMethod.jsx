@@ -151,7 +151,7 @@ const ShippingMethod = ({ navigation, route }) => {
 								}}
 							>
 								<Text style={{ marginLeft: 15, marginTop: 10 }}>
-									N{checkoutData.kship_fee}
+									₦{checkoutData.kship_fee}
 								</Text>
 							</View>
 						</View>
@@ -271,7 +271,7 @@ const ShippingMethod = ({ navigation, route }) => {
 								}}
 							>
 								<Text style={{ marginLeft: 15, marginTop: 10 }}>
-									N{checkoutData.ksecure_fee}
+									₦{checkoutData.ksecure_fee}
 								</Text>
 							</View>
 						</View>
@@ -302,7 +302,6 @@ const ShippingMethod = ({ navigation, route }) => {
 				state={shipWithKshipModal}
 				setState={setShipWithKshipModal}
 				onPress={() => {
-					
 					navigation.navigate({
 						name: "paymentmethod",
 						params: {

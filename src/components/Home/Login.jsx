@@ -38,8 +38,9 @@ const Login = ({ navigation }) => {
 	// 	// Regular expression for email validation
 	// 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-	// 	return emailRegex.test(email);
+	// 	return emailRegex.test(email)_;
 	// };
+
 
 	const login = async () => {
 		try {
@@ -54,7 +55,7 @@ const Login = ({ navigation }) => {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					email,
+					email: email.trim(),
 					password,
 				}),
 			});
@@ -62,7 +63,7 @@ const Login = ({ navigation }) => {
 			//Login Susscessful
 			const data = await response.json();
 			// Store the authentication token in AsyncStorage
-			console.log('!!!!!!!!!!!!!Login Response!!!!!!!!!!!!');
+			console.log("!!!!!!!!!!!!!Login Response!!!!!!!!!!!!");
 			console.log(data);
 			await AsyncStorage.setItem("token", data.access_token);
 			await AsyncStorage.setItem("isLoggedIn", "true");
@@ -134,7 +135,7 @@ const Login = ({ navigation }) => {
 							fontWeight: "400",
 							fontSize: 14,
 							color: "#6A6B6C",
-							paddingHorizontal: 12
+							paddingHorizontal: 12,
 						}}
 					>
 						Log into your account so you can sell or purchase on Klick.
