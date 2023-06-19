@@ -141,9 +141,13 @@ const MyCart = ({ navigation }) => {
 		console.log(itemId);
 		AsyncStorage.getItem("token")
 			.then((token) => {
-				// const updatedCart = data.filter(item => item.id !== itemId);
-				console.log('!!!!!!!!!!!data[0].name!!!!!!!!!!!!!');
-				console.log(Object.keys(data)[0]);
+				console.log("!!!!!!!!!!!data[0].name!!!!!!!!!!!!!");
+				const items = Object.keys(data);
+				console.log(items);
+
+				const updatedCart = items.filter((item) =>
+					console.log(data[item].name)
+				);
 			})
 			.catch((err) => {
 				console.log(err);
