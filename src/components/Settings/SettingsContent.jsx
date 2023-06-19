@@ -51,7 +51,6 @@ const BuyerSettingsContent = ({ navigation }) => {
 	const [refreshing, setRefreshing] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-
 	getData = () => {
 		AsyncStorage.getItem("token")
 			.then((token) => {
@@ -208,8 +207,34 @@ const BuyerSettingsContent = ({ navigation }) => {
 						</View>
 					) : (
 						<View
-							style={{ height: 13, width: "100%", backgroundColor: "white" }}
-						></View>
+							style={{
+								height: 100,
+								width: "100%",
+								backgroundColor: "#191600",
+								alignItems: "center",
+								justifyContent: "center",
+							}}
+						>
+							<Text
+								style={{
+									color: "#FFF",
+									fontWeight: "500",
+									fontSize: 16,
+									marginBottom: 10,
+								}}
+							>
+								Username
+							</Text>
+							<Text
+								style={{
+									color: "#FFF",
+									fontWeight: "400",
+									fontSize: 12,
+								}}
+							>
+								Phone Number
+							</Text>
+						</View>
 					)}
 					<Text
 						style={{

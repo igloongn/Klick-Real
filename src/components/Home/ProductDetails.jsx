@@ -47,6 +47,7 @@ const ProductDetails = ({ navigation, route }) => {
 		text: "Add to cart",
 		color: "#FEDD00",
 	});
+	const [isLoggedIn, setIsLoggedIn] = useState(null);
 	const { id } = route.params;
 	console.log(id);
 	const [expanded, setExpanded] = useState(false);
@@ -56,7 +57,7 @@ const ProductDetails = ({ navigation, route }) => {
 	};
 
 	useEffect(() => {
-		// AsyncStorage.getItem("cart").then((keys) => console.log(keys));
+		AsyncStorage.getItem("isLoggedIn").then((res) => setIsLoggedIn(res));
 		axios
 			.get("https://klick-api.onrender.com/product/" + id)
 			.then((res) => {
@@ -78,68 +79,75 @@ const ProductDetails = ({ navigation, route }) => {
 	};
 	const addToCart = () => {
 		AsyncStorage.getItem("cart").then((cartData) => {
-			AsyncStorage.getItem("token")
-				.then((token) => {
-					axios
-						.get("https://klick-api.onrender.com/auth/user", {
-							headers: { Authorization: "Bearer " + token },
-						})
-						.then((user) => {
-							console.log("!!!!!!!!Cart id!!!!!!!!!");
-							console.log(user.data.user.Cart.id);
-							const cartId = user.data.user.Cart.id;
-							console.log("!!!!!!!!!Product ID!!!!!!!!!!");
-							const productId = data.id;
-							console.log(productId);
-							console.log("quantity: ", count);
-							const JSON_cartData = JSON.parse(cartData);
-							const payload = {
-								items: {
-									...JSON_cartData.items,
-									[productId]: count,
-								},
-							};
-							// AsyncStorage.setItem('cart', JSON.stringify([]))
-							AsyncStorage.setItem("cart", JSON.stringify(payload));
-
-							console.log("!!!!!!!!!!!!!payload!!!!!!!!!!!");
-							console.log(payload);
-
-							axios
-								.put(
-									`https://klick-api.onrender.com/cart/update/${cartId}`,
-									{
-										// items: {
-										// 	[productId]: count,
-										// },
-										...payload,
-									},
-									{
-										headers: {
-											"Content-Type": "application/json",
-											// Authorization: "Bearer " + token,
-										},
-									}
-								)
-								.then((res) => {
-									console.log("!!!!!!Add to Cart Response!!!!!!!!!");
-									console.log(res.data);
-									setButtonText({ text: "Added", color: "green" });
-								})
-								.catch((err) => {
-									console.log("Add to cart Error!!!!!!!!!!");
-									console.log(err);
-								});
-						})
-						.catch(function (error) {
-							console.log("!!!!!!!!!User Error!!!!!!!!!!");
-							console.log(error);
-						});
+			// AsyncStorage.getItem("token")
+			// .then((token) => {
+			// axios
+			// 	.get("https://klick-api.onrender.com/auth/user", {
+			// 		// headers: { Authorization: "Bearer " + token },
+			// 	})
+			// .then((user) => {
+			// console.log("!!!!!!!!Cart id!!!!!!!!!");
+			// console.log(user.data.user.Cart.id);
+			// const cartId = user.data.user.Cart.id;
+			// console.log("!!!!!!!!!Product ID!!!!!!!!!!");
+			const productId = data.id;
+			// console.log(productId);
+			// console.log("quantity: ", count);
+			const JSON_cartData = JSON.parse(cartData);
+			const payload = {
+				items: {
+					...JSON_cartData.items,
+					[productId]: count,
+				},
+			};
+			// AsyncStorage.setItem('cart', JSON.stringify([]))
+			AsyncStorage.setItem(
+				"cart",
+				JSON.stringify({
+					items: { ...JSON_cartData.items, [productId]: count },
 				})
-				.catch((error) => {
-					console.log("!!!!!!!!Get token Error!!!!!!!!");
-					console.log(error);
-				});
+			);
+			setButtonText({ text: "Added", color: "green" });
+			// console.log(JSON_cartData);
+
+			console.log("!!!!!!!!!!!!!payload WHat will be pushed!!!!!!!!!!!");
+			console.log({ ...JSON_cartData });
+
+			// axios
+			// 	.put(
+			// 		`https://klick-api.onrender.com/cart/update/${cartId}`,
+			// 		{
+			// 			// items: {
+			// 			// 	[productId]: count,
+			// 			// },
+			// 			...payload,
+			// 		},
+			// 		{
+			// 			headers: {
+			// 				"Content-Type": "application/json",
+			// 				// Authorization: "Bearer " + token,
+			// 			},
+			// 		}
+			// 	)
+			// 	.then((res) => {
+			// 		console.log("!!!!!!Add to Cart Response!!!!!!!!!");
+			// 		console.log(res.data);
+			// 		setButtonText({ text: "Added", color: "green" });
+			// 	})
+			// 	.catch((err) => {
+			// 		console.log("Add to cart Error!!!!!!!!!!");
+			// 		console.log(err);
+			// 	});
+			// })
+			// .catch(function (error) {
+			// 	console.log("!!!!!!!!!User Error!!!!!!!!!!");
+			// 	console.log(error);
+			// });
+			// })
+			// .catch((error) => {
+			// 	console.log("!!!!!!!!Get token Error!!!!!!!!");
+			// 	console.log(error);
+			// });
 		});
 		// navigation.navigate({
 		// 	name: "mycart",
@@ -315,7 +323,8 @@ const ProductDetails = ({ navigation, route }) => {
 						<View style={styles.acontainer}>
 							<TouchableOpacity onPress={toggleAccordion}>
 								<View style={styles.aheader}>
-									<Text style={styles.atitle}>Contact Store Owner </Text><AntDesign name="caretdown" size={24} color="black" />
+									<Text style={styles.atitle}>Contact Store Owner </Text>
+									<AntDesign name="caretdown" size={24} color="black" />
 								</View>
 							</TouchableOpacity>
 							{expanded && (
@@ -397,9 +406,11 @@ const ProductDetails = ({ navigation, route }) => {
 							</View>
 						</TouchableOpacity>
 
-						<View style={{
-							marginBottom: 30
-						}}>
+						<View
+							style={{
+								marginBottom: 30,
+							}}
+						>
 							<Text
 								style={{
 									color: "#0B0B0E",
@@ -440,7 +451,16 @@ const ProductDetails = ({ navigation, route }) => {
 				}}
 			>
 				{/* <Pressable onPress={() => navigation.navigate("mycart")}> */}
-				<Pressable onPress={() => addToCart()}>
+				<Pressable
+					onPress={() => {
+						if (isLoggedIn === 'true') {
+							addToCart();
+						} else {
+							navigation.navigate('login')
+						}
+
+					}}
+				>
 					{/* <Pressable onPress={() => {}}> */}
 					<GeneralButton
 						style={styles.shift}
@@ -515,9 +535,9 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 	},
 	aheader: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-around",
 		padding: 10,
 		backgroundColor: "#f2f2f2",
 	},

@@ -114,8 +114,8 @@ const HomeContent = ({ navigation }) => {
 		if (!cart) {
 			AsyncStorage.setItem("cart", JSON.stringify([]));
 		} else {
-			// console.log("cart");
-			// console.log(JSON.parse(cart));
+			console.log("cart");
+			console.log(JSON.parse(cart));
 		}
 	});
 
@@ -172,7 +172,7 @@ const HomeContent = ({ navigation }) => {
 				})
 				.catch((err) => {
 					console.log("!!!!!!!!!Axios Error Loggedin!!!!!!!");
-					console.log(err);
+					console.log(res.err);
 				});
 			AsyncStorage.getItem("token").then((token) => {
 				console.log("!!!!!!!!!!TOKEN!!!!!!!!");
@@ -184,55 +184,29 @@ const HomeContent = ({ navigation }) => {
 						},
 					})
 					.then((userdata) => {
-						// setcartCount(Object.keys(userdata.data.user.Cart.items).length);
+						setcartCount(Object.keys(userdata.data.user.Cart.items).length);
 						// const isEmptyObject = (obj) => {
-						// 	if (obj == null) return true;
 						// 	return Object.keys(obj).length === 0;
+						// 	// return console.log(Object.keys(obj));
 						// };
-						// isEmptyObject(userdata.data.DefaultAddress);
-						// if (userdata.data.stores.length > 0) {
-						// 	AsyncStorage.setItem("StoreData", userdata.data.stores[0].id);
+						const isEmptyObject = (obj) => {
+							if (obj == null) return true;
+							return Object.keys(obj).length === 0;
+							// return console.log(Object.keys(obj));
+						};
+						console.log(isEmptyObject("userdata.data.DefaultAddress"));
+						console.log(isEmptyObject(userdata.data.DefaultAddress));
+						console.log(isEmptyObject(userdata.data.DefaultAddress));
+						console.log(isEmptyObject(userdata.data.DefaultAddress));
+						console.log(isEmptyObject(userdata.data.DefaultAddress));
+						isEmptyObject(userdata.data.DefaultAddress);
+						// if (isEmptyObject(userdata.data.DefaultAddress) === true) {
+						// 	navigation.navigate("addaddress");
 						// }
-
-						AsyncStorage.getItem("cart").then((data) => {
-							const JSON_data = JSON.parse(data);
-							console.log("!!!!!!!!!!!!!Cart Data From AsyncStorage!!!!!!!!!!");
-							console.log(JSON_data.items);
-							console.log(JSON_data.items);
-							console.log(Object.keys(JSON_data.items).length);
-							setcartCount(Object.keys(JSON_data.items).length);
-							console.log("!!!!!!!!!!!!Cart ID!!!!!!!!!!!!!");
-							console.log(userdata.data.user.Cart.id);
-
-							const payload = {
-								items: JSON_data.items,
-							};
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log(payload);
-
-							axios
-								.put(
-									`https://klick-api.onrender.com/cart/update/${userdata.data.user.Cart.id}`,
-									payload,
-									{
-										headers: {
-											"Content-Type": "application/json",
-											Authorization: "Bearer " + token,
-										},
-									}
-								)
-								.then((res) => {
-									console.log("!!!!!!Add to Cart Response!!!!!!!!!");
-									console.log(res.data);
-								})
-								.catch((err) => {
-									console.log("Add to cart Error!!!!!!!!!!");
-									console.log(err);
-								});
-						});
-						// Category
+						if (userdata.data.stores.length > 0) {
+							AsyncStorage.setItem("StoreData", userdata.data.stores[0].id);
+						}
+						// console.log(res.data);
 						axios
 							.get("https://klick-api.onrender.com/category/getAll", {
 								headers: {
@@ -247,8 +221,6 @@ const HomeContent = ({ navigation }) => {
 								});
 							})
 							.catch((err) => {});
-
-						// Address Check
 						axios
 							.get("https://klick-api.onrender.com/auth/user", {
 								headers: {
@@ -261,7 +233,7 @@ const HomeContent = ({ navigation }) => {
 									return Object.keys(obj).length === 0;
 								};
 								isEmptyObject(userData.data.DefaultAddress);
-								// console.log(isEmptyObject(userData.data.DefaultAddress));
+								console.log(isEmptyObject(userData.data.DefaultAddress));
 								if (isEmptyObject(userData.data.DefaultAddress) === true) {
 									navigation.navigate("addaddress");
 								}
@@ -273,20 +245,10 @@ const HomeContent = ({ navigation }) => {
 			});
 		} else {
 			setcartCount(0);
-			AsyncStorage.getItem("cart").then((data) => {
-				console.log(
-					"!!!!!!!!!!!!!Cart Data From AsyncStorage Not Logged in!!!!!!!!!!"
-				);
-				const JSON_data = JSON.parse(data);
-				console.log(JSON_data.items);
-				console.log(Object.keys(JSON_data.items).length);
-				setcartCount(Object.keys(JSON_data.items).length);
-			});
-
 			axios
 				.get("https://klick-api.onrender.com/product/")
 				.then((res) => {
-					// console.log("!!!!!!!!!!Products NOt Loggedin!!!!!!!");
+					console.log("!!!!!!!!!!Products NOt Loggedin!!!!!!!");
 					// console.log(res.data.data.products);
 					setProductData(res.data.data.products);
 				})
@@ -313,8 +275,8 @@ const HomeContent = ({ navigation }) => {
 		axios
 			.get("https://klick-api.onrender.com/post/")
 			.then((res) => {
-				// console.log("!!!!!!!!!!!!!!Post NOt Loggedin!!!!!!!!!!!!!!!!!!");
-				// console.log(res.data.data);
+				console.log("!!!!!!!!!!!!!!Post NOt Loggedin!!!!!!!!!!!!!!!!!!");
+				console.log(res.data.data);
 				setPostData(res.data.data);
 				setLoading(false);
 				console.log(loading);
@@ -372,7 +334,7 @@ const HomeContent = ({ navigation }) => {
 				})
 				.catch((err) => {
 					console.log("!!!!!!!!!Axios Error Loggedin!!!!!!!");
-					console.log(err);
+					console.log(res.err);
 				});
 			AsyncStorage.getItem("token").then((token) => {
 				console.log("!!!!!!!!!!TOKEN!!!!!!!!");
@@ -384,55 +346,26 @@ const HomeContent = ({ navigation }) => {
 						},
 					})
 					.then((userdata) => {
-						// setcartCount(Object.keys(userdata.data.user.Cart.items).length);
+						setcartCout(Object.keys(userdata.data.user.Cart.items).length);
 						// const isEmptyObject = (obj) => {
-						// 	if (obj == null) return true;
 						// 	return Object.keys(obj).length === 0;
+						// 	// return console.log(Object.keys(obj));
 						// };
-						// isEmptyObject(userdata.data.DefaultAddress);
-						// if (userdata.data.stores.length > 0) {
-						// 	AsyncStorage.setItem("StoreData", userdata.data.stores[0].id);
+						const isEmptyObject = (obj) => {
+							if (obj == null) return true;
+							return Object.keys(obj).length === 0;
+							// return console.log(Object.keys(obj));
+						};
+						console.log(isEmptyObject("userdata.data.DefaultAddress"));
+						console.log(isEmptyObject(userdata.data.DefaultAddress));
+						isEmptyObject(userdata.data.DefaultAddress);
+						// if (isEmptyObject(userdata.data.DefaultAddress) === true) {
+						// 	navigation.navigate("addaddress");
 						// }
-
-						AsyncStorage.getItem("cart").then((data) => {
-							const JSON_data = JSON.parse(data);
-							console.log("!!!!!!!!!!!!!Cart Data From AsyncStorage!!!!!!!!!!");
-							console.log(JSON_data.items);
-							console.log(JSON_data.items);
-							console.log(Object.keys(JSON_data.items).length);
-							setcartCount(Object.keys(JSON_data.items).length);
-							console.log("!!!!!!!!!!!!Cart ID!!!!!!!!!!!!!");
-							console.log(userdata.data.user.Cart.id);
-
-							const payload = {
-								items: JSON_data.items,
-							};
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log(payload);
-
-							axios
-								.put(
-									`https://klick-api.onrender.com/cart/update/${userdata.data.user.Cart.id}`,
-									payload,
-									{
-										headers: {
-											"Content-Type": "application/json",
-											Authorization: "Bearer " + token,
-										},
-									}
-								)
-								.then((res) => {
-									console.log("!!!!!!Add to Cart Response!!!!!!!!!");
-									console.log(res.data);
-								})
-								.catch((err) => {
-									console.log("Add to cart Error!!!!!!!!!!");
-									console.log(err);
-								});
-						});
-						// Category
+						if (userdata.data.stores.length > 0) {
+							AsyncStorage.setItem("StoreData", userdata.data.stores[0].id);
+						}
+						// console.log(res.data);
 						axios
 							.get("https://klick-api.onrender.com/category/getAll", {
 								headers: {
@@ -447,8 +380,6 @@ const HomeContent = ({ navigation }) => {
 								});
 							})
 							.catch((err) => {});
-
-						// Address Check
 						axios
 							.get("https://klick-api.onrender.com/auth/user", {
 								headers: {
@@ -461,7 +392,7 @@ const HomeContent = ({ navigation }) => {
 									return Object.keys(obj).length === 0;
 								};
 								isEmptyObject(userData.data.DefaultAddress);
-								// console.log(isEmptyObject(userData.data.DefaultAddress));
+								console.log(isEmptyObject(userData.data.DefaultAddress));
 								if (isEmptyObject(userData.data.DefaultAddress) === true) {
 									navigation.navigate("addaddress");
 								}
@@ -473,20 +404,10 @@ const HomeContent = ({ navigation }) => {
 			});
 		} else {
 			setcartCount(0);
-			AsyncStorage.getItem("cart").then((data) => {
-				console.log(
-					"!!!!!!!!!!!!!Cart Data From AsyncStorage Not Logged in!!!!!!!!!!"
-				);
-				const JSON_data = JSON.parse(data);
-				console.log(JSON_data.items);
-				console.log(Object.keys(JSON_data.items).length);
-				setcartCount(Object.keys(JSON_data.items).length);
-			});
-
 			axios
 				.get("https://klick-api.onrender.com/product/")
 				.then((res) => {
-					// console.log("!!!!!!!!!!Products NOt Loggedin!!!!!!!");
+					console.log("!!!!!!!!!!Products NOt Loggedin!!!!!!!");
 					// console.log(res.data.data.products);
 					setProductData(res.data.data.products);
 				})
@@ -506,6 +427,9 @@ const HomeContent = ({ navigation }) => {
 				})
 				.catch((err) => {});
 		}
+		// setTimeout(() => {
+		// 	setRefreshing(false);
+		// }, 2000);
 	};
 
 	return (
@@ -528,54 +452,34 @@ const HomeContent = ({ navigation }) => {
 						<KlickLogo />
 					</View>
 					{isLoggedIn ? (
-						<>
-							<View style={{ paddingRight: 10 }}>
-								<View style={styles.cart}>
-									<TouchableOpacity
-										onPress={() => navigation.navigate("mycart")}
-									>
-										<AntDesign name="shoppingcart" size={40} color="black" />
-										{cartCount ? (
-											<Badge count={cartCount} />
-										) : (
-											<Badge count={0} />
-										)}
-									</TouchableOpacity>
-								</View>
+						<View style={{ paddingRight: 10 }}>
+							<View style={styles.cart}>
+								<TouchableOpacity onPress={() => navigation.navigate("mycart")}>
+									<AntDesign name="shoppingcart" size={40} color="black" />
+									{cartCount ? (
+										<Badge count={cartCount} />
+									) : (
+										<Badge count={0} />
+									)}
+								</TouchableOpacity>
 							</View>
-						</>
+						</View>
 					) : (
-						<>
-							<TouchableOpacity
-								style={{
-									marginRight: 20,
-									display: "flex",
-									paddingHorizontal: 20,
-									borderRadius: 10,
-									justifyContent: "center",
-									alignItems: "center",
-									backgroundColor: "#FEDD00",
-									height: 40,
-								}}
-								onPress={() => navigation.navigate("login")}
-							>
-								<Text>Login</Text>
-							</TouchableOpacity>
-							<View style={{ paddingRight: 10 }}>
-								<View style={styles.cart}>
-									<TouchableOpacity
-										onPress={() => navigation.navigate("mycart")}
-									>
-										<AntDesign name="shoppingcart" size={40} color="black" />
-										{cartCount ? (
-											<Badge count={cartCount} />
-										) : (
-											<Badge count={0} />
-										)}
-									</TouchableOpacity>
-								</View>
-							</View>
-						</>
+						<TouchableOpacity
+							style={{
+								marginRight: 20,
+								display: "flex",
+								paddingHorizontal: 20,
+								borderRadius: 10,
+								justifyContent: "center",
+								alignItems: "center",
+								backgroundColor: "#FEDD00",
+								height: 40,
+							}}
+							onPress={() => navigation.navigate("login")}
+						>
+							<Text>Login</Text>
+						</TouchableOpacity>
 					)}
 				</View>
 				<ScrollView

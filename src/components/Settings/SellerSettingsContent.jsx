@@ -173,16 +173,6 @@ const SellerSettingsContent = ({ navigation }) => {
 									justifyContent: "center",
 								}}
 							>
-								{/* <Image
-						style={{
-							borderRadius: 50,
-							height: 60,
-							width: 60,
-							marginLeft: 20,
-							marginTop: 20,
-						}}
-						source={require("../../../assets/profile.jpg")}
-					/> */}
 								<View
 									style={{
 										color: "#FFF",
@@ -208,13 +198,67 @@ const SellerSettingsContent = ({ navigation }) => {
 							</View>
 						) : (
 							<View
-								style={{ height: 13, width: "100%", backgroundColor: "white" }}
-							></View>
+								style={{
+									height: 150,
+									width: "100%",
+									backgroundColor: "#191600",
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+							>
+								<View
+									style={{
+										color: "#FFF",
+										marginBottom: 10,
+									}}
+								>
+									<Image
+										source={require("../../../assets/logoo.png")}
+										style={{ width: 80, height: 80, borderRadius: 50 }} // Set the width and height of the image
+									/>
+								</View>
+								<Text
+									style={{
+										color: "#FFF",
+										fontWeight: "400",
+										fontSize: 20,
+									}}
+								>
+									No store Yet...
+								</Text>
+							</View>
 						)
 					) : (
 						<View
-							style={{ height: 13, width: "100%", backgroundColor: "white" }}
-						></View>
+							style={{
+								height: 150,
+								width: "100%",
+								backgroundColor: "#191600",
+								alignItems: "center",
+								justifyContent: "center",
+							}}
+						>
+							<View
+								style={{
+									color: "#FFF",
+									marginBottom: 10,
+								}}
+							>
+								<Image
+									style={{ width: 80, height: 80, borderRadius: 50 }}
+									source={require("../../../assets/logoo.png")}
+								/>
+							</View>
+							<Text
+								style={{
+									color: "#FFF",
+									fontWeight: "400",
+									fontSize: 20,
+								}}
+							>
+								Please Create a store
+							</Text>
+						</View>
 					)}
 
 					<Text

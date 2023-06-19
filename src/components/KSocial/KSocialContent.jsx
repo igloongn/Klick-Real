@@ -342,7 +342,7 @@ const BuyerKSocial = ({ navigation }) => {
 					/>
 				</View>
 			)}
-			{
+			{postData && (
 				<View>
 					<ScrollView style={styles.scrollView}>
 						<FlatList
@@ -399,7 +399,7 @@ const BuyerKSocial = ({ navigation }) => {
 						ButtonColor={"#EB270B"}
 					/>
 				</View>
-			}
+			)}
 		</SafeAreaView>
 	);
 };

@@ -13,7 +13,12 @@ const FullScreenCarousel = () => {
 		axios.get("https://klick-api.onrender.com/post/").then((res) => {
 			// console.log("!!!!!!!!!!Data!!!!!!!!!Yea");
 			// console.log(res.data.data.rows);
-			setData(res.data.data.rows);
+			setData(res.data.data);
+			console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
+			console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
+			console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
+			console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
+			console.log(res.data.data[0].id)
 		});
 
 		const interval = setInterval(() => {
@@ -21,7 +26,7 @@ const FullScreenCarousel = () => {
 		}, 15000); // Adjust the interval time as desired (in milliseconds)
 
 		return () => clearInterval(interval);
-	}, [data]);
+	}, []);
 
 	const renderItem = ({ item }) => {
 		return (

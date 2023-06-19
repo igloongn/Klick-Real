@@ -57,90 +57,20 @@ const Counter = ({ itemCount, navigation }) => {
 	);
 };
 
-const Cart = ({ navigation, data }) => {
-	console.log("!!!!!!!!!!!!!!!!;");
-	console.log(data);
+// const Cart = ({ navigation, data }) => {
+// 	// console.log("!!!!!!!!!!!!!!!!;");
+// 	// console.log(data);
+// 	const [ItemId, setItemId] = useState(null)
+// console.log(ItemId)
+// 	return (
 
-	return (
-		<View style={{ marginBottom: 0 }}>
-			<View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
-				{Object.keys(data).map((key) => (
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "space-around",
-							alignItems: "center",
-							// backgroundColor: "red",
-							backgroundColor: "white",
-							borderRadius: 8,
-							marginBottom: 15,
-						}}
-						elevation={10}
-					>
-						<View style={{ paddingVertical: 10 }}>
-							<Image
-								style={{
-									width: 102,
-									height: 102,
-									marginTop: 15,
-									borderRadius: 10,
-								}}
-								source={{ uri: data[key].image[0] }}
-							></Image>
-						</View>
-						<View
-							style={{
-								flex: 0.8,
-								display: "flex",
-								flexDirection: "column",
-								justifyContent: "flex-end",
-								alignItems: "flex-start",
-								// backgroundColor: 'red',
-							}}
-						>
-							<Text style={{ fontSize: 18, fontWeight: "500" }}>
-								{data[key].name}
-							</Text>
-							<Text
-								style={{
-									color: "#0485E8",
-									marginHorizontal: 0,
-									fontWeight: "500",
-									fontSize: 13,
-									marginVertical: 7,
-								}}
-							>
-								N{data[key].UnitPrice}
-							</Text>
-							{/* <Text style={{marginHorizontal:0,fontWeight:"500",fontSize:15,marginTop:5}}>QTY:2</Text> */}
-							<Counter itemCount={data[key].quantity} />
-						</View>
-						<View
-							style={{
-								alignSelf: "flex-start",
-								padding: 15,
-							}}
-						>
-							<FontAwesome
-								onPress={() => console.log(data[key].id)}
-								name="trash"
-								size={20}
-								color="red"
-							/>
-						</View>
-					</View>
-				))}
-			</View>
-		</View>
-	);
-};
+// 	);
+// };
 
 const MyCart = ({ navigation }) => {
 	console.log("!!!!!!!!!My Cart Page !!!!!!!");
-
-	const [data, setData] = useState(null);
 	const [cartId, setCartId] = useState(null);
+	const [data, setData] = useState(null);
 
 	const emptyCart = () => {
 		console.log(cartId);
@@ -177,34 +107,49 @@ const MyCart = ({ navigation }) => {
 	};
 
 	useEffect(() => {
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+		fetchCartData = () => {
+			AsyncStorage.getItem("token")
+				.then((token) => {
+					axios
+						.get("https://klick-api.onrender.com/auth/user", {
+							headers: { Authorization: "Bearer " + token },
+						})
+						.then((user) => {
+							const data = user.data.user.Cart.items;
+							const dataLength = Object.entries(data).length;
+
+							setCartId(user.data.user.Cart.id);
+							setData(data);
+						})
+						.catch((error) => {
+							console.log(error);
+						});
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		};
+		fetchCartData();
+	}, []);
+	// Function to delete an item from the cart
+	const deleteCartItem = (itemId) => {
+		// Make a DELETE request to the API to delete the item
+		console.log(itemId);
 		AsyncStorage.getItem("token")
 			.then((token) => {
-				axios
-					.get("https://klick-api.onrender.com/auth/user", {
-						headers: { Authorization: "Bearer " + token },
-					})
-					.then((user) => {
-						const cartdata = user.data.user.Cart.items;
-						const dataLength = Object.entries(cartdata).length;
-
-						console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-						console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-						console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-						console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-						console.log(cartdata);
-
-						setCartId(user.data.user.Cart.id);
-						setData(cartdata);
-						AsyncStorage.setItem("cart", JSON.stringify(cartdata));
-					})
-					.catch((error) => {
-						console.log(error);
-					});
+				// const updatedCart = data.filter(item => item.id !== itemId);
+				console.log('!!!!!!!!!!!data[0].name!!!!!!!!!!!!!');
+				console.log(Object.keys(data)[0]);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
+	};
+
 	return (
 		<View style={{}}>
 			<ScrollView style={{}}>
@@ -216,7 +161,76 @@ const MyCart = ({ navigation }) => {
 							// backgroundColor: 'red'
 						}}
 					>
-						<Cart data={data} />
+						<View style={{ marginBottom: 0 }}>
+							<View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
+								{Object.keys(data).map((key) => (
+									<View
+										style={{
+											display: "flex",
+											flexDirection: "row",
+											justifyContent: "space-around",
+											alignItems: "center",
+											backgroundColor: "white",
+											borderRadius: 8,
+											marginBottom: 15,
+										}}
+										elevation={10}
+									>
+										<View style={{ paddingVertical: 10 }}>
+											<Image
+												style={{
+													width: 102,
+													height: 102,
+													marginTop: 15,
+													borderRadius: 10,
+												}}
+												source={{ uri: data[key].image[0] }}
+											></Image>
+										</View>
+										<View
+											style={{
+												flex: 0.8,
+												display: "flex",
+												flexDirection: "column",
+												justifyContent: "flex-end",
+												alignItems: "flex-start",
+												// backgroundColor: 'red',
+											}}
+										>
+											<Text style={{ fontSize: 18, fontWeight: "500" }}>
+												{data[key].name}
+											</Text>
+											<Text
+												style={{
+													color: "#0485E8",
+													marginHorizontal: 0,
+													fontWeight: "500",
+													fontSize: 13,
+													marginVertical: 7,
+												}}
+											>
+												N{data[key].UnitPrice}
+											</Text>
+											{/* <Text style={{marginHorizontal:0,fontWeight:"500",fontSize:15,marginTop:5}}>QTY:2</Text> */}
+											<Counter itemCount={data[key].quantity} />
+										</View>
+										<View
+											style={{
+												alignSelf: "flex-start",
+												padding: 15,
+											}}
+										>
+											<FontAwesome
+												onPress={() => deleteCartItem(key)}
+												name="trash"
+												size={20}
+												color="red"
+											/>
+										</View>
+									</View>
+								))}
+							</View>
+						</View>
 						<TouchableOpacity
 							onPress={() => emptyCart()}
 							style={{ alignItems: "center" }}

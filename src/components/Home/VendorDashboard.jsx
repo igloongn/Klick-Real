@@ -7,6 +7,7 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	Pressable,
+	RefreshControl,
 } from "react-native";
 import SHomeCubes from "./SHomeCubes";
 import SRecentOrders from "./SRecentOrders";
@@ -40,6 +41,8 @@ const VendorDashboard = ({ navigation }) => {
 	const mode_data = useBuyerSwitchVendorContext();
 	const [store, setStore] = useState(null);
 	const [user, setUser] = useState(null);
+	const [refreshing, setRefreshing] = useState(false);
+
 	// console.log(mode_data)
 	const focused = useIsFocused();
 
@@ -102,20 +105,49 @@ const VendorDashboard = ({ navigation }) => {
 	}, []);
 
 	console.log("focused", focused);
+	// On Refresh event
+	const onRefresh = () => {
+		// Perform your refresh logic here
 
-	// useEffect(() => {
-	// 	() => console.log("out");
-	// }, [focused]);
+		console.log("Refresh");
 
-	// useEffect(()=>{
-	//     // Add Login && Register logic here
-	//     getLoginData(navigation);
-	//     // console.log('here')
+		// Get User Data
+		AsyncStorage.getItem("token").then((token) => {
+			console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
+			console.log(token);
+			axios
+				.get(`https://klick-api.onrender.com/auth/user`, {
+					headers: {
+						Authorization: "Bearer " + token,
+					},
+				})
+				.then((userdata) => {
+					setUser(userdata.data.stores);
+					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					// console.log(user[0].logo);
+					console.log(user);
+					setRefreshing(false);
+				})
+				.catch((err) => {
+					console.log(
+						"!!!!!!!!!!!!!!!!!USer store Lenght Error!!!!!!!!!!!!!!!!"
+					);
+					console.log(err);
+				});
+		});
 
-	// })
+		// setTimeout(() => {
+		// 	setRefreshing(false);
+		// }, 2000);
+	};
+
 	return (
 		<View style={styles.container}>
-			<ScrollView>
+			<ScrollView
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
+			>
 				<View
 					style={{
 						display: "flex",
@@ -173,7 +205,7 @@ const VendorDashboard = ({ navigation }) => {
 										borderRadius: 50,
 										marginRight: 10,
 									}}
-									source={require("../../../assets/orderpic.png")}
+									source={require("../../../assets/logoo.png")}
 								></Image>
 							</View>
 							<View>
