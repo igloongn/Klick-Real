@@ -145,6 +145,7 @@ const MyCart = ({ navigation }) => {
 				const items = Object.keys(data);
 				console.log(items);
 
+
 				const updatedCart = items.filter((item) =>
 					console.log(data[item].name)
 				);

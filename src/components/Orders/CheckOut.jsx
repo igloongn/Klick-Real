@@ -170,22 +170,60 @@ const CheckOut = ({ navigation, route }) => {
 				});
 		});
 	}, []);
+
+	// const handleCheckout = () => {
+	// 	console.log("CheckOut");
+	// 	AsyncStorage.getItem("token").then((token) => {
+	// 		console.log(cartID);
+	// 		console.log(token);
+	// 		let config = {
+	// 			method: "get",
+	// 			url: `https://klick-api.onrender.com/cart/checkout/${cartID}`,
+	// 			headers: {
+	// 				Authorization: "Bearer " + token,
+	// 			},
+	// 		};
+
+	// 		axios
+	// 			.request(config)
+	// 			.then((res) => {
+	// 				console.log(res.data);
+	// 				const checkoutData = res.data;
+	// 				console.log("res.data", checkoutData);
+	// 				axios
+	// 					.get("https://klick-api.onrender.com/cart/" + cartID)
+	// 					.then((data) => {
+	// 						const cartDetail = data.data.data;
+	// 						navigation.navigate({
+	// 							name: "shippingmethod",
+	// 							params: { checkoutData, cartDetail, addressPayload: address },
+	// 						});
+	// 					})
+	// 					.catch((err) => {
+	// 						console.log("Checkout Error");
+	// 						console.log(err);
+	// 					});
+	// 			})
+	// 			.catch((err) => {
+	// 				console.log("Cart Error");
+	// 				console.log(err);
+	// 			});
+	// 	});
+	// };
+
 	const handleCheckout = () => {
 		console.log("CheckOut");
 		AsyncStorage.getItem("token").then((token) => {
 			console.log(cartID);
 			console.log(token);
-			let config = {
-				method: "post",
-				// maxBodyLength: Infinity,
-				url: `https://klick-api.onrender.com/cart/checkout/${cartID}`,
-				headers: {
-					Authorization: "Bearer " + token,
-				},
-			};
+
 
 			axios
-				.request(config)
+				.get(`https://klick-api.onrender.com/cart/checkout/${cartID}`, {
+					headers: {
+						Authorization: "Bearer " + token,
+					},
+				})
 				.then((res) => {
 					console.log(res.data);
 					const checkoutData = res.data;
