@@ -109,6 +109,7 @@ const HomeContent = ({ navigation }) => {
 	const [cartCount, setcartCount] = useState(null);
 	const [category, setCategory] = useState(null);
 	const [refreshing, setRefreshing] = useState(false);
+	const [stores, setStores] = useState(null);
 
 	AsyncStorage.getItem("cart").then((cart) => {
 		if (!cart) {
@@ -156,10 +157,20 @@ const HomeContent = ({ navigation }) => {
 		onChangeSearch(text);
 		performSearch(text);
 	};
-
+	const getStores = () => {
+		axios
+			.get("https://klick-api.onrender.com/brand/")
+			.then((res) => {
+				console.log("!!!!!!!!!!Store!!!!!!!!!");
+				console.log(res.data);
+				setStores(res.data.data);
+			})
+			.catch((err) => {});
+	};
 	useEffect(() => {
-		getStatus();
 		onChangeSearch("");
+		getStatus();
+		getStores();
 		if (isLoggedIn) {
 			setcartCount(0);
 
@@ -355,11 +366,11 @@ const HomeContent = ({ navigation }) => {
 	// On Refresh event
 	const onRefresh = () => {
 		// Perform your refresh logic here
-
 		console.log("Refresh");
-
 		getStatus();
 		onChangeSearch("");
+		getStores();
+
 		if (isLoggedIn) {
 			setcartCount(0);
 
@@ -384,16 +395,6 @@ const HomeContent = ({ navigation }) => {
 						},
 					})
 					.then((userdata) => {
-						// setcartCount(Object.keys(userdata.data.user.Cart.items).length);
-						// const isEmptyObject = (obj) => {
-						// 	if (obj == null) return true;
-						// 	return Object.keys(obj).length === 0;
-						// };
-						// isEmptyObject(userdata.data.DefaultAddress);
-						// if (userdata.data.stores.length > 0) {
-						// 	AsyncStorage.setItem("StoreData", userdata.data.stores[0].id);
-						// }
-
 						AsyncStorage.getItem("cart").then((data) => {
 							const JSON_data = JSON.parse(data);
 							console.log("!!!!!!!!!!!!!Cart Data From AsyncStorage!!!!!!!!!!");
@@ -808,7 +809,7 @@ const HomeContent = ({ navigation }) => {
 							marginHorizontal: 15,
 						}}
 					>
-						Sponsored
+						Products
 					</Text>
 
 					{productData && (
@@ -824,8 +825,36 @@ const HomeContent = ({ navigation }) => {
 							/>
 						</>
 					)}
-					<View style={{ marginTop: 400 }}></View>
+					<View style={{ marginTop: 100 }}></View>
+					<Text
+						style={{
+							fontWeight: "500",
+							fontSize: 20,
+							marginTop: 20,
+							marginHorizontal: 15,
+						}}
+					>
+						Available Stores
+					</Text>
+					{loading && (
+						<View>
+							<Text>Loading...</Text>
+						</View>
+					)}
+					{stores && (
+						<FlatList
+							style={{ marginTop: 20 }}
+							data={stores}
+							renderItem={({ item }) => (
+								<ScrollCard item={item} navigation={navigation} />
+							)}
+							// renderItem={ScrollCard}
+							keyExtractor={(item) => item.id}
+						/>
+					)}
 				</ScrollView>
+
+				{/* Switch to Seller */}
 				<TouchableOpacity
 					onPress={() => {
 						mode_data?.switchMode("vendor");

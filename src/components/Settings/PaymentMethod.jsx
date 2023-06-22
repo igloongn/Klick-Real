@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import GeneralButton from "../General/GeneralButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import PaymentIcon from "../../utils/SVGs/PaymentIcon";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SettingsTiles = ({ name, route, navigation }) => {
 	return (
@@ -35,10 +37,70 @@ const SettingsTiles = ({ name, route, navigation }) => {
 };
 
 const PaymentMethod = ({ navigation, route }) => {
+	const [storeId, setStoreId] = useState(null);
 	const { addressPayload, sellerData, shippingCharge, subTotal } = route.params;
-	console.log("!!!!!!!!!!!!DAta!!!!!!!!");
-	console.log(shippingCharge);
-
+	// 	{
+	//     "shipping_method" : "ksecure",
+	//     "storeId": "f0b4d892-c911-49fa-a161-55d48e494ee7",
+	//     "option": "CARD",  // or KCREDIT
+	//     "service": "FLUTTERWAVE"  // or SEERBIT
+	// }
+	useEffect(() => {
+		AsyncStorage.getItem("token").then((token) => {
+			console.log(token);
+			axios
+				.get("https://klick-api.onrender.com/auth/user", {
+					headers: { Authorization: "Bearer " + token },
+				})
+				.then((data) => {
+					const cartItem = data.data.user.Cart.items;
+					const conCartItem = Object.values(cartItem);
+					setStoreId(conCartItem[0].store);
+					console.log(storeId);
+				})
+				.catch((error) => console.log("Error in Get User"));
+		});
+	}, []);
+	const makePayment = () => {
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				console.log(sellerData);
+				console.log(storeId);
+				const payload = {
+					shipping_method: sellerData.name,
+					storeId: storeId,
+					option: "CARD",
+					service: "FLUTTERWAVE",
+				};
+				console.log(payload)
+				axios
+					.post(
+						"https://klick-api.onrender.com/order/",
+						{
+							shipping_method: sellerData.name,
+							storeId: storeId,
+							option: "CARD",
+							service: "FLUTTERWAVE",
+						},
+						{
+							headers: {
+								Authorization: "Bearer " + token,
+							},
+						}
+					)
+					.then((res) => {
+						console.log('res.data');
+						console.log(res.data);
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			})
+			.catch((err) => {
+				console.log("Issue With the Token");
+			});
+		// console.log('Yello')
+	};
 	return (
 		<View>
 			<View
@@ -186,7 +248,7 @@ const PaymentMethod = ({ navigation, route }) => {
 			</View>
 			<View>
 				<TouchableOpacity
-					onPress={() => {}}
+					onPress={() => makePayment()}
 					style={{
 						width: "100%",
 						display: "flex",

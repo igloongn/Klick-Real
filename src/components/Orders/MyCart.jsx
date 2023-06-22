@@ -7,6 +7,7 @@ import {
 	TouchableOpacity,
 	Pressable,
 	ScrollView,
+	RefreshControl,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import GeneralButton from "../General/GeneralButton";
@@ -71,6 +72,7 @@ const MyCart = ({ navigation }) => {
 	console.log("!!!!!!!!!My Cart Page !!!!!!!");
 	const [cartId, setCartId] = useState(null);
 	const [data, setData] = useState(null);
+	const [refreshing, setRefreshing] = useState(false);
 
 	const emptyCart = () => {
 		console.log(cartId);
@@ -107,13 +109,30 @@ const MyCart = ({ navigation }) => {
 	};
 
 	useEffect(() => {
+		// Auth Checker
 		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
 		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
 		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
 		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
+		AsyncStorage.getItem('token').then((token) => {
+			axios.get('https://klick-api.onrender.com/auth/user', {
+				headers: {
+					Authorization: 'Bearer ' + token
+				}
+			}).then((data) => {
+				console.log('The User is found');
+				// console.log(data.data);
+				
+			}).catch((err) => {
+				navigation.navigate('login')
+			});
+		}).catch((err) => {
+			
+		});
 		fetchCartData = () => {
 			AsyncStorage.getItem("token")
 				.then((token) => {
+					console.log(token)
 					axios
 						.get("https://klick-api.onrender.com/auth/user", {
 							headers: { Authorization: "Bearer " + token },
@@ -145,7 +164,6 @@ const MyCart = ({ navigation }) => {
 				const items = Object.keys(data);
 				console.log(items);
 
-
 				const updatedCart = items.filter((item) =>
 					console.log(data[item].name)
 				);
@@ -154,10 +172,16 @@ const MyCart = ({ navigation }) => {
 				console.log(err);
 			});
 	};
+	const onRefresh = () => fetchCartData();
 
 	return (
 		<View style={{}}>
-			<ScrollView style={{}}>
+			<ScrollView
+				style={{}}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
+			>
 				{data && (
 					<View
 						style={{
