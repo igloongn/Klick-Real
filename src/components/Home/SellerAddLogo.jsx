@@ -195,7 +195,7 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 						backgroundColor: "grey",
 						postion: "absolute",
 						marginTop: 200,
-						bottom: Dimensions.get("screen").height / 1.1,
+						bottom: Dimensions.get("screen").height / 0.9,
 						height: Dimensions.get("screen").height,
 						width: Dimensions.get("screen").width,
 					}}

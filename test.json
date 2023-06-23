@@ -1,22 +1,5 @@
 {
-    "data": {
-        "deliveryFee": "332.00",
-        "order": {
-            "orderId": "df5165e9-d5df-463c-b4d0-509189944b1b",
-            "orderNumber": "#K-ID317134",
-            "orderamount": "30000.00",
-            "orderdate": "2023-06-23T04:37:37.641Z",
-            "orderstatus": "pending",
-            "shippingMethod": [Object
-            ],
-            "storeId": "8c5e44e8-d599-419a-b2d2-1c9b8070b1d7",
-            "userId": "d21f7168-5e59-4da5-a63f-815b16056a27"
-        },
-        "paymentAmount": 30332,
-        "paymentLink": "https://ravemodal-dev.herokuapp.com/v3/hosted/pay/fe76fd50d91a517234ad",
-        "socials": {},
-        "subTotal": "30000.00"
-    },
-    "message": "Order created successfully, please make payment on delivery",
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFmYzE2MzIwLTg3M2QtNDdhMC04ZDliLWY4MDk5NjVjMTJkZiIsImZ1bGxOYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImRvbm92YW4ud3lldGhAZml4ZWRmb3IuY29tIiwicm9sZSI6Imd1ZXN0IiwiaXNBY3RpdmF0ZWQiOmZhbHNlLCJ2ZW5kb3JNb2RlIjpmYWxzZSwid2Vic2l0ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCIsImp0aSI6IjQzMzg1MzIyLWQzMTUtNDUzYi05NjZkLTAyMjYyY2IzM2UyZCIsImlhdCI6MTY4NzUwMTYwMSwiZXhwIjoxNjg3NTczNjAxfQ.5BONap6Sqp53hzkvZQNCERdhDfKm7DBJO25csF4PEZE",
+    "message": "User not verified, verification code sent successfully",
     "success": true
 }

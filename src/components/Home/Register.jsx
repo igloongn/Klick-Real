@@ -109,9 +109,12 @@ const Register = ({ navigation }) => {
 								}
 
 								// Store the authentication token in AsyncStorage
-								await AsyncStorage.setItem("token", res_data.access_token);
+								// await AsyncStorage.setItem("regToken", res_data.access_token);
 
-								navigation.navigate("verify", { email });
+								navigation.navigate("verify", {
+									token: res_data.access_token,
+									email,
+								});
 								setSuccessModalVisible(true);
 							} catch (error) {
 								// Handle network or other errors

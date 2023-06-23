@@ -19,6 +19,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import API_URL from "../../settings";
 import MyModal from "../../utils/MyModal";
+import ModalFunc from "../../utils/ModalFunc";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -31,6 +32,8 @@ const Login = ({ navigation }) => {
 
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
+	const [verifyVisible, setVerifyVisible] = useState(false);
+	const [regToken, setRegToken] = useState(null);
 
 	const navigate = useNavigation();
 
@@ -41,47 +44,109 @@ const Login = ({ navigation }) => {
 	// 	return emailRegex.test(email)_;
 	// };
 
-
 	const login = async () => {
-		try {
-			setLoading(true);
-			console.log({
-				email,
-				password,
-			});
-			const response = await fetch(API_URL + "/auth/signin", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					email: email.trim(),
-					password,
-				}),
-			});
-			// if (response && response.data && response.data.access_token){
-			//Login Susscessful
-			const data = await response.json();
-			// Store the authentication token in AsyncStorage
-			console.log("!!!!!!!!!!!!!Login Response!!!!!!!!!!!!");
-			console.log(data);
-			await AsyncStorage.setItem("token", data.access_token);
-			await AsyncStorage.setItem("isLoggedIn", "true");
-			// Do something with the response data
-			// navigation.navigate('vendordash')
-			setSuccessModalVisible(true);
-			setTimeout(() => {
-				navigation.navigate("hometab");
-			}, 2000);
-		} catch (error) {
-			// Handle network or other errors
-			console.error("!!!!!!!!!!!!!");
-			console.error(error);
-			setFailedModalVisible(true);
-			setLoading(false);
-		}
-		// finally {
+		// try {
+		// 	setLoading(true);
+		// 	console.log({
+		// 		email,
+		// 		password,
+		// 	});
+		// 	const response = await fetch(API_URL + "/auth/signin", {
+		// 		method: "POST",
+		// 		headers: {
+		// 			"Content-Type": "application/json",
+		// 		},
+		// 		body: JSON.stringify({
+		// 			email: email.trim(),
+		// 			password,
+		// 		}),
+		// 	});
+		// 	// if (response && response.data && response.data.access_token){
+		// 	//Login Susscessful
+		// 	const data = await response.json();
+		// 	// Store the authentication token in AsyncStorage
+		// 	console.log("!!!!!!!!!!!!!Login Response!!!!!!!!!!!!");
+		// 	// console.log(data.status_code);
+		// 	await AsyncStorage.setItem("token", data.access_token);
+		// 	await AsyncStorage.setItem("isLoggedIn", "true");
+		// 	// Do something with the response data
+		// 	// navigation.navigate('vendordash')
+		// 	setSuccessModalVisible(true);
+		// 	setTimeout(() => {
+		// 		navigation.navigate("hometab");
+		// 	}, 2000);
+		// } catch (error) {
+		// 	// Handle network or other errors
+		// 	console.error("!!!!!!!!!!!!!");
+		// 	console.error(error);
+		// 	setFailedModalVisible(true);
+		// 	setLoading(false);
 		// }
+
+		const payload = {
+			email: email.trim(),
+			password,
+		};
+		// console.log(payload);
+		setLoading(true);
+		setFailedModalVisible(false);
+
+		axios
+			.post("https://klick-api.onrender.com/auth/signin", payload)
+			.then((response) => {
+				console.log("POST request successful");
+				console.log("Response:", response.data);
+				console.log("!!!!!!!!!!!!!Login Response!!!!!!!!!!!!");
+				// console.log(data.status_code);
+				AsyncStorage.setItem("token", response.data.access_token);
+				AsyncStorage.setItem("isLoggedIn", "true");
+				// Do something with the response data
+				// navigation.navigate('vendordash')
+				setSuccessModalVisible(true);
+				setTimeout(() => {
+					navigation.navigate("hometab");
+				}, 2000);
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.log("POST request failed");
+
+				if (error.response) {
+					// console.log("Error response data:", error.response.data);
+					// console.log("Error response headers:", error.response.headers);
+					console.log("Error response status:", error.response.status);
+
+					if (error.response.status === 422) {
+						console.log("Error response status:", error.response.status);
+						setRegToken(error.response.data.access_token);
+						AsyncStorage.setItem(
+							"payload",
+							JSON.stringify({
+								email,
+								Regtoken: error.response.data.access_token,
+							})
+						);
+						console.log(error.response.data.access_token);
+						// navigation.navigate({
+						// 	name: "verify",
+						// 	params: {
+						// 		token: error.response.data.access_token,
+						// 		email,
+						// 	},
+						// });
+						setVerifyVisible(true);
+					}
+
+					if (error.response.status === 400) {
+						console.log("Error response status:", error.response.status);
+						setFailedModalVisible(true);
+					}
+				} else {
+					console.error("Error:", error.message);
+				}
+				// setFailedModalVisible(true);
+				setLoading(false);
+			});
 	};
 
 	return (
@@ -216,9 +281,26 @@ const Login = ({ navigation }) => {
 			<MyModal
 				state={failedModalVisible}
 				setState={setFailedModalVisible}
-				text={"An error occured during login"}
+				text={"invalid Credentials"}
 				button={"Try again"}
 				ButtonColor={"#EB270B"}
+			/>
+			{/* Resend OTP Modal */}
+			<ModalFunc
+				state={verifyVisible}
+				setState={setVerifyVisible}
+				text={"Please Verify Your Email"}
+				button={"Verify"}
+				ButtonColor={"#FEDD00"}
+				onPress={() => {
+					navigation.navigate({
+						name: "verify",
+						params: {
+							token: regToken,
+							email,
+						},
+					});
+				}}
 			/>
 		</ScrollView>
 	);

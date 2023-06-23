@@ -1,7 +1,13 @@
 import React from "react";
 import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
-const MyModal = ({ text, button, state, setState, ButtonColor='#FEDD00' }) => {
+const MyModal = ({
+	text,
+	button,
+	state,
+	setState,
+	ButtonColor = "#FEDD00",
+}) => {
 	return (
 		<View style={styles.centeredView}>
 			<Modal

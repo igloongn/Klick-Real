@@ -42,12 +42,15 @@ const ModalFunc = ({
 const styles = StyleSheet.create({
 	centeredView: {
 		position: "absolute",
-		flex: 1,
+		// flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
 		marginTop: 22,
-		height: "100%",
-		width: "100%",
+		// height: "100%",
+		// width: "100%",
+		top: 300,
+		left: 50,
+		// backgroundColor: 'red'
 	},
 	modalView: {
 		margin: 20,

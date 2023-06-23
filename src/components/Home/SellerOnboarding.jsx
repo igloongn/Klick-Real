@@ -5,6 +5,7 @@ import SellerAddLogo from "./SellerAddLogo";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MyModal from "../../utils/MyModal";
+import axios from "axios";
 
 const SelleronBoardingContext = React.createContext();
 
@@ -28,6 +29,7 @@ const SellerOnboarding = ({ navigation }) => {
 
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
+	const [weirdError, setWeirdError] = useState("There is an Error");
 
 	const submit = async (navigation) => {
 		setLoading(true);
@@ -40,6 +42,7 @@ const SellerOnboarding = ({ navigation }) => {
 			address,
 			industry,
 			country,
+			Image: file[0],
 		});
 		// if (true) return;
 		let formData = new FormData();
@@ -51,47 +54,73 @@ const SellerOnboarding = ({ navigation }) => {
 		formData.append("industry", industry.trim());
 		formData.append("country", country.trim());
 		// formData.append('UPLOADCARE_PUB_KEY', 'c271ff5c8a4f6b806c36');
-
-
 		formData.append("file", {
 			uri: file[0]?.uri,
 			type: "image/jpg",
 			name: file[0]?.filename,
 		});
-		// console.log('!!!!!!!!!!!!formData!!!!!!!!!!!!!!');
-		// console.log(formData);
-		try {
-			const token = await AsyncStorage.getItem("token");
-			console.log(token);
-			const response = await fetch(
-				"https://klick-api.onrender.com/auth/registerstore",
-				{
-					// const response = await fetch("https://upload.uploadcare.com/base/", {
-					method: "POST",
-					mode: "no-cors",
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${token}`,
-					},
-					body: formData,
-				}
-			);
-			const _data = await response.json();
-			// const _data = await response.text();
-			console.log("y", _data);
-			// Alert.alert("Success", "Your Store was created successfully");
-			setSuccessModalVisible(true);
-			setTimeout(() => {
-				navigation.navigate("sellerstab");
-			}, 3000);
-		} catch (error) {
-			// Handle network or other errors
-			console.error(error);
-			setFailedModalVisible(true);
-			// Alert.alert("Error", "An error occured while creating store.");
-		} finally {
-			setLoading(false);
+		console.log("!!!!!!!!!!!!formData!!!!!!!!!!!!!!");
+		console.log(formData);
+		const pictureName = file[0];
+		console.log("Yello");
+		console.log(pictureName);
+		if (pictureName) {
+			// console.log("Picture is not set");
+			// 	formData.append("file", {
+			// 	uri: 'https://t4.ftcdn.net/jpg/04/83/90/95/360_F_483909569_OI4LKNeFgHwvvVju60fejLd9gj43dIcd.jpg',
+			// 	type: "image/jpg",
+			// 	name: 'FrontendDefaultPicture.jpg',
+			// });
+		} else {
+			console.log("Picture is not set");
 		}
+		console.log("General");
+
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				axios
+					.post("https://klick-api.onrender.com/auth/registerstore", formData, {
+						headers: {
+							"Content-Type": "multipart/form-data",
+							Authorization: `Bearer ${token}`,
+						},
+					})
+					.then((res) => {
+						const _data = res.data;
+
+						console.log("y");
+						console.log("y", _data);
+						// Alert.alert("Success", "Your Store was created successfully");
+						setSuccessModalVisible(true);
+						setTimeout(() => {
+							navigation.navigate("sellerstab");
+						}, 2000);
+						setLoading(false);
+					})
+					.catch((error) => {
+						if (error.response) {
+							console.log("Error status:", error.response.status);
+							console.log("Error status:", error.response.status);
+							console.log("Error status:", error.response.status);
+							console.log("Error status:", error.response.status);
+							console.log("Error data:", error.response.data.msg);
+							setWeirdError(error.response.data.msg);
+						} else {
+							console.error("Error:", error.message);
+						}
+						console.error("!!!!!!!!!!!!!!!!Store Creation Error!!!!!!!!!");
+						console.error(error);
+						if (error.message === "Network Error") {
+							console.error(error.message);
+							setWeirdError("Please Add a Picture");
+						}
+						setFailedModalVisible(true);
+						setLoading(false);
+					});
+			})
+			.catch((err) => {
+				console.log("Please Check your TOken");
+			});
 	};
 
 	const values = {
@@ -150,7 +179,7 @@ const SellerOnboarding = ({ navigation }) => {
 			<MyModal
 				state={failedModalVisible}
 				setState={setFailedModalVisible}
-				text={"An error occured while creating store."}
+				text={weirdError}
 				button={"Try again"}
 				ButtonColor={"#EB270B"}
 			/>

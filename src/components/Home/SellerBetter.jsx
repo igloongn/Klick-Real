@@ -73,8 +73,8 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 		const allWordsValid = words.every((word) => word.length >= 3);
 
 		// if (regex.test(storeName)) {
-		// if (regexPattern.test(storeName)) {
-		if (allWordsValid) {
+		if (regexPattern.test(storeName)) {
+			// if (allWordsValid) {
 			// Input value is valid
 			//   Alert.alert('Success', 'Valid input!');
 			//   setSuccessModalVisible(true)
@@ -205,14 +205,13 @@ const SellerBetter = ({ navigation, prevStage, nextStage }) => {
 		</View>
 	);
 };
-
 const styles = StyleSheet.create({
 	container: {
 		// flex: 1,
 		backgroundColor: "#FFF",
 		//   alignItems: 'center',
 		justifyContent: "center",
-		marginTop: 50
+		marginTop: 50,
 	},
 	containerStyle: {
 		// flex: 1,
