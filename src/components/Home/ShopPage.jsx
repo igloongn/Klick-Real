@@ -8,6 +8,7 @@ import {
 	FlatList,
 	ScrollView,
 	Linking,
+	ActivityIndicator,
 } from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import GeneralButton from "../General/GeneralButton";
@@ -41,8 +42,10 @@ const ShopPage = ({ navigation, route }) => {
 
 	// const [data, setData] = useState([]);
 	const [storeData, setStoreData] = useState(null);
+	const [storeProducts, setStoreProducts] = useState([]);
 	const [expanded, setExpanded] = useState(false);
 	const [storeDetailexpanded, setStoreDetailExpanded] = useState(false);
+	const [randArray, setRandArray] = useState(null);
 	const toggleAccordion = () => setExpanded(!expanded);
 	const StoreDetailtoggleAccordion = () =>
 		setStoreDetailExpanded(!storeDetailexpanded);
@@ -60,7 +63,7 @@ const ShopPage = ({ navigation, route }) => {
 	};
 	// const route = useRoute();
 	const { id } = route.params;
-	console.log(route);
+	// console.log(route);
 
 	const [textExpanded, setTextExpanded] = useState(false);
 
@@ -74,7 +77,7 @@ const ShopPage = ({ navigation, route }) => {
 				<Text
 					style={{
 						fontWeight: "400",
-						fontSize: 14,
+						fontSize: 17,
 						color: "#6A6B6C",
 						marginTop: 5,
 						marginHorizontal: 15,
@@ -92,7 +95,7 @@ const ShopPage = ({ navigation, route }) => {
 				<Text
 					style={{
 						fontWeight: "400",
-						fontSize: 14,
+						fontSize: 17,
 						color: "#6A6B6C",
 						marginTop: 5,
 						marginHorizontal: 15,
@@ -101,7 +104,9 @@ const ShopPage = ({ navigation, route }) => {
 					{truncatedText}
 				</Text>
 				<TouchableOpacity onPress={toggleReadMore}>
-					<Text style={{ color: "blue", marginTop: 5 }}>Read more</Text>
+					<Text style={{ color: "blue", marginTop: 5, paddingLeft: 12 }}>
+						Read more
+					</Text>
 				</TouchableOpacity>
 			</View>
 		);
@@ -112,9 +117,53 @@ const ShopPage = ({ navigation, route }) => {
 			.get("https://klick-api.onrender.com/brand/" + id)
 			.then((res) => {
 				setStoreData(res.data.data);
-				console.log("!!!!!!!!Store Data!!!!!!!!!!");
-				console.log(res.data.data);
-				console.log(`https://wa.me/+234${storeData.businessPhone}`);
+				// console.log("!!!!!!!!Store Data!!!!!!!!!!");
+				// console.log(res.data.data);
+				// console.log(`https://wa.me/+234${storeData.businessPhone}`);
+				console.log(id);
+				// Get the list of Products in the Particular Store
+				axios
+					.get(`https://klick-api.onrender.com/product/?store=${id}`)
+					// .get(
+					// 	"https://klick-api.onrender.com/product/?store=7f37f3b1-02e7-4b7c-ad36-4a5138cf3493"
+					// )
+					.then((res) => {
+						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
+						// console.log(res.data.data.products);
+						setStoreProducts(res.data.data.products);
+
+						console.log(res.data.data.products.length);
+					})
+					.catch((error) => {
+						console.log("!!!!!!!1Error!!!!!!!!");
+						console.log(error);
+					});
+				axios
+					.get("https://klick-api.onrender.com/product/")
+					.then((res) => {
+						function getRandomItems(array, count) {
+							const randomItems = [];
+							const length = array.length;
+
+							for (let i = 0; i < count; i++) {
+								const randomIndex = Math.floor(Math.random() * length);
+								randomItems.push(array[randomIndex]);
+							}
+
+							return randomItems;
+						}
+
+						const randomItems = getRandomItems(res.data.data.products, 4);
+						setRandArray(randomItems);
+						console.log(randomItems);
+						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
+						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
+						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
+						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
+						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
+						console.log(res.data.data.products);
+					})
+					.catch((err) => console.log(err));
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -336,25 +385,30 @@ const ShopPage = ({ navigation, route }) => {
 							fontSize: 20,
 							fontWeight: "600",
 							marginHorizontal: 20,
-							marginVertical: 10,
+							marginVertical: 20,
 						}}
 					>
-						Popular
+						Products of {storeData.name}
 					</Text>
 
-					<FlatList
-						style={{}}
-						data={DATA2}
-						renderItem={({ item }) => (
-							<PopularCard
-								name={"Play Mat"}
-								location={"N20,000"}
-								rate={"4.8(1.2k)"}
+					{storeProducts ? (
+						storeProducts.length > 0 && (
+							<FlatList
+								style={{}}
+								data={storeProducts}
+								renderItem={({ item }) => (
+									<PopularCard item={item} navigation={navigation} />
+								)}
+								keyExtractor={(item) => item.id}
+								horizontal
 							/>
-						)}
-						keyExtractor={(item) => item.id}
-						horizontal
-					/>
+							// <PopularCard item={storeProducts} />
+						)
+					) : (
+						<View>
+							<ActivityIndicator />
+						</View>
+					)}
 
 					<Text
 						style={{
@@ -366,122 +420,59 @@ const ShopPage = ({ navigation, route }) => {
 					>
 						Recommended Products
 					</Text>
+					<View>
+						{randArray &&
+							randArray.map((item) => (
+								<View
+									style={{
+										marginBottom: 30,
+										paddingLeft: 30,
+										display: "flex",
+										flexDirection: "row",
+										justifyContent: "flex-start",
+									}}
+								>
+									<Image
+										style={{ width: 100, height: 100, borderRadius: 20 }}
+										source={{ uri: item.images[0] }}
+									></Image>
+									<View 
+									style={{
+										marginLeft: 30,
+									}}
+									>
+										<Text
+											style={{
+												fontWeight: "500",
+												fontSize: 17,
+											}}
+										>
+											{item.name}
+										</Text>
+										<Text
+											style={{
+												color: "#0485E8",
+												fontWeight: "500",
+												fontSize: 15,
+												marginTop: 5,
+											}}
+										>
+											₦{item.price}
+										</Text>
+										<Text
+											style={{
+												fontWeight: "500",
+												fontSize: 15,
+											}}
+										>
+											QTY:{item.quantity.instock}
+										</Text>
+									</View>
+								</View>
+							))}
 
-					<View style={{ marginBottom: 30, paddingLeft: 30 }}>
-						<Image
-							style={styles.orderpic}
-							source={require("../../../assets/orderpic.png")}
-						></Image>
-						<Text
-							style={{
-								marginHorizontal: 125,
-								marginTop: -95,
-								fontWeight: "500",
-								fontSize: 17,
-							}}
-						>
-							HD SLR Camera
-						</Text>
-						<Text
-							style={{
-								color: "#0485E8",
-								marginHorizontal: 125,
-								fontWeight: "500",
-								fontSize: 15,
-								marginTop: 5,
-							}}
-						>
-							N20,000
-						</Text>
-						<Text
-							style={{
-								marginHorizontal: 125,
-								fontWeight: "500",
-								fontSize: 15,
-								marginTop: 5,
-							}}
-						>
-							QTY:2
-						</Text>
+						<View style={{ marginTop: 70 }} />
 					</View>
-
-					<View style={{ marginBottom: 30, paddingLeft: 30 }}>
-						<Image
-							style={styles.orderpic}
-							source={require("../../../assets/orderpic.png")}
-						></Image>
-						<Text
-							style={{
-								marginHorizontal: 125,
-								marginTop: -95,
-								fontWeight: "500",
-								fontSize: 17,
-							}}
-						>
-							HD SLR Camera
-						</Text>
-						<Text
-							style={{
-								color: "#0485E8",
-								marginHorizontal: 125,
-								fontWeight: "500",
-								fontSize: 15,
-								marginTop: 5,
-							}}
-						>
-							N20,000
-						</Text>
-						<Text
-							style={{
-								marginHorizontal: 125,
-								fontWeight: "500",
-								fontSize: 15,
-								marginTop: 5,
-							}}
-						>
-							QTY:2
-						</Text>
-					</View>
-
-					<View style={{ marginBottom: 30, paddingLeft: 30 }}>
-						<Image
-							style={styles.orderpic}
-							source={require("../../../assets/orderpic.png")}
-						></Image>
-						<Text
-							style={{
-								marginHorizontal: 125,
-								marginTop: -95,
-								fontWeight: "500",
-								fontSize: 17,
-							}}
-						>
-							HD SLR Camera
-						</Text>
-						<Text
-							style={{
-								color: "#0485E8",
-								marginHorizontal: 125,
-								fontWeight: "500",
-								fontSize: 15,
-								marginTop: 5,
-							}}
-						>
-							N20,000
-						</Text>
-						<Text
-							style={{
-								marginHorizontal: 125,
-								fontWeight: "500",
-								fontSize: 15,
-								marginTop: 5,
-							}}
-						>
-							QTY:2
-						</Text>
-					</View>
-
-					<View style={{ marginTop: 70 }} />
 				</ScrollView>
 			)}
 		</View>
@@ -493,56 +484,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFF",
 		flex: 1,
 	},
-	// row: {
-	// 	display: "flex",
-	// 	flexDirection: "row",
-	// 	marginTop: 20,
-	// },
-	// row3: {
-	// 	display: "flex",
-	// 	flexDirection: "row",
-	// 	marginTop: 20,
-	// 	flex: 1,
-	// 	// backgroundColor: 'red',
-	// 	// rowGap: 10,
-	// 	justifyContent: "center",
-	// 	alignItems: "center",
-	// },
-	// row2: {
-	// 	display: "flex",
-	// 	flexDirection: "row",
-	// 	marginTop: 30,
-	// },
-	// stretch: {
-	// 	width: 50,
-	// 	height: 50,
-	// 	marginHorizontal: 10,
-
-	// 	borderRadius: 50,
-	// },
-	// location: {
-	// 	fontSize: 12,
-	// 	fontWeight: "400",
-	// 	color: "#98999A",
-	// 	marginHorizontal: 5,
-	// },
-	// central: {
-	// 	fontSize: 16,
-	// 	fontWeight: "500",
-	// 	color: "#0B0B0E",
-	// 	marginHorizontal: 5,
-	// },
-	// shift: {
-	// 	marginLeft: 120,
-	// 	marginTop: 0,
-	// },
-	// orderpic: {
-	// 	width: 102,
-	// 	height: 102,
-	// 	marginHorizontal: 10,
-	// 	marginTop: 15,
-	// 	borderRadius: 10,
-	// },
 });
 
 export default ShopPage;

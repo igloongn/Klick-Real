@@ -21,7 +21,7 @@
     "orientation": "portrait",
     "plugins": [],
     "sdkVersion": "48.0.0",
-    "slug": "n",
+    "slug": "klick",
     "splash": {
       "backgroundColor": "#ffffff",
       "image": "./assets/splash.png",
@@ -34,10 +34,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "af78537c-b690-48b6-8661-07b4b3c7f34c"
+        "projectId": "3b43951a-0d6b-449c-864d-1db7ec42de53"
       }
     },
-    "owner": "igloop"
+    "owner": "henryrichie"
   },
   "name": "klick2"
 }

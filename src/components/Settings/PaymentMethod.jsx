@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+	Text,
+	View,
+	StyleSheet,
+	Image,
+	TouchableOpacity,
+	Linking,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import GeneralButton from "../General/GeneralButton";
@@ -39,12 +46,17 @@ const SettingsTiles = ({ name, route, navigation }) => {
 const PaymentMethod = ({ navigation, route }) => {
 	const [storeId, setStoreId] = useState(null);
 	const { addressPayload, sellerData, shippingCharge, subTotal } = route.params;
-	// 	{
-	//     "shipping_method" : "ksecure",
-	//     "storeId": "f0b4d892-c911-49fa-a161-55d48e494ee7",
-	//     "option": "CARD",  // or KCREDIT
-	//     "service": "FLUTTERWAVE"  // or SEERBIT
-	// }
+
+	const handleExternalLink = async (url) => {
+		const supported = await Linking.canOpenURL(url);
+
+		if (supported) {
+			await Linking.openURL(url);
+		} else {
+			console.log(`Don't know how to open URL: ${url}`);
+		}
+	};
+
 	useEffect(() => {
 		AsyncStorage.getItem("token").then((token) => {
 			console.log(token);
@@ -72,7 +84,8 @@ const PaymentMethod = ({ navigation, route }) => {
 					option: "CARD",
 					service: "FLUTTERWAVE",
 				};
-				console.log(payload)
+				console.log("payload");
+				console.log(payload);
 				axios
 					.post(
 						"https://klick-api.onrender.com/order/",
@@ -89,8 +102,11 @@ const PaymentMethod = ({ navigation, route }) => {
 						}
 					)
 					.then((res) => {
-						console.log('res.data');
-						console.log(res.data);
+						// console.log('res.data');
+						// console.log(res.data.data);
+						if (res.data.success === true) {
+							handleExternalLink(res.data.data.paymentLink);
+						}
 					})
 					.catch((err) => {
 						console.log(err);

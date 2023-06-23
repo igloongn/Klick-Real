@@ -138,19 +138,25 @@ const HomeContent = ({ navigation }) => {
 
 	// Smart Search
 	const performSearch = (query) => {
-		// Perform your search logic here
-		// This can involve fetching data from an API or filtering an existing dataset
-		// Update the searchResults state with the filtered or fetched results
-		const filteredResults = productData.filter(
-			(item) => item.name.toLowerCase().includes(search.toLowerCase())
-			// item.name.toLowerCase().includes(search)
-		);
-		console.log("Search Result");
-		console.log("Search Result");
-		console.log("Search Result");
-		console.log(filteredResults.length);
+		// // Perform your search logic here
+		// // This can involve fetching data from an API or filtering an existing dataset
+		// // Update the searchResults state with the filtered or fetched results
+		// const filteredResults = productData.filter(
+		// 	(item) => item.name.toLowerCase().includes(search.toLowerCase())
+		// 	// item.name.toLowerCase().includes(search)
+		// );
+		// console.log("Search Result");
+		// console.log("Search Result");
+		// console.log("Search Result");
+		// console.log(filteredResults.length);
+		// setSearchResults(filteredResults);
 
-		setSearchResults(filteredResults);
+		axios.get(`https://klick-api.onrender.com/product/?q=${query}`).then((res) => {
+			setSearchResults(res.data.data.products);
+			
+		}).catch((err) => {
+			
+		});
 	};
 
 	const handleSearchInput = (text) => {
@@ -208,19 +214,19 @@ const HomeContent = ({ navigation }) => {
 						AsyncStorage.getItem("cart").then((data) => {
 							const JSON_data = JSON.parse(data);
 							console.log("!!!!!!!!!!!!!Cart Data From AsyncStorage!!!!!!!!!!");
-							console.log(JSON_data.items);
-							console.log(JSON_data.items);
-							console.log(Object.keys(JSON_data.items).length);
+							// console.log(JSON_data.items);
+							// console.log(JSON_data.items);
+							// console.log(Object.keys(JSON_data.items).length);
 							setcartCount(Object.keys(JSON_data.items).length);
-							console.log("!!!!!!!!!!!!Cart ID!!!!!!!!!!!!!");
-							console.log(userdata.data.user.Cart.id);
+							// console.log("!!!!!!!!!!!!Cart ID!!!!!!!!!!!!!");
+							// console.log(userdata.data.user.Cart.id);
 
 							const payload = {
 								items: JSON_data.items,
 							};
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+							// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+							// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+							// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 							console.log(payload);
 
 							axios

@@ -159,7 +159,8 @@ export default function MainNav() {
 			/>
 			<Stack.Screen name="specialoffer" component={SpecialOffer} />
 			<Stack.Screen name="shoppage" component={ShopPage} options={{
-				title: 'Shop Page'
+				title: 'Shop Page',
+				// headerShown: false
 			}} />
 			<Stack.Screen
 				name="productdetails"
