@@ -31,6 +31,7 @@ import { useGetLogginedUser } from "../../utils/apiHooks";
 import { Entypo } from "@expo/vector-icons";
 import MyModal from "../../utils/MyModal";
 import { SafeAreaView } from "react-native";
+import { RefreshControl } from "react-native";
 
 const Item = ({ title, navigation, onPress, item }) => (
 	<>
@@ -167,6 +168,7 @@ const SellerKSocialContent = ({ navigation }) => {
 	const { user, Loading, isErorr, getUserData } = useGetLogginedUser();
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
 		getAllData();
@@ -252,7 +254,7 @@ const SellerKSocialContent = ({ navigation }) => {
 		});
 		formdata.append("post_type", "status");
 		formdata.append("caption", "");
-		console.log("--form", formdata.parts);
+		console.log("--form", formdata._parts);
 
 		try {
 			const token = await AsyncStorage.getItem("token");
@@ -260,6 +262,8 @@ const SellerKSocialContent = ({ navigation }) => {
 
 			// console.log(data)
 			const storeID = await AsyncStorage.getItem("StoreData");
+			console.log(storeID);
+			console.log(storeID);
 			const response = await fetch(
 				`https://klick-api.onrender.com/post/?storeId=${storeID}`,
 				{
@@ -272,6 +276,7 @@ const SellerKSocialContent = ({ navigation }) => {
 					body: formdata,
 				}
 			);
+			console.log(response?.status);
 			if (response?.status >= 200 && response?.status < 203) {
 				const _data = await response.json();
 				console.log("y----", _data);
@@ -281,7 +286,7 @@ const SellerKSocialContent = ({ navigation }) => {
 				// 	navigation.navigate("sellerksocialcontent");
 				// }, 2000);
 			} else {
-				throw Error("statsuc code not 200");
+				throw Error("status code not 200");
 			}
 		} catch (error) {
 			// Handle network or other errors
@@ -292,7 +297,12 @@ const SellerKSocialContent = ({ navigation }) => {
 			// setIsLoading(false);
 		}
 	};
-
+	// On Refresh event
+	const onRefresh = () => {
+		// Perform your refresh logic here
+		console.log("Refresh");
+		getAllData();
+	};
 	console.log(showGallery);
 
 	return (
@@ -344,7 +354,12 @@ const SellerKSocialContent = ({ navigation }) => {
 			)}
 			{
 				<View>
-					<ScrollView style={styles.scrollView}>
+					<ScrollView
+						style={styles.scrollView}
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+						}
+					>
 						<FlatList
 							style={{ marginTop: 20 }}
 							data={postData}

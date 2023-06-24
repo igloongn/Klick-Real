@@ -73,13 +73,7 @@ const SellerAddAddress = ({ navigation, prevStage, nextStage }) => {
 						value={address}
 						onChangeValue={(text) => setAddress(text)}
 					/>
-					<GeneralInput
-						placeholder={"e.g Lagos"}
-						name="State"
-						width={335}
-						value={state}
-						onChangeValue={(text) => setState(text)}
-					/>
+
 					<GeneralInput
 						placeholder={"e.g Ikeja"}
 						name="City"
@@ -87,7 +81,13 @@ const SellerAddAddress = ({ navigation, prevStage, nextStage }) => {
 						value={city}
 						onChangeValue={(text) => setCity(text)}
 					/>
-
+					<GeneralInput
+						placeholder={"e.g Lagos"}
+						name="State"
+						width={335}
+						value={state}
+						onChangeValue={(text) => setState(text)}
+					/>
 					<View
 						style={{
 							display: "flex",

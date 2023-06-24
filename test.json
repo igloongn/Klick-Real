@@ -1,5 +1,18 @@
-{
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFmYzE2MzIwLTg3M2QtNDdhMC04ZDliLWY4MDk5NjVjMTJkZiIsImZ1bGxOYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImRvbm92YW4ud3lldGhAZml4ZWRmb3IuY29tIiwicm9sZSI6Imd1ZXN0IiwiaXNBY3RpdmF0ZWQiOmZhbHNlLCJ2ZW5kb3JNb2RlIjpmYWxzZSwid2Vic2l0ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCIsImp0aSI6IjQzMzg1MzIyLWQzMTUtNDUzYi05NjZkLTAyMjYyY2IzM2UyZCIsImlhdCI6MTY4NzUwMTYwMSwiZXhwIjoxNjg3NTczNjAxfQ.5BONap6Sqp53hzkvZQNCERdhDfKm7DBJO25csF4PEZE",
-    "message": "User not verified, verification code sent successfully",
-    "success": true
-}
+[
+    [
+        "files",
+        {
+            "name": "20230424_060917.jpg",
+            "type": "image/jpg",
+            "uri": "file:///storage/emulated/0/Pictures/Twitter/20230424_060917.jpg"
+        }
+    ],
+    [
+        "post_type",
+        "status"
+    ],
+    [
+        "caption",
+        ""
+    ]
+]

@@ -87,7 +87,7 @@ const Login = ({ navigation }) => {
 			email: email.trim(),
 			password,
 		};
-		// console.log(payload);
+		console.log(payload);
 		setLoading(true);
 		setFailedModalVisible(false);
 
@@ -105,7 +105,7 @@ const Login = ({ navigation }) => {
 				setSuccessModalVisible(true);
 				setTimeout(() => {
 					navigation.navigate("hometab");
-				}, 2000);
+				}, 1500);
 				setLoading(false);
 			})
 			.catch((error) => {
@@ -127,18 +127,12 @@ const Login = ({ navigation }) => {
 							})
 						);
 						console.log(error.response.data.access_token);
-						// navigation.navigate({
-						// 	name: "verify",
-						// 	params: {
-						// 		token: error.response.data.access_token,
-						// 		email,
-						// 	},
-						// });
 						setVerifyVisible(true);
 					}
 
 					if (error.response.status === 400) {
-						console.log("Error response status:", error.response.status);
+						console.log("Error response status 400:", error.response.status);
+						// console.log(object)
 						setFailedModalVisible(true);
 					}
 				} else {

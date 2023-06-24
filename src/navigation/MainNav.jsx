@@ -102,7 +102,7 @@ export default function MainNav() {
 				component={AddAddress}
 				options={{
 					headerStyle: { elevation: 0 },
-					title: "Add Address",
+					title: "Add Delivery Address",
 				}}
 			/>
 			<Stack.Screen

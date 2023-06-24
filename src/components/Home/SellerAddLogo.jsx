@@ -100,7 +100,7 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 						to easily discover you and connect with you.
 					</Text>
 
-					<View
+					{/* <View
 						style={{
 							display: "flex",
 							flexDirection: "row",
@@ -124,7 +124,7 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 								</Text>
 							)}
 						</TouchableOpacity>
-					</View>
+					</View> */}
 					{/* <GeneralInput placeholder={""} name="Business Logo" width={335} value={file} onChangeValue={text => setFile(text)} /> */}
 					<View
 						style={{
@@ -178,8 +178,8 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 										borderRadius: 80,
 										marginTop: 25,
 										// borderWidth: 1,
-										alignItems: 'center',
-										justifyContent: 'center',
+										alignItems: "center",
+										justifyContent: "center",
 									}}
 								>
 									<ActivityIndicator />
@@ -193,10 +193,13 @@ const SellerAddLogo = ({ navigation, prevStage, nextStage, loading }) => {
 				<View
 					style={{
 						backgroundColor: "grey",
-						postion: "absolute",
+						// position: "absolute",
+						position: "absolute",
+
 						marginTop: 200,
-						bottom: Dimensions.get("screen").height / 0.9,
-						height: Dimensions.get("screen").height,
+						// bottom: Dimensions.get("screen").height/ 1.3,
+						height: Dimensions.get("screen").height / 1.3,
+						// height: Dimensions.get("screen").height,
 						width: Dimensions.get("screen").width,
 					}}
 				>

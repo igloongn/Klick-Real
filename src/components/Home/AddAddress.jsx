@@ -61,7 +61,12 @@ const AddAddress = ({ navigation, route }) => {
 		// }
 		try {
 			setLoading(true);
-			if (address !== null && city !== null && state !== null && country !== null) {
+			if (
+				address.length !== null &&
+				city.length !== null &&
+				state.length !== null &&
+				country.length !== null
+			) {
 				const payload = {
 					address,
 					city,
@@ -75,27 +80,29 @@ const AddAddress = ({ navigation, route }) => {
 				console.log(payload);
 
 				const token = await AsyncStorage.getItem("token");
+				console.log(token);
 				const postAddress = await axios.post(
 					"https://klick-api.onrender.com/address/",
+					payload,
 					{
 						headers: { Authorization: "Bearer " + token },
 					}
 				);
 				console.log(postAddress.data);
-                
-                setLoading(false);
+
+				setLoading(false);
 				setSuccessModalVisible(true);
-                navigation.navigate('hometab')
+				navigation.navigate("hometab");
+			} else {
+				setFillAllFields(true);
+				setLoading(false);
 			}
-            else{
-                setFillAllFields(true)
-                setLoading(false);
-            }
 		} catch (error) {
 			// Handle network or other errors
 			console.log("This is the Error that occurred");
 			console.log(error);
 			setFailedModalVisible(true);
+			setLoading(false);
 		}
 	};
 
@@ -119,7 +126,7 @@ const AddAddress = ({ navigation, route }) => {
 							color: "#0B0B0E",
 						}}
 					>
-						Complete the Registration
+						Add Delivery Address
 					</Text>
 					<Text
 						style={{
@@ -157,7 +164,7 @@ const AddAddress = ({ navigation, route }) => {
 							<Text style={styles.text}>{"Phone number"}</Text>
 						</View>
 						<View style={styles.inputContainer}>
-							<Text style={styles.prefix}>+234</Text>
+							{/* <Text style={styles.prefix}>+234</Text> */}
 							<TextInput
 								placeholder={"e.g 9062056518 (whatsapp no.)"}
 								style={styles.input}
@@ -168,6 +175,14 @@ const AddAddress = ({ navigation, route }) => {
 							/>
 						</View>
 					</View>
+					{/* <GeneralInput
+						placeholder={"Phone Number"}
+						name="Phone number"
+						width={335}
+						value={phone}
+						// onChangeValue={(text) => setCountry(text)}
+						// inputMode="email"
+					/> */}
 
 					<GeneralInput
 						placeholder={"Nigeria"}

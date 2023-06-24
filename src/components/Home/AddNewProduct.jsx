@@ -42,17 +42,21 @@ const AddNewProduct = ({ navigation }) => {
 	const [instock, setInStock] = useState("");
 	const [type, setType] = useState("");
 	const [colors, setColors] = useState("");
-	// const [shipCategoryId, setShipCategoryId] = useState("")
 	const [weight, setWeight] = useState("");
 	const [length, setLength] = useState("");
 	const [width, setWidth] = useState("");
 	const [height, setHeight] = useState("");
-	const [shipCategory, setShipCategory] = useState("");
 	const [Category, setCategory] = useState("");
 
 	// From Mufasa
-	const [myStoreCat, setMyStoreCat] = useState(null);
-	const [shippingCat, setShippingCat] = useState(null);
+	// const [myStoreCat, setMyStoreCat] = useState(null);
+	// const [shippingCategoryId, setShippingCategoryId] = useState("");
+	// const [shippingCategory, setShippingCategory] = useState("");
+	// const [localCategory, setLocalCategory] = useState("");
+	const [listLocalCategory, setListLocalCategory] = useState(null);
+	const [listShippingCategory, setListShippingCategory] = useState(null);
+	const [localCategory, setLocalCategory] = useState(null);
+	const [shippingCategory, setShippingCategory] = useState(null);
 	const [user, setUser] = useState(null);
 
 	const [listofCat, setListofCat] = useState([]);
@@ -72,15 +76,16 @@ const AddNewProduct = ({ navigation }) => {
 	}, []);
 
 	useEffect(() => {
-		fetch(`${base_url}category/getAll`)
-			.then((res) => res.json())
-			.then((data) => {
-				setListofCat(data?.data);
-				// console.log(data?.data)
-			})
-			.catch((err) => console.log(err));
+		// fetch(`${base_url}category/getAll`)
+		// 	.then((res) => res.json())
+		// 	.then((data) => {
+		// 		setListofCat(data?.data);
+		// 		// console.log(data?.data)
+		// 	})
+		// 	.catch((err) => console.log(err));
 
 		AsyncStorage.getItem("token").then((token) => {
+			console.log(token);
 			axios
 				.get("https://klick-api.onrender.com/auth/user", {
 					headers: {
@@ -93,45 +98,59 @@ const AddNewProduct = ({ navigation }) => {
 					const userData = user.data;
 					console.log("!!!!!!!!!user data!!!!!!!!!");
 					console.log(userData.stores[0].id);
-					
+
 					setUser(userData);
+					// axios
+					// 	.get(
+					// 		`https://klick-api.onrender.com/brand/${userData.stores[0].id}`
+					// 	)
+					// 	.then((res) => {
+					// 		console.error("res.data.data.industry");
+					// 		console.log(res.data.data.industry);
+					// 		// axios
+					// 		// 	.get(
+					// 		// 		`https://klick-api.onrender.com/category/${res.data.data.industry}`
+					// 		// 	)
+					// 		// 	.then((res) => {
+					// 		// 		console.log("!!!!!!!!!Store Details!!!!!!!!!");
+					// 		// 		// console.log(res.data.data.name)
+					// 		// 		console.log(res.data.data);
+					// 		// 		setMyStoreCat(res.data.data);
+					// 		// 	});
+					// 	});
 					axios
-						.get(
-							`https://klick-api.onrender.com/brand/${userData.stores[0].id}`
-							)
-							.then((res) => {
-							console.log(res.data.data.industry);
-							axios
-								.get(
-									`https://klick-api.onrender.com/category/${res.data.data.industry}`
-								)
-								.then((res) => {
-									console.log("!!!!!!!!!Store Details!!!!!!!!!");
-									// console.log(res.data.data.name)
-									console.log(res.data.data);
-									setMyStoreCat(res.data.data);
-								});
-						});
+						.get("https://klick-api.onrender.com/product/shipping/category")
+						.then((res) => {
+							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
+							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
+							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
+							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
+							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
+							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
+							// console.log(res.data.data);
+							setListShippingCategory(res.data.data);
+						})
+						.catch((err) => {});
 					axios
 						// .get("https://klick-api.onrender.com/product/shipping/category")
 						.get("https://klick-api.onrender.com/category/getAll")
 						.then((res) => {
-							// console.log("!!!!!!!!!Shipping Categories!!!!!!!");
+							// console.log("!!!!!!!!!Local Category!!!!!!!");
+							// console.log("!!!!!!!!!Local Category!!!!!!!");
+							// console.log("!!!!!!!!!Local Category!!!!!!!");
+							// console.log("!!!!!!!!!Local Category!!!!!!!");
 							// console.log(res.data.data);
-							setShippingCat(res.data.data);
+							setListLocalCategory(res.data.data);
 						});
 				});
 		});
-	}, []);
-
-	useEffect(() => {
-		fetch(`${base_url}product/shipping/category`)
-			.then((res) => res.json())
-			.then((data) => {
-				setsheepListofCat(data?.data);
-				// console.log(data?.data)
-			})
-			.catch((err) => console.log(err));
+		// fetch(`${base_url}product/shipping/category`)
+		// 	.then((res) => res.json())
+		// 	.then((data) => {
+		// 		setsheepListofCat(data?.data);
+		// 		// console.log(data?.data)
+		// 	})
+		// 	.catch((err) => console.log(err));
 	}, []);
 
 	const data = useMemo(
@@ -155,53 +174,12 @@ const AddNewProduct = ({ navigation }) => {
 		return output[0] ? output[0]?.id : "";
 	}, [Category, listofCat]);
 
-	const shipCategoryId = useMemo(() => {
-		const output = sheeplistofCat?.filter(
-			(item) => item?.category === shipCategory
-		);
-		return output[0] ? output[0]?.category_id : "";
-	}, [shipCategory, sheeplistofCat]);
-
-	// const pickImage = async () => {
-	//   try {
-	//     const result = await DocumentPicker.getDocumentAsync({
-	//       type: 'image/*',
-	//       copyToCacheDirectory: false,
-	//     });
-
-	//     if (result.type === 'success') {
-	//       setImages(result.uri);
-	//     }
-	//   } catch (err) {
-	//     console.log(err);
-	//   }
-	// };
-
-	// const pickImages = async () => {
-	//   // no permission request is necessary for launching the library
-
-	//   setIsLoading(true);
-	//   let result = await ImagePicker.launchImageLibraryAsync({
-	//     mediaTypes: ImagePicker.MediaTypeOptions.All,
-	//     allowsEditing: true,
-	//     allowsMultipleSelection:true,
-	//     selectionLimit:10,
-	//     aspect:[4, 3],
-	//     quality:1,
-	//     base64:true,
-	//   })
-	//   setIsLoading(false);
-	//   console.log(result);
-	//   if(!result.canceled){
-	//     // setImages(result.uri ? [result.uri] : result.selected)
-	//     setImages(result.assets)
-	//   }
-
-	// }
-
-	// if (hasGalleryPermission === false){
-	//   return <Text>No access </Text>
-	// }
+	// const shipCategoryId = useMemo(() => {
+	// 	const output = sheeplistofCat?.filter(
+	// 		(item) => item?.category === shipCategory
+	// 	);
+	// 	return output[0] ? output[0]?.category_id : "";
+	// }, [shipCategory, sheeplistofCat]);
 
 	const submit = async () => {
 		if (
@@ -214,7 +192,8 @@ const AddNewProduct = ({ navigation }) => {
 			colors.length !== 0 &&
 			weight.length !== 0 &&
 			length.length !== 0 &&
-			shipCategory.length !== 0
+			images.length !== 0
+			// shipCategory.length !== 0
 			// Category.length !== 0
 		) {
 			// let photo = { uri: source.uri}
@@ -228,12 +207,15 @@ const AddNewProduct = ({ navigation }) => {
 			formdata.append("quantity[instock]", instock.trim());
 			formdata.append("specifications[type]", type.trim());
 			formdata.append("specifications[colors]", colors.trim());
-			formdata.append("specifications[shippingcategory_id]", shipCategoryId);
+			formdata.append(
+				"specifications[shippingcategory_id]",
+				shippingCategory.category_id
+			);
 			formdata.append("specifications[weight]", weight.trim());
 			formdata.append("specifications[dimensions][length]", length.trim());
 			formdata.append("specifications[dimensions][height]", height.trim());
 			formdata.append("specifications[dimensions][width]", width.trim());
-			formdata.append("shippingcategory", shipCategory);
+			formdata.append("shippingcategory", shippingCategory.category);
 			images.forEach((element) => {
 				formdata.append("images", {
 					uri: element.uri,
@@ -252,14 +234,16 @@ const AddNewProduct = ({ navigation }) => {
 				instock,
 				type,
 				colors,
-				shipCategoryId,
+				// shipCategoryId,
 				weight,
 				length,
 				width,
 				height,
-				shipCategory,
+				// shipCategory,
 				images,
-				selectCatId,
+				// selectCatId,
+				shippingCategory,
+				localCategory,
 			});
 
 			console.log("formd-23r6", formdata);
@@ -272,12 +256,12 @@ const AddNewProduct = ({ navigation }) => {
 				const token = await AsyncStorage.getItem("token");
 				console.log("tok-1", token);
 				// console.log(myStoreCat);
-				console.log('!!!!!!!!!!!!!!Create!!!!!!!!!!!');
+				console.log("!!!!!!!!!!!!!!Create!!!!!!!!!!!");
 				// console.log(myStoreCat);
-				console.log(shipCategory);
+				console.log(localCategory);
 				console.log(user.stores[0].id);
-				const url = `https://klick-api.onrender.com/product/?category=${shipCategory}&storeId=${user.stores[0].id}`;
-				console.log(url)
+				const url = `https://klick-api.onrender.com/product/?category=${localCategory}&storeId=${user.stores[0].id}`;
+				console.log(url);
 				// const response = await fetch("https://klick-api.onrender.com/product/?category=039c6ea9-45d7-493f-beb1-fd74fb40399d", {
 				const response = await fetch(url, {
 					method: "POST",
@@ -308,7 +292,7 @@ const AddNewProduct = ({ navigation }) => {
 				// Alert.alert("Success", "Product added");
 				setSuccessModalVisible(true);
 				setTimeout(() => {
-					navigation.navigate('sellerstab')
+					navigation.navigate("sellerstab");
 				}, 2000);
 			} catch (error) {
 				// Handle network or other errors
@@ -330,11 +314,11 @@ const AddNewProduct = ({ navigation }) => {
 				<View
 					style={
 						{
-							// backgroundColor: "red",
 							// display: "flex",
 							// flexDirection: "column",
 							// justifyContent: "center",
 							// alignItems: "center",
+							// backgroundColor: "red",
 						}
 					}
 				>
@@ -344,7 +328,11 @@ const AddNewProduct = ({ navigation }) => {
 							display: "flex",
 							flexDirection: "column",
 							justifyContent: "center",
-							alignItems: "center",
+							alignItems: "flex-start",
+							// alignItems: "center",
+							// backgroundColor: "red",
+							// paddingLeft: 30,
+							// backgroundColor: "blue",
 						}}
 					>
 						{/* <Text style={{fontWeight:"400", fontSize:14, color:"#6A6B6C",}}>Create an account so you can start selling on Klick.</Text> */}
@@ -433,25 +421,8 @@ const AddNewProduct = ({ navigation }) => {
 							onChangeValue={(text) => setHeight(text)}
 							mode={"numeric"}
 						/>
-						{/* {myStoreCat && (
-							<View style={{ marginTop: 20, width: 335 }}>
-								<Text
-									style={{
-										fontSize: 13,
-										marginBottom: 10,
-										fontWeight: "500",
-										fontSize: 16,
-									}}
-								>
-									Category
-								</Text>
-								<View>
-									<TextInput value={myStoreCat.id} editable={false} style />
-								</View>
-							</View>
-						)} */}
 
-						{shippingCat && (
+						{listLocalCategory && (
 							<View style={{ marginTop: 20, width: 335 }}>
 								<Text
 									style={{
@@ -465,36 +436,74 @@ const AddNewProduct = ({ navigation }) => {
 								</Text>
 
 								<Picker
-									selectedValue={shipCategory}
-									onValueChange={(itemValue, itemIndex) =>
-										setShipCategory(itemValue)
-									}
+									selectedValue={localCategory}
+									onValueChange={(itemValue, itemIndex) => {
+										setLocalCategory(itemValue);
+										// console.log(itemValue);
+									}}
 								>
-									{shippingCat.map((item, index) => (
+									{listLocalCategory.map((item, index) => (
 										<Picker.Item label={item.name} value={item.id} />
 									))}
 								</Picker>
 							</View>
 						)}
 
-						<View>
+						{listShippingCategory && (
+							<View style={{ marginTop: 20, width: 335 }}>
+								<Text
+									style={{
+										fontSize: 13,
+										marginBottom: 10,
+										fontWeight: "500",
+										fontSize: 16,
+									}}
+								>
+									Shipping Category
+								</Text>
+
+								<Picker
+									selectedValue={shippingCategory}
+									onValueChange={(itemValue, itemIndex) =>
+										setShippingCategory(itemValue)
+									}
+								>
+									{listShippingCategory.map((item, index) => (
+										<Picker.Item label={item.category} value={item} />
+									))}
+								</Picker>
+							</View>
+						)}
+
+						<View style={{ alignItems: "center" }}>
 							<TouchableOpacity
 								style={{
-									height: 100,
+									height: 200,
 									marginTop: 15,
 									width: 335,
-									marginHorizontal: 40,
 									borderWidth: 1,
 									backgroundColor: "white",
 									borderColor: "gray",
 									borderStyle: "dashed",
+									borderRadius: 50,
 								}}
 								title="pick Images"
 								onPress={() => setShowGallery(true)}
 							>
-								<Text style={{ marginLeft: 120, marginTop: 40 }}>
-									Select Images
-								</Text>
+								{images && images.length > 0 ? (
+									<Image
+										style={{
+											width: 335,
+											height: 200,
+											borderRadius: 50,
+										}}
+										source={{ uri: images[0]?.uri }}
+									/>
+								) : (
+									<Text style={{ marginLeft: 120, marginTop: 40 }}>
+										Select Images
+									</Text>
+								)}
 							</TouchableOpacity>
 						</View>
 
@@ -519,12 +528,13 @@ const AddNewProduct = ({ navigation }) => {
 			{showGallery && (
 				<View
 					style={{
-						position: "relative",
-						top: 12,
-						height: "100%",
-						// height: Dimensions.get("screen").height,
+						position: "absolute",
+						// top: 12,
+						// height: "100%",
+						height: Dimensions.get("screen").height / 1.3,
 						width: Dimensions.get("screen").width,
 						backgroundColor: "grey",
+						// backgroundColor: "red",
 					}}
 				>
 					<ImagePicker

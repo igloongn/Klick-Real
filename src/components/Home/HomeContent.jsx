@@ -110,6 +110,7 @@ const HomeContent = ({ navigation }) => {
 	const [category, setCategory] = useState(null);
 	const [refreshing, setRefreshing] = useState(false);
 	const [stores, setStores] = useState(null);
+	const [defaultAddress, setDefaultAddress] = useState(true);
 
 	AsyncStorage.getItem("cart").then((cart) => {
 		if (!cart) {
@@ -151,12 +152,12 @@ const HomeContent = ({ navigation }) => {
 		// console.log(filteredResults.length);
 		// setSearchResults(filteredResults);
 
-		axios.get(`https://klick-api.onrender.com/product/?q=${query}`).then((res) => {
-			setSearchResults(res.data.data.products);
-			
-		}).catch((err) => {
-			
-		});
+		axios
+			.get(`https://klick-api.onrender.com/product/?q=${query}`)
+			.then((res) => {
+				setSearchResults(res.data.data.products);
+			})
+			.catch((err) => {});
 	};
 
 	const handleSearchInput = (text) => {
@@ -194,6 +195,27 @@ const HomeContent = ({ navigation }) => {
 			AsyncStorage.getItem("token").then((token) => {
 				console.log("!!!!!!!!!!TOKEN!!!!!!!!");
 				console.log(token);
+				// Address Check
+				axios
+					.get("https://klick-api.onrender.com/auth/user", {
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					})
+					.then((userData) => {
+						setcartCount(Object.keys(userData.data.user.Cart.items).length);
+						const isEmptyObject = (obj) => {
+							return Object.keys(obj).length === 0;
+						};
+						isEmptyObject(userData.data.DefaultAddress);
+						// console.log(isEmptyObject(userData.data.DefaultAddress));
+						if (isEmptyObject(userData.data.DefaultAddress) === true) {
+							setDefaultAddress(false);
+						}
+					})
+					.catch((err) => {
+						console.log(err);
+					});
 				axios
 					.get("https://klick-api.onrender.com/auth/user", {
 						headers: {
@@ -264,28 +286,6 @@ const HomeContent = ({ navigation }) => {
 								});
 							})
 							.catch((err) => {});
-
-						// Address Check
-						axios
-							.get("https://klick-api.onrender.com/auth/user", {
-								headers: {
-									Authorization: "Bearer " + token,
-								},
-							})
-							.then((userData) => {
-								setcartCount(Object.keys(userData.data.user.Cart.items).length);
-								const isEmptyObject = (obj) => {
-									return Object.keys(obj).length === 0;
-								};
-								isEmptyObject(userData.data.DefaultAddress);
-								// console.log(isEmptyObject(userData.data.DefaultAddress));
-								if (isEmptyObject(userData.data.DefaultAddress) === true) {
-									navigation.navigate("addaddress");
-								}
-							})
-							.catch((err) => {
-								console.log(err);
-							});
 					});
 			});
 		} else {
@@ -470,7 +470,8 @@ const HomeContent = ({ navigation }) => {
 								isEmptyObject(userData.data.DefaultAddress);
 								// console.log(isEmptyObject(userData.data.DefaultAddress));
 								if (isEmptyObject(userData.data.DefaultAddress) === true) {
-									navigation.navigate("addaddress");
+									// navigation.navigate("addaddress");
+									setDefaultAddress(false);
 								}
 							})
 							.catch((err) => {
@@ -536,6 +537,23 @@ const HomeContent = ({ navigation }) => {
 					</View>
 					{isLoggedIn ? (
 						<>
+							{defaultAddress === false && (
+								<TouchableOpacity
+									style={{
+										marginRight: 20,
+										display: "flex",
+										paddingHorizontal: 20,
+										borderRadius: 10,
+										justifyContent: "center",
+										alignItems: "center",
+										backgroundColor: "#FEDD00",
+										height: 40,
+									}}
+									onPress={() => navigation.navigate("addaddress")}
+								>
+									<Text>Set Address</Text>
+								</TouchableOpacity>
+							)}
 							<View style={{ paddingRight: 10 }}>
 								<View style={styles.cart}>
 									<TouchableOpacity

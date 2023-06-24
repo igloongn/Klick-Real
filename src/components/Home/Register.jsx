@@ -32,6 +32,7 @@ const Register = ({ navigation }) => {
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
 	const [fillAllFields, setFillAllFields] = useState(false);
+	const [weirdError, setWeirdError] = useState(null);
 
 	const [inputError, setInputError] = useState({
 		phone: false,
@@ -50,6 +51,8 @@ const Register = ({ navigation }) => {
 		// Regular expression for email validation
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+		processedEmail = email.toLowerCase();
+		// return emailRegex.test(processedEmail);
 		return emailRegex.test(email);
 	};
 	validatePhone();
@@ -89,7 +92,7 @@ const Register = ({ navigation }) => {
 						Alert.alert("Please enter a valid email");
 					} else {
 						if (phone.length !== 10) {
-							Alert.alert("Please enter a valid Phone Number");
+							Alert.alert("Phone must be at least 10 digits");
 						} else {
 							try {
 								setLoading(true);
@@ -103,11 +106,12 @@ const Register = ({ navigation }) => {
 								});
 								const res_status_code = response.status;
 								const res_data = await response.json();
-
 								if (res_status_code != 201) {
-									throw new Error(res_data.message);
+									console.log(res_data.msg);
+									setWeirdError(res_data.msg);
+									setFailedModalVisible(true);
+									throw new Error(res_data.msg);
 								}
-
 								// Store the authentication token in AsyncStorage
 								// await AsyncStorage.setItem("regToken", res_data.access_token);
 
@@ -117,10 +121,27 @@ const Register = ({ navigation }) => {
 								});
 								setSuccessModalVisible(true);
 							} catch (error) {
+								console.log("User Registration Error");
+								console.log("Error data:", error.response);
+								if (error.response) {
+									console.log("Error status:", error.response.status);
+									console.log("Error data:", error.response.data.msg);
+									// setWeirdError(error.response.data.msg);
+								} else {
+									console.error(
+										"!!!!!!!!!!!!!!!!User Registration Error!!!!!!!!!"
+									);
+									console.error("Error:", error.message);
+									console.log(error); // Extract the error message
+								}
+								console.error(error);
+								if (error.message === "Network Error") {
+									console.error(error.message);
+									setWeirdError("Please Add a Picture");
+								}
 								// Handle network or other errors
-								console.log("This is the Error that occurred");
-								console.log(error);
-								setFailedModalVisible(true);
+								// console.log(error);
+								// setFailedModalVisible(true);
 							} finally {
 								setLoading(false);
 							}
@@ -283,15 +304,15 @@ const Register = ({ navigation }) => {
 			<MyModal
 				state={SuccessModalVisible}
 				setState={setSuccessModalVisible}
-				text={"Registration Successful"}
-				button={"Thank You"}
+				text={"Verify With OTP"}
+				button={"Verify"}
 				ButtonColor={"#FEDD00"}
 			/>
 			{/* Login Successful Modal */}
 			<MyModal
 				state={failedModalVisible}
 				setState={setFailedModalVisible}
-				text={"An error occured during Registration"}
+				text={weirdError}
 				button={"Try again"}
 				ButtonColor={"#EB270B"}
 			/>

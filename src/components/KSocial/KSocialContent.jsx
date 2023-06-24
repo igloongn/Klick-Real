@@ -31,6 +31,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetLogginedUser } from "../../utils/apiHooks";
 import { Entypo } from "@expo/vector-icons";
 import MyModal from "../../utils/MyModal";
+import { RefreshControl } from "react-native";
 
 const Item = ({ title, navigation, onPress, item }) => (
 	<>
@@ -167,6 +168,7 @@ const BuyerKSocial = ({ navigation }) => {
 	const { user, Loading, isErorr, getUserData } = useGetLogginedUser();
 	const [SuccessModalVisible, setSuccessModalVisible] = useState(false);
 	const [failedModalVisible, setFailedModalVisible] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
 		getAllData();
@@ -252,7 +254,7 @@ const BuyerKSocial = ({ navigation }) => {
 		});
 		formdata.append("post_type", "status");
 		formdata.append("caption", "");
-		console.log("--form", formdata.parts);
+		console.log("--formxcec", formdata);
 
 		try {
 			const token = await AsyncStorage.getItem("token");
@@ -260,6 +262,11 @@ const BuyerKSocial = ({ navigation }) => {
 
 			// console.log(data)
 			const storeID = await AsyncStorage.getItem("StoreData");
+			console.log(storeID)
+			console.log(storeID)
+			console.log(storeID)
+			console.log(storeID)
+			console.log(storeID)
 			const response = await fetch(
 				`https://klick-api.onrender.com/post/?storeId=${storeID}`,
 				{
@@ -272,6 +279,11 @@ const BuyerKSocial = ({ navigation }) => {
 					body: formdata,
 				}
 			);
+			console.log(response?.status)
+			console.log(response?.status)
+			console.log(response?.status)
+			console.log(response?.status)
+			
 			if (response?.status >= 200 && response?.status < 203) {
 				const _data = await response.json();
 				console.log("y----", _data);
@@ -291,6 +303,13 @@ const BuyerKSocial = ({ navigation }) => {
 		} finally {
 			// setIsLoading(false);
 		}
+	};
+
+	// On Refresh event
+	const onRefresh = () => {
+		// Perform your refresh logic here
+		console.log("Refresh");
+		getAllData();
 	};
 
 	console.log(showGallery);
@@ -344,7 +363,12 @@ const BuyerKSocial = ({ navigation }) => {
 			)}
 			{postData && (
 				<View>
-					<ScrollView style={styles.scrollView}>
+					<ScrollView
+						style={styles.scrollView}
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+						}
+					>
 						<FlatList
 							style={{ marginTop: 20 }}
 							data={postData}

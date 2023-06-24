@@ -228,6 +228,9 @@ const CheckOut = ({ navigation, route }) => {
 					console.log(res.data);
 					const checkoutData = res.data;
 					console.log("res.data", checkoutData);
+					console.log("https://klick-api.onrender.com/cart/" + cartID)
+					console.log("https://klick-api.onrender.com/cart/" + cartID)
+					console.log("https://klick-api.onrender.com/cart/" + cartID)
 					axios
 						.get("https://klick-api.onrender.com/cart/" + cartID)
 						.then((data) => {
