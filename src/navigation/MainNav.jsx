@@ -85,7 +85,24 @@ export default function MainNav() {
 
 	//   const authCtx = useContext(AuthContext);
 	return (
-		<Stack.Navigator screenOptions={{ headerShown: true }}>
+		// <Stack.Navigator screenOptions={{ headerShown: true }}>
+		<Stack.Navigator
+			screenOptions={{
+				animationTypeForReplace: "push",
+				cardStyleInterpolator: ({ current: { progress } }) => ({
+					cardStyle: {
+						transform: [
+							{
+								translateX: progress.interpolate({
+									inputRange: [0, 1],
+									outputRange: [500, 0],
+								}),
+							},
+						],
+					},
+				}),
+			}}
+		>
 			{/* <Stack.Screen name="auth" component={Auth}/> */}
 			{/* <Stack.Screen name="test" component={MessagingScreen} /> */}
 			<Stack.Screen
@@ -158,10 +175,14 @@ export default function MainNav() {
 				}}
 			/>
 			<Stack.Screen name="specialoffer" component={SpecialOffer} />
-			<Stack.Screen name="shoppage" component={ShopPage} options={{
-				title: 'Shop Page',
-				// headerShown: false
-			}} />
+			<Stack.Screen
+				name="shoppage"
+				component={ShopPage}
+				options={{
+					title: "Store Page",
+					// headerShown: false
+				}}
+			/>
 			<Stack.Screen
 				name="productdetails"
 				component={ProductDetails}

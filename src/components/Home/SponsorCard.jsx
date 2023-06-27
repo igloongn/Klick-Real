@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 const SponsorCard = ({ item, name, location, rate, image, navigation }) => {
-	console.log(item?.id);
+	// console.log(item?.id);
 	return (
 		<TouchableOpacity
 			style={styles.sponsoredcard}

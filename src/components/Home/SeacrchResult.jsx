@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProductCard from "./ProductCard";
+import LoadingScreen from "../../utils/MyLoading";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -24,9 +25,10 @@ const SeacrhResult = ({ route }) => {
 	const navigation = useNavigation();
 	const [store, setStore] = useState(null);
 	const [products, setProducts] = useState([]);
+	const [loading, setLoading] = useState(true);
 	const { query } = route.params;
-	console.log("!!!!!!!!!!!Query!!!!!!!!!!!!!");
-	console.log(query);
+	// console.log("!!!!!!!!!!!Query!!!!!!!!!!!!!");
+	// console.log(query);
 
 	useEffect(() => {
 		// axios.get('https://klick-api.onrender.com/product/store/product?storeId=')
@@ -47,24 +49,27 @@ const SeacrhResult = ({ route }) => {
 					// console.log("!!!!!!!!!!User Data!!!!!!!!");
 					// console.log(storeData.id);
 					axios
-						.get(`https://klick-api.onrender.com/product/`, {
+						// .get(`https://klick-api.onrender.com/product/`, {
+						.get(`https://klick-api.onrender.com/product/?q=${query}`, {
 							headers: { Authorization: `Bearer ${token}` },
 						})
 						.then((data) => {
-							console.log("!!!!!!Product Data!!!!!!!");
-							const productlist = data.data.data.products.filter(
-								(item) => item.name === query
-							);
-							console.log(productlist);
-							setProducts(productlist);
+							// console.log("!!!!!!Product Data!!!!!!!");
+							// const productlist = data.data.data.products.filter(
+							// 	(item) => item.name === query
+							// );
+							// console.log(data.data.data.products);
+							setProducts(data.data.data.products);
+							setLoading(false);
 
-							console.log("!!!!!!Product Data!!!!!!!");
+							// console.log("!!!!!!Product Data!!!!!!!");
 							// console.log(data.data.data.products.map(item=> item.name = query));
 							// setProducts(data.data.data.products.map(item=> item.name = query));
 						})
 						.catch((error) => {
 							console.log("!!!!!!!!!Axios Error!!!!!!!");
 							console.log(error);
+							setLoading(false);
 						});
 				});
 		});
@@ -80,7 +85,7 @@ const SeacrhResult = ({ route }) => {
 					width: windowWidth,
 					flexDirection: "row",
 					justifyContent: "space-around",
-					paddingVertical: 10,
+					paddingVertical: 6,
 				}}
 			>
 				<View
@@ -104,7 +109,7 @@ const SeacrhResult = ({ route }) => {
 						<Text></Text>
 					</TouchableOpacity>
 					{/* Settings */}
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						style={{
 							width: 50,
 							height: 50,
@@ -114,17 +119,65 @@ const SeacrhResult = ({ route }) => {
 						}}
 					>
 						<Text></Text>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 				</View>
-				<TouchableOpacity></TouchableOpacity>
+				{!loading && (
+					<TouchableOpacity>
+						<Text
+							style={{
+								fontSize: 16,
+								fontWeight: "bold",
+							}}
+						>
+							{query}
+						</Text>
+					</TouchableOpacity>
+				)}
 			</View>
 			{/* Body */}
-			<ScrollView>
-				{products ? (
-					products.length > 0 ? (
-						products.map((item) => (
-							<ProductCard productDetails={item} navigation={navigation} />
-						))
+			{loading ? (
+				<View
+					style={
+						{
+							// backgroundColor: "red",
+							// flex: 1,
+							// marginTop: 80,
+						}
+					}
+				>
+					<LoadingScreen word={`${query} Data Loading....`} />
+				</View>
+			) : (
+				<ScrollView>
+					{products ? (
+						products.length > 0 ? (
+							products.map((item) => (
+								<ProductCard productDetails={item} navigation={navigation} />
+							))
+						) : (
+							<View>
+								<OpenBox />
+								<Text
+									style={{
+										fontSize: 25,
+										fontWeight: 400,
+										textAlign: "center",
+									}}
+								>
+									Search Not Found
+								</Text>
+								<Text
+									style={{
+										fontSize: 16,
+										textAlign: "center",
+										color: "#6A6B6C",
+									}}
+								>
+									You’re yet to add any product to your store. Products that you
+									add will appear here
+								</Text>
+							</View>
+						)
 					) : (
 						<View>
 							<OpenBox />
@@ -148,32 +201,9 @@ const SeacrhResult = ({ route }) => {
 								add will appear here
 							</Text>
 						</View>
-					)
-				) : (
-					<View>
-						<OpenBox />
-						<Text
-							style={{
-								fontSize: 25,
-								fontWeight: 400,
-								textAlign: "center",
-							}}
-						>
-							Search Not Found
-						</Text>
-						<Text
-							style={{
-								fontSize: 16,
-								textAlign: "center",
-								color: "#6A6B6C",
-							}}
-						>
-							You’re yet to add any product to your store. Products that you add
-							will appear here
-						</Text>
-					</View>
-				)}
-			</ScrollView>
+					)}
+				</ScrollView>
+			)}
 		</View>
 	);
 };

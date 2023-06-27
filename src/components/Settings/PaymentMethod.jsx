@@ -59,7 +59,7 @@ const PaymentMethod = ({ navigation, route }) => {
 
 	useEffect(() => {
 		AsyncStorage.getItem("token").then((token) => {
-			console.log(token);
+			// console.log(token);
 			axios
 				.get("https://klick-api.onrender.com/auth/user", {
 					headers: { Authorization: "Bearer " + token },
@@ -68,7 +68,7 @@ const PaymentMethod = ({ navigation, route }) => {
 					const cartItem = data.data.user.Cart.items;
 					const conCartItem = Object.values(cartItem);
 					setStoreId(conCartItem[0].store);
-					console.log(storeId);
+					// console.log(storeId);
 				})
 				.catch((error) => console.log("Error in Get User"));
 		});
@@ -76,16 +76,16 @@ const PaymentMethod = ({ navigation, route }) => {
 	const makePayment = () => {
 		AsyncStorage.getItem("token")
 			.then((token) => {
-				console.log(sellerData);
-				console.log(storeId);
+				// console.log(sellerData);
+				// console.log(storeId);
 				const payload = {
 					shipping_method: sellerData.name,
 					storeId: storeId,
 					option: "CARD",
 					service: "FLUTTERWAVE",
 				};
-				console.log("payload");
-				console.log(payload);
+				// console.log("payload");
+				// console.log(payload);
 				axios
 					.post(
 						"https://klick-api.onrender.com/order/",

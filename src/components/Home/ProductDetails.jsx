@@ -22,6 +22,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
+import LoadingScreen from "../../utils/MyLoading";
 
 // const DATA2 = [
 // 	{
@@ -41,6 +42,7 @@ import { FontAwesome } from "@expo/vector-icons";
 const ProductDetails = ({ navigation, route }) => {
 	const [toggle, setToggle] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState(null);
 	const [count, setCount] = useState(1);
 	const [buttonText, setButtonText] = useState({
@@ -49,7 +51,7 @@ const ProductDetails = ({ navigation, route }) => {
 	});
 	const [isLoggedIn, setIsLoggedIn] = useState(null);
 	const { id } = route.params;
-	console.log(id);
+	// console.log(id);
 	const [expanded, setExpanded] = useState(false);
 
 	const toggleAccordion = () => {
@@ -63,8 +65,8 @@ const ProductDetails = ({ navigation, route }) => {
 			.then((res) => {
 				// console.log("!!!!!!!!!!Product Detail!!!!!!!!!!!");
 				// console.log(res?.data.data);
-				setData(res?.data.data);
-				// setIsLoading(true);
+				setData(res.data.data);
+				setLoading(false);
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -110,8 +112,8 @@ const ProductDetails = ({ navigation, route }) => {
 			setButtonText({ text: "Added", color: "green" });
 			// console.log(JSON_cartData);
 
-			console.log("!!!!!!!!!!!!!payload WHat will be pushed!!!!!!!!!!!");
-			console.log({ ...JSON_cartData });
+			// console.log("!!!!!!!!!!!!!payload WHat will be pushed!!!!!!!!!!!");
+			// console.log({ ...JSON_cartData });
 
 			// axios
 			// 	.put(
@@ -171,272 +173,297 @@ const ProductDetails = ({ navigation, route }) => {
 	return (
 		<View style={styles.container}>
 			<ScrollView>
-				{data && (
-					<Image
-						style={{ height: 200, width: 357, marginLeft: 20, marginTop: 20 }}
-						source={{ uri: data?.images[0] }}
-					></Image>
-				)}
-				{data && (
-					<>
-						<Text
-							style={{
-								color: "#0B0B0E",
-								fontSize: 20,
-								fontWeight: "500",
-								marginLeft: 20,
-								marginTop: 30,
-							}}
-						>
-							{data?.name}
-						</Text>
-						<Text
-							style={{
-								color: "#0B0B0E",
-								fontSize: 12,
-								fontWeight: "400",
-								marginLeft: 20,
-								marginTop: 5,
-							}}
-						>
-							{data?.rating}(1.2K reviews)
-						</Text>
-						<Text
-							style={{
-								color: "#0485E8",
-								fontSize: 16,
-								fontWeight: "500",
-								marginLeft: 20,
-								marginTop: 5,
-							}}
-						>
-							₦{data?.price}
-						</Text>
-						<Text
-							style={{
-								color: "#0B0B0E",
-								fontSize: 12,
-								fontWeight: "400",
-								marginLeft: 20,
-								marginTop: 5,
-							}}
-						>
-							Total in stock: {data.quantity.total}
-						</Text>
-						<View
-							style={{
-								backgroundColor: "#F7F7F7",
-								width: 118,
-								height: 48,
-								borderRadius: 30,
-								marginLeft: 20,
-								marginTop: 10,
-							}}
-						>
-							<View style={{ display: "flex", flexDirection: "row" }}>
-								<Pressable onPress={decrement}>
-									<Text
-										style={{
-											fontSize: 24,
-											fontWeight: "500",
-											paddingLeft: 20,
-											paddingTop: 10,
-										}}
-									>
-										-
-									</Text>
-								</Pressable>
-								<Text style={{ marginLeft: 20, marginTop: 15 }}>{count}</Text>
-								<Pressable onPress={increment}>
-									<Text
-										style={{
-											fontSize: 24,
-											fontWeight: "500",
-											fontSize: 24,
-											fontWeight: "500",
-											paddingLeft: 20,
-											paddingTop: 10,
-										}}
-									>
-										+
-									</Text>
-								</Pressable>
-							</View>
-						</View>
-
-						<View
-							style={{
-								backgroundColor: "#F7F7F7",
-								width: 375,
-								height: 76,
-								marginLeft: 0,
-								marginTop: 10,
-							}}
-						>
-							<Text
+				{loading ? (
+					<View
+						style={{
+							// backgroundColor: 'red',
+							// flex: 1,
+							marginTop: 80,
+						}}
+					>
+						<LoadingScreen word={"Product Data Loading...."} />
+					</View>
+				) : (
+					<View>
+						{data && (
+							<Image
 								style={{
-									color: "#0B0B0E",
-									fontSize: 14,
-									fontWeight: "500",
+									height: 200,
+									width: 357,
 									marginLeft: 20,
 									marginTop: 20,
 								}}
-							>
-								K-Secured Return Option
-							</Text>
-							<Text
-								style={{
-									color: "#0B0B0E",
-									fontSize: 12,
-									fontWeight: "400",
-									marginLeft: 20,
-									marginTop: 0,
-								}}
-							>
-								Free return within 3 days. Money back guarantee
-							</Text>
-						</View>
-
-						<Text
-							style={{
-								color: "#0B0B0E",
-								fontSize: 16,
-								fontWeight: "500",
-								marginLeft: 20,
-								marginTop: 20,
-							}}
-						>
-							Description
-						</Text>
-						<Text
-							style={{
-								color: "#0B0B0E",
-								fontSize: 12,
-								fontWeight: "400",
-								marginLeft: 20,
-								marginTop: 0,
-							}}
-						>
-							{data?.description}
-						</Text>
-
-						<View style={styles.acontainer}>
-							<TouchableOpacity onPress={toggleAccordion}>
-								<View style={styles.aheader}>
-									<Text style={styles.atitle}>Contact Store Owner </Text>
-									<AntDesign name="caretdown" size={24} color="black" />
-								</View>
-							</TouchableOpacity>
-							{expanded && (
-								<View
+								source={{ uri: data?.images[0] }}
+							></Image>
+						)}
+						{data && (
+							<>
+								<Text
 									style={{
-										display: "flex",
-										flexDirection: "column",
-										justifyContent: "center",
-										alignItems: "flex-start",
-										padding: 20,
+										color: "#0B0B0E",
+										fontSize: 20,
+										fontWeight: "500",
+										marginLeft: 20,
+										marginTop: 30,
 									}}
 								>
-									<TouchableOpacity
-										onPress={() =>
-											handleExternalLinkWhatsApp(
-												`https://wa.me/${data.store.businessPhone}`
-											)
-										}
-										style={{
-											marginVertical: 10,
-										}}
-									>
-										<Text>
-											<FontAwesome name="whatsapp" size={24} color="black" />
-											{"  WhatsApp"}
+									{data?.name}
+								</Text>
+								<Text
+									style={{
+										color: "#0B0B0E",
+										fontSize: 12,
+										fontWeight: "400",
+										marginLeft: 20,
+										marginTop: 5,
+									}}
+								>
+									{data?.rating}(1.2K reviews)
+								</Text>
+								<Text
+									style={{
+										color: "#0485E8",
+										fontSize: 16,
+										fontWeight: "500",
+										marginLeft: 20,
+										marginTop: 5,
+									}}
+								>
+									₦{data?.price}
+								</Text>
+								<Text
+									style={{
+										color: "#0B0B0E",
+										fontSize: 12,
+										fontWeight: "400",
+										marginLeft: 20,
+										marginTop: 5,
+									}}
+								>
+									Total in stock: {data.quantity.total}
+								</Text>
+								<View
+									style={{
+										backgroundColor: "#F7F7F7",
+										width: 118,
+										height: 48,
+										borderRadius: 30,
+										marginLeft: 20,
+										marginTop: 10,
+									}}
+								>
+									<View style={{ display: "flex", flexDirection: "row" }}>
+										<Pressable onPress={decrement}>
+											<Text
+												style={{
+													fontSize: 24,
+													fontWeight: "500",
+													paddingLeft: 20,
+													paddingTop: 10,
+												}}
+											>
+												-
+											</Text>
+										</Pressable>
+										<Text style={{ marginLeft: 20, marginTop: 15 }}>
+											{count}
 										</Text>
-									</TouchableOpacity>
-									<TouchableOpacity
-										onPress={() => console.log("Instagram Link Clicked")}
-										style={{
-											marginVertical: 10,
-										}}
-									>
-										<Text>
-											<AntDesign name="instagram" size={24} color="black" />
-											{"  Instagram"}: Mufasa
-										</Text>
-									</TouchableOpacity>
+										<Pressable onPress={increment}>
+											<Text
+												style={{
+													fontSize: 24,
+													fontWeight: "500",
+													fontSize: 24,
+													fontWeight: "500",
+													paddingLeft: 20,
+													paddingTop: 10,
+												}}
+											>
+												+
+											</Text>
+										</Pressable>
+									</View>
 								</View>
-							)}
-						</View>
 
-						<TouchableOpacity onPress={() => navigation.navigate("rates")}>
-							<Text
-								style={{
-									color: "#0B0B0E",
-									fontSize: 14,
-									fontWeight: "500",
-									marginLeft: 20,
-									marginTop: 20,
-								}}
-							>
-								Ratings & Reviews
-							</Text>
-							<Text
-								style={{
-									color: "#0B0B0E",
-									fontSize: 12,
-									fontWeight: "400",
-									marginLeft: 20,
-									marginTop: 0,
-								}}
-							>
-								4.8(1.2K reviews)
-							</Text>
-							<View
-								style={{
-									display: "flex",
-									flexDirection: "row",
-									marginTop: 10,
-									marginLeft: 20,
-								}}
-							>
-								<AntDesign name="star" size={20} color="yellow" />
-								<AntDesign name="star" size={20} color="yellow" />
-								<AntDesign name="star" size={20} color="yellow" />
-								<AntDesign name="star" size={20} color="gray" />
-								<AntDesign name="star" size={20} color="gray" />
-							</View>
-						</TouchableOpacity>
+								<View
+									style={{
+										backgroundColor: "#F7F7F7",
+										width: 375,
+										height: 76,
+										marginLeft: 0,
+										marginTop: 10,
+									}}
+								>
+									<Text
+										style={{
+											color: "#0B0B0E",
+											fontSize: 14,
+											fontWeight: "500",
+											marginLeft: 20,
+											marginTop: 20,
+										}}
+									>
+										K-Secured Return Option
+									</Text>
+									<Text
+										style={{
+											color: "#0B0B0E",
+											fontSize: 12,
+											fontWeight: "400",
+											marginLeft: 20,
+											marginTop: 0,
+										}}
+									>
+										Free return within 3 days. Money back guarantee
+									</Text>
+								</View>
 
-						<View
-							style={{
-								marginBottom: 30,
-							}}
-						>
-							<Text
-								style={{
-									color: "#0B0B0E",
-									fontSize: 14,
-									fontWeight: "500",
-									marginLeft: 20,
-									marginTop: 20,
-								}}
-							>
-								It's Lovely
-							</Text>
-							<Text
-								style={{
-									color: "#0B0B0E",
-									fontSize: 12,
-									fontWeight: "400",
-									marginLeft: 20,
-									marginTop: 0,
-								}}
-							>
-								However rare side effects observed among children{"\n"}can be
-								metabolic acidosis, coma, respiratory{"\n"}depression, and
-								hypoglycemia
-							</Text>
-						</View>
-					</>
+								<Text
+									style={{
+										color: "#0B0B0E",
+										fontSize: 16,
+										fontWeight: "500",
+										marginLeft: 20,
+										marginTop: 20,
+									}}
+								>
+									Description
+								</Text>
+								<Text
+									style={{
+										color: "#0B0B0E",
+										fontSize: 12,
+										fontWeight: "400",
+										marginLeft: 20,
+										marginTop: 0,
+									}}
+								>
+									{data?.description}
+								</Text>
+
+								<View style={styles.acontainer}>
+									<TouchableOpacity onPress={toggleAccordion}>
+										<View style={styles.aheader}>
+											<Text style={styles.atitle}>Contact Store Owner </Text>
+											<AntDesign name="caretdown" size={24} color="black" />
+										</View>
+									</TouchableOpacity>
+									{expanded && (
+										<View
+											style={{
+												display: "flex",
+												flexDirection: "column",
+												justifyContent: "center",
+												alignItems: "flex-start",
+												padding: 20,
+											}}
+										>
+											<TouchableOpacity
+												onPress={() =>
+													handleExternalLinkWhatsApp(
+														`https://wa.me/${data.store.businessPhone}`
+													)
+												}
+												style={{
+													marginVertical: 10,
+												}}
+											>
+												<Text>
+													<FontAwesome
+														name="whatsapp"
+														size={24}
+														color="black"
+													/>
+													{"  WhatsApp"}
+												</Text>
+											</TouchableOpacity>
+											<TouchableOpacity
+												onPress={() => console.log("Instagram Link Clicked")}
+												style={{
+													marginVertical: 10,
+												}}
+											>
+												<Text>
+													<AntDesign name="instagram" size={24} color="black" />
+													{"  Instagram"}: Mufasa
+												</Text>
+											</TouchableOpacity>
+										</View>
+									)}
+								</View>
+
+								<TouchableOpacity onPress={() => navigation.navigate("rates")}>
+									<Text
+										style={{
+											color: "#0B0B0E",
+											fontSize: 14,
+											fontWeight: "500",
+											marginLeft: 20,
+											marginTop: 20,
+										}}
+									>
+										Ratings & Reviews
+									</Text>
+									<Text
+										style={{
+											color: "#0B0B0E",
+											fontSize: 12,
+											fontWeight: "400",
+											marginLeft: 20,
+											marginTop: 0,
+										}}
+									>
+										4.8(1.2K reviews)
+									</Text>
+									<View
+										style={{
+											display: "flex",
+											flexDirection: "row",
+											marginTop: 10,
+											marginLeft: 20,
+										}}
+									>
+										<AntDesign name="star" size={20} color="yellow" />
+										<AntDesign name="star" size={20} color="yellow" />
+										<AntDesign name="star" size={20} color="yellow" />
+										<AntDesign name="star" size={20} color="gray" />
+										<AntDesign name="star" size={20} color="gray" />
+									</View>
+								</TouchableOpacity>
+
+								<View
+									style={{
+										marginBottom: 30,
+									}}
+								>
+									<Text
+										style={{
+											color: "#0B0B0E",
+											fontSize: 14,
+											fontWeight: "500",
+											marginLeft: 20,
+											marginTop: 20,
+										}}
+									>
+										It's Lovely
+									</Text>
+									<Text
+										style={{
+											color: "#0B0B0E",
+											fontSize: 12,
+											fontWeight: "400",
+											marginLeft: 20,
+											marginTop: 0,
+										}}
+									>
+										However rare side effects observed among children{"\n"}can
+										be metabolic acidosis, coma, respiratory{"\n"}depression,
+										and hypoglycemia
+									</Text>
+								</View>
+							</>
+						)}
+					</View>
 				)}
 			</ScrollView>
 
@@ -453,12 +480,14 @@ const ProductDetails = ({ navigation, route }) => {
 				{/* <Pressable onPress={() => navigation.navigate("mycart")}> */}
 				<Pressable
 					onPress={() => {
-						if (isLoggedIn === 'true') {
+						if (isLoggedIn === "true") {
 							addToCart();
 						} else {
-							navigation.navigate('login')
+							navigation.navigate({
+								name: "login",
+								params: { id: data?.id, route: 'productData' },
+							});
 						}
-
 					}}
 				>
 					{/* <Pressable onPress={() => {}}> */}

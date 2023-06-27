@@ -18,6 +18,7 @@ import axios from "axios";
 import { Dimensions } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import LoadingScreen from "../../utils/MyLoading";
 
 const DATA2 = [
 	{
@@ -47,6 +48,7 @@ const ShopPage = ({ navigation, route }) => {
 	const [storeDetailexpanded, setStoreDetailExpanded] = useState(false);
 	const [randArray, setRandArray] = useState(null);
 	const toggleAccordion = () => setExpanded(!expanded);
+	const [loading, setLoading] = useState(true);
 	const StoreDetailtoggleAccordion = () =>
 		setStoreDetailExpanded(!storeDetailexpanded);
 
@@ -120,7 +122,7 @@ const ShopPage = ({ navigation, route }) => {
 				// console.log("!!!!!!!!Store Data!!!!!!!!!!");
 				// console.log(res.data.data);
 				// console.log(`https://wa.me/+234${storeData.businessPhone}`);
-				console.log(id);
+				// console.log(id);
 				// Get the list of Products in the Particular Store
 				axios
 					.get(`https://klick-api.onrender.com/product/?store=${id}`)
@@ -128,11 +130,11 @@ const ShopPage = ({ navigation, route }) => {
 					// 	"https://klick-api.onrender.com/product/?store=7f37f3b1-02e7-4b7c-ad36-4a5138cf3493"
 					// )
 					.then((res) => {
-						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
+						// console.log("!!!!!!!!!!1Produts!!!!!!!!!");
 						// console.log(res.data.data.products);
 						setStoreProducts(res.data.data.products);
 
-						console.log(res.data.data.products.length);
+						// console.log(res.data.data.products.length);
 					})
 					.catch((error) => {
 						console.log("!!!!!!!1Error!!!!!!!!");
@@ -155,13 +157,10 @@ const ShopPage = ({ navigation, route }) => {
 
 						const randomItems = getRandomItems(res.data.data.products, 4);
 						setRandArray(randomItems);
-						console.log(randomItems);
-						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
-						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
-						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
-						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
-						console.log("!!!!!!!!!!1Produts!!!!!!!!!");
-						console.log(res.data.data.products);
+						// console.log(randomItems);
+						// console.log("!!!!!!!!!!1Produts!!!!!!!!!");
+						// console.log(res.data.data.products);
+						setLoading(false);
 					})
 					.catch((err) => console.log(err));
 			})
@@ -170,81 +169,102 @@ const ShopPage = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.container}>
-			{storeData && (
-				<ScrollView>
-					<Image
-						style={{ width: "100%", height: 300 }}
-						resizeMode="cover" // or resizeMode="stretch" if you want to stretch the image
-						source={{ uri: storeData.logo }}
-					/>
-
-					<View
-						style={{
-							flexDirection: "row",
-							alignItems: "center",
-							justifyContent: "space-around",
-							paddingTop: 30,
-							paddingBottom: 10,
-							marginLeft: 12,
-						}}
-					>
-						<Image
-							style={{
-								height: 40,
-								width: 40,
-								marginRight: 10,
-								display: "none",
-							}}
-							source={require("../../../assets/Ellipse.png")}
-						></Image>
-						<View style={{ flex: 5, marginLeft: 10 }}>
-							<Text
+			{loading ? (
+				<View
+					style={{
+						// backgroundColor: 'red',
+						// flex: 1,
+						marginTop: 80,
+					}}
+				>
+					<LoadingScreen word={"Store Data Loading...."} />
+				</View>
+			) : (
+				<View>
+					{storeData && (
+						<ScrollView>
+							<Image
+								// style={{ width: "100%", height: 300 }}
 								style={{
-									fontWeight: "600",
-									fontSize: 20,
-									color: "#0B0B0E",
-									marginHorizontal: 5,
-									marginLeft: 10,
+									height: 200,
+									width: 357,
+									marginLeft: 20,
+									marginTop: 20,
+									borderRadius: 20,
+								}}
+								resizeMode="cover" // or resizeMode="stretch" if you want to stretch the image
+								source={{ uri: storeData.logo }}
+							/>
+
+							<View
+								style={{
+									flexDirection: "row",
+									alignItems: "center",
+									justifyContent: "space-around",
+									paddingTop: 30,
+									paddingBottom: 10,
+									marginLeft: 12,
 								}}
 							>
-								{storeData?.name}
-							</Text>
-							{/* <Text style={styles.location}>Ikoyi, Lagos</Text> */}
-						</View>
-						<TouchableOpacity
-							style={{ paddingRight: 22 }}
-							// onPress={(toggle) => setToggle(!toggle)}
-							onPress={() => StoreDetailtoggleAccordion()}
-						>
-							<SimpleLineIcons
-								style={styles.shift}
-								name="arrow-down"
-								size={17}
-								color="black"
-							/>
-						</TouchableOpacity>
-					</View>
+								<Image
+									style={{
+										height: 40,
+										width: 40,
+										marginRight: 10,
+										display: "none",
+									}}
+									source={require("../../../assets/Ellipse.png")}
+								></Image>
+								<View style={{ flex: 5, marginLeft: 10 }}>
+									<Text
+										style={{
+											fontWeight: "600",
+											fontSize: 20,
+											color: "#0B0B0E",
+											marginHorizontal: 5,
+											marginLeft: 10,
+										}}
+									>
+										{storeData?.name}
+									</Text>
+									{/* <Text style={styles.location}>Ikoyi, Lagos</Text> */}
+								</View>
+								<TouchableOpacity
+									style={{ paddingRight: 22 }}
+									// onPress={(toggle) => setToggle(!toggle)}
+									onPress={() => StoreDetailtoggleAccordion()}
+								>
+									<SimpleLineIcons
+										style={styles.shift}
+										name="arrow-down"
+										size={17}
+										color="black"
+									/>
+								</TouchableOpacity>
+							</View>
 
-					{storeDetailexpanded && (
-						<View
-							style={{
-								backgroundColor: "white",
-								// height: 180,
-								// borderTopLeftRadius: 30,
-								// borderTopRightRadius: 30,
-							}}
-						>
-							<TouchableOpacity onPress={() => StoreDetailtoggleAccordion()}>
+							{storeDetailexpanded && (
 								<View
 									style={{
-										height: 5,
-										width: 60,
-										backgroundColor: "#E1E1E1",
-										borderRadius: 5,
+										backgroundColor: "white",
+										// height: 180,
+										// borderTopLeftRadius: 30,
+										// borderTopRightRadius: 30,
 									}}
-								></View>
-							</TouchableOpacity>
-							{/* <View style={{}}>
+								>
+									<TouchableOpacity
+										onPress={() => StoreDetailtoggleAccordion()}
+									>
+										<View
+											style={{
+												height: 5,
+												width: 60,
+												backgroundColor: "#E1E1E1",
+												borderRadius: 5,
+											}}
+										></View>
+									</TouchableOpacity>
+									{/* <View style={{}}>
 								<Image
 									style={{}}
 									source={require("../../../assets/Ellipse.png")}
@@ -269,17 +289,17 @@ const ShopPage = ({ navigation, route }) => {
 								/>
 							</View> */}
 
-							<Text
-								style={{
-									fontWeight: "500",
-									fontSize: 20,
-									marginTop: 20,
-									marginHorizontal: 15,
-								}}
-							>
-								Overview
-							</Text>
-							{/* <Text
+									<Text
+										style={{
+											fontWeight: "500",
+											fontSize: 20,
+											marginTop: 20,
+											marginHorizontal: 15,
+										}}
+									>
+										Overview
+									</Text>
+									{/* <Text
 								style={{
 									fontWeight: "400",
 									fontSize: 14,
@@ -292,188 +312,190 @@ const ShopPage = ({ navigation, route }) => {
 								eiusmod tempor incididunt ut labore et dolore magna aliqua ut
 								enim adtempor incididunt ut laboa...
 							</Text> */}
-							<RenderContent
-								text={
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim adtempor incididunt ut laboa..."
-								}
-							/>
-							<Text
-								style={{
-									fontWeight: "400",
-									fontSize: 16,
-									marginTop: 10,
-									marginHorizontal: 15,
-								}}
-							>
-								Monday - Friday:
-							</Text>
-							<Text
-								style={{
-									fontWeight: "400",
-									fontSize: 16,
-									marginTop: 0,
-									marginHorizontal: 15,
-								}}
-							>
-								Saturday - Sunday:
-							</Text>
-						</View>
-					)}
+									<RenderContent
+										text={
+											"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim adtempor incididunt ut laboa..."
+										}
+									/>
+									<Text
+										style={{
+											fontWeight: "400",
+											fontSize: 16,
+											marginTop: 10,
+											marginHorizontal: 15,
+										}}
+									>
+										Monday - Friday:
+									</Text>
+									<Text
+										style={{
+											fontWeight: "400",
+											fontSize: 16,
+											marginTop: 0,
+											marginHorizontal: 15,
+										}}
+									>
+										Saturday - Sunday:
+									</Text>
+								</View>
+							)}
 
-					<TouchableOpacity
-						onPress={() => toggleAccordion()}
-						style={{
-							flexDirection: "row",
-							justifyContent: "center",
-						}}
-					>
-						<GeneralButton
-							style={styles.shift}
-							message="Contact Seller"
-							backgroundColor={"#iFEDD00"}
-							color="black"
-							width={335}
-							height={50}
-							borderColor={"#FEDD00"}
-							size={15}
-							top={10}
-							marginLeft={120}
-							marginTop={80}
-							marginHorizintal={25}
-						/>
-					</TouchableOpacity>
-					{expanded && (
-						<View
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								justifyContent: "center",
-								alignItems: "center",
-								padding: 20,
-							}}
-						>
 							<TouchableOpacity
-								onPress={() =>
-									handleExternalLinkWhatsApp(
-										`https://wa.me/+234${storeData.businessPhone}`
-									)
-								}
+								onPress={() => toggleAccordion()}
 								style={{
-									marginVertical: 10,
+									flexDirection: "row",
+									justifyContent: "center",
 								}}
 							>
-								<Text>
-									<FontAwesome name="whatsapp" size={24} color="black" />
-									{"  WhatsApp"}
-								</Text>
+								<GeneralButton
+									style={styles.shift}
+									message="Contact Seller"
+									backgroundColor={"#iFEDD00"}
+									color="black"
+									width={335}
+									height={50}
+									borderColor={"#FEDD00"}
+									size={15}
+									top={10}
+									marginLeft={120}
+									marginTop={80}
+									marginHorizintal={25}
+								/>
 							</TouchableOpacity>
-							<TouchableOpacity
-								onPress={() => console.log("Instagram Link Clicked")}
-								style={{
-									marginVertical: 10,
-								}}
-							>
-								<Text>
-									<AntDesign name="instagram" size={24} color="black" />
-									{"  Instagram"}:{/* Mufasa */}
-								</Text>
-							</TouchableOpacity>
-						</View>
-					)}
-					<Text
-						style={{
-							fontSize: 20,
-							fontWeight: "600",
-							marginHorizontal: 20,
-							marginVertical: 20,
-						}}
-					>
-						Products of {storeData.name}
-					</Text>
-
-					{storeProducts ? (
-						storeProducts.length > 0 && (
-							<FlatList
-								style={{}}
-								data={storeProducts}
-								renderItem={({ item }) => (
-									<PopularCard item={item} navigation={navigation} />
-								)}
-								keyExtractor={(item) => item.id}
-								horizontal
-							/>
-							// <PopularCard item={storeProducts} />
-						)
-					) : (
-						<View>
-							<ActivityIndicator />
-						</View>
-					)}
-
-					<Text
-						style={{
-							fontSize: 20,
-							fontWeight: "600",
-							marginLeft: 20,
-							marginVertical: 20,
-						}}
-					>
-						Recommended Products
-					</Text>
-					<View>
-						{randArray &&
-							randArray.map((item) => (
+							{expanded && (
 								<View
 									style={{
-										marginBottom: 30,
-										paddingLeft: 30,
 										display: "flex",
-										flexDirection: "row",
-										justifyContent: "flex-start",
+										flexDirection: "column",
+										justifyContent: "center",
+										alignItems: "center",
+										padding: 20,
 									}}
 								>
-									<Image
-										style={{ width: 100, height: 100, borderRadius: 20 }}
-										source={{ uri: item.images[0] }}
-									></Image>
-									<View 
-									style={{
-										marginLeft: 30,
-									}}
+									<TouchableOpacity
+										onPress={() =>
+											handleExternalLinkWhatsApp(
+												`https://wa.me/+234${storeData.businessPhone}`
+											)
+										}
+										style={{
+											marginVertical: 10,
+										}}
 									>
-										<Text
-											style={{
-												fontWeight: "500",
-												fontSize: 17,
-											}}
-										>
-											{item.name}
+										<Text>
+											<FontAwesome name="whatsapp" size={24} color="black" />
+											{"  WhatsApp"}
 										</Text>
-										<Text
-											style={{
-												color: "#0485E8",
-												fontWeight: "500",
-												fontSize: 15,
-												marginTop: 5,
-											}}
-										>
-											₦{item.price}
+									</TouchableOpacity>
+									<TouchableOpacity
+										onPress={() => console.log("Instagram Link Clicked")}
+										style={{
+											marginVertical: 10,
+										}}
+									>
+										<Text>
+											<AntDesign name="instagram" size={24} color="black" />
+											{"  Instagram"}:{/* Mufasa */}
 										</Text>
-										<Text
-											style={{
-												fontWeight: "500",
-												fontSize: 15,
-											}}
-										>
-											QTY:{item.quantity.instock}
-										</Text>
-									</View>
+									</TouchableOpacity>
 								</View>
-							))}
+							)}
+							<Text
+								style={{
+									fontSize: 20,
+									fontWeight: "600",
+									marginHorizontal: 20,
+									marginVertical: 20,
+								}}
+							>
+								Products of {storeData.name}
+							</Text>
 
-						<View style={{ marginTop: 70 }} />
-					</View>
-				</ScrollView>
+							{storeProducts ? (
+								storeProducts.length > 0 && (
+									<FlatList
+										style={{}}
+										data={storeProducts}
+										renderItem={({ item }) => (
+											<PopularCard key={item.id} item={item} navigation={navigation} />
+										)}
+										keyExtractor={(item) => item.id}
+										horizontal
+									/>
+									// <PopularCard item={storeProducts} />
+								)
+							) : (
+								<View>
+									<ActivityIndicator />
+								</View>
+							)}
+
+							<Text
+								style={{
+									fontSize: 20,
+									fontWeight: "600",
+									marginLeft: 20,
+									marginVertical: 20,
+								}}
+							>
+								Recommended Products
+							</Text>
+							<View>
+								{randArray &&
+									randArray.map((item) => (
+										<View
+											style={{
+												marginBottom: 30,
+												paddingLeft: 30,
+												display: "flex",
+												flexDirection: "row",
+												justifyContent: "flex-start",
+											}}
+										>
+											<Image
+												style={{ width: 100, height: 100, borderRadius: 20 }}
+												source={{ uri: item.images[0] }}
+											></Image>
+											<View
+												style={{
+													marginLeft: 30,
+												}}
+											>
+												<Text
+													style={{
+														fontWeight: "500",
+														fontSize: 17,
+													}}
+												>
+													{item.name}
+												</Text>
+												<Text
+													style={{
+														color: "#0485E8",
+														fontWeight: "500",
+														fontSize: 15,
+														marginTop: 5,
+													}}
+												>
+													₦{item.price}
+												</Text>
+												<Text
+													style={{
+														fontWeight: "500",
+														fontSize: 15,
+													}}
+												>
+													QTY:{item.quantity.instock}
+												</Text>
+											</View>
+										</View>
+									))}
+
+								<View style={{ marginTop: 70 }} />
+							</View>
+						</ScrollView>
+					)}
+				</View>
 			)}
 		</View>
 	);

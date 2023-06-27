@@ -47,15 +47,24 @@ const Register = ({ navigation }) => {
 			inputError.phone = false;
 		}
 	};
-	const validateEmail = (email) => {
+	const validateEmail = (word) => {
 		// Regular expression for email validation
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-		processedEmail = email.toLowerCase();
-		// return emailRegex.test(processedEmail);
-		return emailRegex.test(email);
+		processedEmail = word.toLowerCase();
+		// console.log(word);
+		// console.log(emailRegex.test(word));
+		return emailRegex.test(processedEmail);
+		// return emailRegex.test(word);
 	};
 	validatePhone();
+
+	myFunc = (word) => {
+		console.log("");
+		// const email = "thebagnft@gmail.com";
+		const isValidEmail = validateEmail(word);
+		console.log(isValidEmail);
+		return isValidEmail;
+	};
 
 	// const navigate = useNavigation()
 
@@ -88,7 +97,10 @@ const Register = ({ navigation }) => {
 				if (password !== confirmPassword) {
 					Alert.alert("Please the password must be the same");
 				} else {
-					if (!validateEmail(email)) {
+					// if (!validateEmail(email)) {
+					if (!myFunc(email)) {
+						// console.log("Email Test Later");
+						// console.log(validateEmail(email));
 						Alert.alert("Please enter a valid email");
 					} else {
 						if (phone.length !== 10) {
@@ -107,7 +119,7 @@ const Register = ({ navigation }) => {
 								const res_status_code = response.status;
 								const res_data = await response.json();
 								if (res_status_code != 201) {
-									console.log(res_data.msg);
+									// console.log(res_data.msg);
 									setWeirdError(res_data.msg);
 									setFailedModalVisible(true);
 									throw new Error(res_data.msg);

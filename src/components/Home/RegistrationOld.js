@@ -63,7 +63,7 @@ const Register = ({ navigation }) => {
 			email,
 			phone: phone_number,
 		};
-		console.log(payload);
+		// console.log(payload);
 		// This is the Full Validation for all the textInputs
 		if (
 			firstName.trim() === "" ||

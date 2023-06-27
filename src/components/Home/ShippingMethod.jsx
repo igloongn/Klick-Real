@@ -19,8 +19,8 @@ import PaymentModal from "../../utils/PaymentModal";
 
 const ShippingMethod = ({ navigation, route }) => {
 	const { checkoutData, cartDetail, addressPayload } = route.params;
-	console.log("!!!!!!!!!!!!!!!!!!!!");
-	console.log(cartDetail);
+	// console.log("!!!!!!!!!!!!!!!!!!!!");
+	// console.log(cartDetail);
 	// console.log(addressPayload);
 	const [shipWithSellerModal, setShipWithSellerModal] = useState(false);
 	const [shipWithKshipModal, setShipWithKshipModal] = useState(false);

@@ -13,6 +13,7 @@ import GeneralButton from "../General/GeneralButton";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
+import LoadingScreen from "../../utils/MyLoading";
 
 const DeliveryChange = ({ name, address, navigation }) => {
 	return (
@@ -60,8 +61,8 @@ const DeliveryChange = ({ name, address, navigation }) => {
 };
 
 const Cart = ({ navigation, data }) => {
-	console.log("!!!!!!!!!!!!!!!!;");
-	console.log(data);
+	// console.log("!!!!!!!!!!!!!!!!;");
+	// console.log(data);
 
 	return (
 		<View style={{ marginBottom: 0 }}>
@@ -146,6 +147,7 @@ const CheckOut = ({ navigation, route }) => {
 	const [data, setData] = useState(null);
 	const [address, setAddress] = useState(null);
 	const [cartID, setCartID] = useState(null);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		AsyncStorage.getItem("token").then((token) => {
@@ -154,7 +156,7 @@ const CheckOut = ({ navigation, route }) => {
 					headers: { Authorization: "Bearer " + token },
 				})
 				.then((userdata) => {
-					console.log("userdata.data");
+					// console.log("userdata.data");
 					// console.log(userdata.data.DefaultAddress);
 					const decodeToken = jwtDecode(token);
 					// console.log("decodeToken");
@@ -166,57 +168,18 @@ const CheckOut = ({ navigation, route }) => {
 						state: userdata.data.DefaultAddress.state,
 						fullName: decodeToken.fullName,
 					};
+
 					setAddress(newObj);
+					setLoading(false);
 				});
 		});
 	}, []);
 
-	// const handleCheckout = () => {
-	// 	console.log("CheckOut");
-	// 	AsyncStorage.getItem("token").then((token) => {
-	// 		console.log(cartID);
-	// 		console.log(token);
-	// 		let config = {
-	// 			method: "get",
-	// 			url: `https://klick-api.onrender.com/cart/checkout/${cartID}`,
-	// 			headers: {
-	// 				Authorization: "Bearer " + token,
-	// 			},
-	// 		};
-
-	// 		axios
-	// 			.request(config)
-	// 			.then((res) => {
-	// 				console.log(res.data);
-	// 				const checkoutData = res.data;
-	// 				console.log("res.data", checkoutData);
-	// 				axios
-	// 					.get("https://klick-api.onrender.com/cart/" + cartID)
-	// 					.then((data) => {
-	// 						const cartDetail = data.data.data;
-	// 						navigation.navigate({
-	// 							name: "shippingmethod",
-	// 							params: { checkoutData, cartDetail, addressPayload: address },
-	// 						});
-	// 					})
-	// 					.catch((err) => {
-	// 						console.log("Checkout Error");
-	// 						console.log(err);
-	// 					});
-	// 			})
-	// 			.catch((err) => {
-	// 				console.log("Cart Error");
-	// 				console.log(err);
-	// 			});
-	// 	});
-	// };
-
 	const handleCheckout = () => {
-		console.log("CheckOut");
+		// console.log("CheckOut");
 		AsyncStorage.getItem("token").then((token) => {
-			console.log(cartID);
-			console.log(token);
-
+			// console.log(cartID);
+			// console.log(token);
 
 			axios
 				.get(`https://klick-api.onrender.com/cart/checkout/${cartID}`, {
@@ -225,12 +188,10 @@ const CheckOut = ({ navigation, route }) => {
 					},
 				})
 				.then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					const checkoutData = res.data;
-					console.log("res.data", checkoutData);
-					console.log("https://klick-api.onrender.com/cart/" + cartID)
-					console.log("https://klick-api.onrender.com/cart/" + cartID)
-					console.log("https://klick-api.onrender.com/cart/" + cartID)
+					// console.log("res.data", checkoutData);
+					// console.log("https://klick-api.onrender.com/cart/" + cartID)
 					axios
 						.get("https://klick-api.onrender.com/cart/" + cartID)
 						.then((data) => {
@@ -255,38 +216,52 @@ const CheckOut = ({ navigation, route }) => {
 	return (
 		<View style={{ marginBottom: 30, marginTop: 10 }}>
 			<ScrollView>
-				{address && (
-					<>
-						<View style={{ backgroundColor: "#E5E5E5", height: 50 }}>
-							<Text style={{ color: "#6A6B6C", marginTop: 20, marginLeft: 30 }}>
-								Delivery to:
-							</Text>
-						</View>
+				{loading ? (
+					<View
+						style={{
+							// backgroundColor: 'red',
+							// flex: 1,
+							marginTop: 80,
+						}}
+					>
+						<LoadingScreen word={"Checkout Data Loading...."} />
+					</View>
+				) : (
+					address && (
+						<>
+							<View style={{ backgroundColor: "#E5E5E5", height: 50 }}>
+								<Text
+									style={{ color: "#6A6B6C", marginTop: 20, marginLeft: 30 }}
+								>
+									Delivery to:
+								</Text>
+							</View>
 
-						<DeliveryChange
-							name={address.fullName}
-							address={
-								address.address + ", " + address.city + ", " + address.state
-							}
-						/>
-						<Cart data={cartData} />
-
-						<TouchableOpacity
-							// onPress={() => navigation.navigate("shippingmethod")}
-							onPress={() => handleCheckout()}
-							style={{ alignItems: "center", marginBottom: 60 }}
-						>
-							<GeneralButton
-								message={"Check Out"}
-								marginLeft={110}
-								top={15}
-								backgroundColor={"#FEDD00"}
-								borderColor={"#FEDD00"}
-								height={45}
-								width={335}
+							<DeliveryChange
+								name={address.fullName}
+								address={
+									address.address + ", " + address.city + ", " + address.state
+								}
 							/>
-						</TouchableOpacity>
-					</>
+							<Cart data={cartData} />
+
+							<TouchableOpacity
+								// onPress={() => navigation.navigate("shippingmethod")}
+								onPress={() => handleCheckout()}
+								style={{ alignItems: "center", marginBottom: 60 }}
+							>
+								<GeneralButton
+									message={"Check Out"}
+									marginLeft={110}
+									top={15}
+									backgroundColor={"#FEDD00"}
+									borderColor={"#FEDD00"}
+									height={45}
+									width={335}
+								/>
+							</TouchableOpacity>
+						</>
+					)
 				)}
 			</ScrollView>
 		</View>

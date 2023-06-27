@@ -30,8 +30,8 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 	useEffect(() => {
 		AsyncStorage.getItem("token").then((res) => {
 			if (!res) {
-				console.log("!!!!!!!!!");
-				console.log(res);
+				// console.log("!!!!!!!!!");
+				// console.log(res);
 				navigation.navigate("login");
 			} else {
 				console.log("User is logged in");
@@ -45,13 +45,13 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 		deliveryPayload.address = address;
 		deliveryPayload.state = state;
 		deliveryPayload.isDefault = isDefault;
-		console.log('deliveryPayload.isDefault')
-		console.log(isDefault)
-		console.log("!!!!!!!!!!delivery Address Payload!!!!!!!!!!!");
-		console.log(deliveryPayload);
+		// console.log('deliveryPayload.isDefault')
+		// console.log(isDefault)
+		// console.log("!!!!!!!!!!delivery Address Payload!!!!!!!!!!!");
+		// console.log(deliveryPayload);
 
 		AsyncStorage.getItem("token").then((token) => {
-			console.log(token);
+			// console.log(token);
 			axios
 				.get("https://klick-api.onrender.com/auth/user", {
 					headers: {
@@ -73,8 +73,8 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 						phone: "+" + "2348140570059",
 						type: "other",
 					};
-					console.log("!!!!!!!payload!!!!!!!");
-					console.log(payload);
+					// console.log("!!!!!!!payload!!!!!!!");
+					// console.log(payload);
 					axios
 						.post("https://klick-api.onrender.com/address/", payload, {
 							headers: {
@@ -83,7 +83,7 @@ const AddDeliveryLocation = ({ navigation, route }) => {
 							},
 						})
 						.then((res) => {
-							console.log("!!!!!!!!Response!!!!!!!!");
+							// console.log("!!!!!!!!Response!!!!!!!!");
 							// console.log(payload);
 							// console.log(res.data);
 							navigation.navigate({

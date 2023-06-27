@@ -30,6 +30,7 @@ import KlickLogo from "../../utils/SVGs/KlickLogo";
 
 import { AntDesign } from "@expo/vector-icons";
 import jwtDecode from "jwt-decode";
+import LoadingScreen from "../../utils/MyLoading";
 
 const DATA2 = [
 	{
@@ -131,7 +132,7 @@ const HomeContent = ({ navigation }) => {
 	};
 
 	const mode_data = useBuyerSwitchVendorContext();
-	console.log("mode", mode_data);
+	// console.log("mode", mode_data);
 	if (mode_data?.mode === "vendor") {
 		navigation.navigate({ name: "sellerstab" });
 	}
@@ -146,8 +147,6 @@ const HomeContent = ({ navigation }) => {
 		// 	(item) => item.name.toLowerCase().includes(search.toLowerCase())
 		// 	// item.name.toLowerCase().includes(search)
 		// );
-		// console.log("Search Result");
-		// console.log("Search Result");
 		// console.log("Search Result");
 		// console.log(filteredResults.length);
 		// setSearchResults(filteredResults);
@@ -168,8 +167,8 @@ const HomeContent = ({ navigation }) => {
 		axios
 			.get("https://klick-api.onrender.com/brand/")
 			.then((res) => {
-				console.log("!!!!!!!!!!Store!!!!!!!!!");
-				console.log(res.data);
+				// console.log("!!!!!!!!!!Store!!!!!!!!!");
+				// console.log(res.data);
 				setStores(res.data.data);
 			})
 			.catch((err) => {});
@@ -184,7 +183,7 @@ const HomeContent = ({ navigation }) => {
 			axios
 				.get("https://klick-api.onrender.com/product/", {})
 				.then((res) => {
-					console.log("!!!!!!!!!!Products Loggedin!!!!!!!");
+					// console.log("!!!!!!!!!!Products Loggedin!!!!!!!");
 					// console.log(res.data.data.products);
 					setProductData(res.data.data.products);
 				})
@@ -235,7 +234,7 @@ const HomeContent = ({ navigation }) => {
 
 						AsyncStorage.getItem("cart").then((data) => {
 							const JSON_data = JSON.parse(data);
-							console.log("!!!!!!!!!!!!!Cart Data From AsyncStorage!!!!!!!!!!");
+							// console.log("!!!!!!!!!!!!!Cart Data From AsyncStorage!!!!!!!!!!");
 							// console.log(JSON_data.items);
 							// console.log(JSON_data.items);
 							// console.log(Object.keys(JSON_data.items).length);
@@ -249,7 +248,7 @@ const HomeContent = ({ navigation }) => {
 							// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 							// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 							// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log(payload);
+							// console.log(payload);
 
 							axios
 								.put(
@@ -291,12 +290,12 @@ const HomeContent = ({ navigation }) => {
 		} else {
 			setcartCount(0);
 			AsyncStorage.getItem("cart").then((data) => {
-				console.log(
-					"!!!!!!!!!!!!!Cart Data From AsyncStorage Not Logged in!!!!!!!!!!"
-				);
+				// console.log(
+				// 	"!!!!!!!!!!!!!Cart Data From AsyncStorage Not Logged in!!!!!!!!!!"
+				// );
 				const JSON_data = JSON.parse(data);
-				console.log(JSON_data.items);
-				console.log(Object.keys(JSON_data.items).length);
+				// console.log(JSON_data.items);
+				// console.log(Object.keys(JSON_data.items).length);
 				setcartCount(Object.keys(JSON_data.items).length);
 			});
 
@@ -334,7 +333,7 @@ const HomeContent = ({ navigation }) => {
 				// console.log(res.data.data);
 				setPostData(res.data.data);
 				setLoading(false);
-				console.log(loading);
+				// console.log(loading);
 			})
 			.catch((err) => {
 				console.log("!!!!!!!!!!!!!!Post Error!!!!!!!!!!!!!!!!!!");
@@ -372,6 +371,7 @@ const HomeContent = ({ navigation }) => {
 	// On Refresh event
 	const onRefresh = () => {
 		// Perform your refresh logic here
+		setLoading(true);
 		console.log("Refresh");
 		getStatus();
 		onChangeSearch("");
@@ -383,7 +383,7 @@ const HomeContent = ({ navigation }) => {
 			axios
 				.get("https://klick-api.onrender.com/product/", {})
 				.then((res) => {
-					console.log("!!!!!!!!!!Products Loggedin!!!!!!!");
+					// console.log("!!!!!!!!!!Products Loggedin!!!!!!!");
 					// console.log(res.data.data.products);
 					setProductData(res.data.data.products);
 				})
@@ -392,8 +392,8 @@ const HomeContent = ({ navigation }) => {
 					console.log(err);
 				});
 			AsyncStorage.getItem("token").then((token) => {
-				console.log("!!!!!!!!!!TOKEN!!!!!!!!");
-				console.log(token);
+				// console.log("!!!!!!!!!!TOKEN!!!!!!!!");
+				// console.log(token);
 				axios
 					.get("https://klick-api.onrender.com/auth/user", {
 						headers: {
@@ -403,21 +403,21 @@ const HomeContent = ({ navigation }) => {
 					.then((userdata) => {
 						AsyncStorage.getItem("cart").then((data) => {
 							const JSON_data = JSON.parse(data);
-							console.log("!!!!!!!!!!!!!Cart Data From AsyncStorage!!!!!!!!!!");
-							console.log(JSON_data.items);
-							console.log(JSON_data.items);
-							console.log(Object.keys(JSON_data.items).length);
+							// console.log("!!!!!!!!!!!!!Cart Data From AsyncStorage!!!!!!!!!!");
+							// console.log(JSON_data.items);
+							// console.log(JSON_data.items);
+							// console.log(Object.keys(JSON_data.items).length);
 							setcartCount(Object.keys(JSON_data.items).length);
-							console.log("!!!!!!!!!!!!Cart ID!!!!!!!!!!!!!");
-							console.log(userdata.data.user.Cart.id);
+							// console.log("!!!!!!!!!!!!Cart ID!!!!!!!!!!!!!");
+							// console.log(userdata.data.user.Cart.id);
 
 							const payload = {
 								items: JSON_data.items,
 							};
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-							console.log(payload);
+							// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+							// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+							// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+							// console.log(payload);
 
 							axios
 								.put(
@@ -482,12 +482,12 @@ const HomeContent = ({ navigation }) => {
 		} else {
 			setcartCount(0);
 			AsyncStorage.getItem("cart").then((data) => {
-				console.log(
-					"!!!!!!!!!!!!!Cart Data From AsyncStorage Not Logged in!!!!!!!!!!"
-				);
+				// console.log(
+				// 	"!!!!!!!!!!!!!Cart Data From AsyncStorage Not Logged in!!!!!!!!!!"
+				// );
 				const JSON_data = JSON.parse(data);
-				console.log(JSON_data.items);
-				console.log(Object.keys(JSON_data.items).length);
+				// console.log(JSON_data.items);
+				// console.log(Object.keys(JSON_data.items).length);
 				setcartCount(Object.keys(JSON_data.items).length);
 			});
 
@@ -500,7 +500,7 @@ const HomeContent = ({ navigation }) => {
 				})
 				.catch((err) => {
 					console.log("!!!!!!!!!Axios Error!!!!!!!");
-					console.log(res.err);
+					console.log(err);
 				});
 			axios
 				.get("https://klick-api.onrender.com/category/getAll", {})
@@ -514,6 +514,7 @@ const HomeContent = ({ navigation }) => {
 				})
 				.catch((err) => {});
 		}
+		setLoading(false);
 	};
 
 	return (
@@ -582,7 +583,12 @@ const HomeContent = ({ navigation }) => {
 									backgroundColor: "#FEDD00",
 									height: 40,
 								}}
-								onPress={() => navigation.navigate("login")}
+								onPress={() => {
+									navigation.navigate({
+										name: "login",
+										params: { id: null, route: "button" },
+									});
+								}}
 							>
 								<Text>Login</Text>
 							</TouchableOpacity>
@@ -695,28 +701,30 @@ const HomeContent = ({ navigation }) => {
 						</View>
 					</View>
 
-					{loading && (
+					{loading ? (
 						<View>
-							<ActivityIndicator />
+							{/* <ActivityIndicator /> */}
+							<LoadingScreen word={"Status Loading..."} />
 							{/* <Text>Loading...</Text> */}
 						</View>
-					)}
-					{postData && (
-						<View>
-							<FlatList
-								style={{ marginTop: 20 }}
-								data={postData}
-								renderItem={({ item }) =>
-									item?.posttype === "status" ? (
-										<Item navigation={navigation} item={item} />
-									) : (
-										<></>
-									)
-								}
-								keyExtractor={(item) => item.id}
-								horizontal
-							/>
-						</View>
+					) : (
+						postData && (
+							<View>
+								<FlatList
+									style={{ marginTop: 20 }}
+									data={postData}
+									renderItem={({ item }) =>
+										item?.posttype === "status" ? (
+											<Item navigation={navigation} item={item} />
+										) : (
+											<></>
+										)
+									}
+									keyExtractor={(item) => item.id}
+									horizontal
+								/>
+							</View>
+						)
 					)}
 
 					<Text
@@ -729,72 +737,78 @@ const HomeContent = ({ navigation }) => {
 					>
 						Categories
 					</Text>
+					{loading ? (
+						<LoadingScreen word={"Categories Loading..."} />
+					) : (
+						<>
+							<View
+								style={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "space-around",
+									alignItems: "center",
+								}}
+							>
+								{category &&
+									category.firstRow.map((item) => (
+										<CategoriesCard
+											navigation={navigation}
+											pic={{ uri: item.image }}
+											label={item.name}
+											route={"categories"}
+											params={item.id}
+										/>
+									))}
+							</View>
+							<View
+								style={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "space-around",
+									alignItems: "center",
+									// marginHorizontal: 20,
+									marginVertical: 40,
+								}}
+							>
+								{category &&
+									category.secondRow.map((item) => (
+										<CategoriesCard
+											navigation={navigation}
+											pic={{ uri: item.image }}
+											label={item.name}
+											route={"categories"}
+											params={item.id}
+										/>
+									))}
+							</View>
+							<View
+								style={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "space-around",
+									alignItems: "center",
+									// marginHorizontal: 20,
+									marginBottom: 40,
+								}}
+							>
+								{category &&
+									category.thirdRow.map((item) => (
+										<CategoriesCard
+											navigation={navigation}
+											pic={{ uri: item.image }}
+											label={item.name}
+											route={"categories"}
+											params={item.id}
+										/>
+									))}
+								<View></View>
+								<View></View>
+								<View></View>
+								<View></View>
+							</View>
+						</>
+					)}
 
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "space-around",
-							alignItems: "center",
-						}}
-					>
-						{category &&
-							category.firstRow.map((item) => (
-								<CategoriesCard
-									navigation={navigation}
-									pic={{ uri: item.image }}
-									label={item.name}
-									route={"categories"}
-									params={item.id}
-								/>
-							))}
-					</View>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "space-around",
-							alignItems: "center",
-							// marginHorizontal: 20,
-							marginVertical: 40,
-						}}
-					>
-						{category &&
-							category.secondRow.map((item) => (
-								<CategoriesCard
-									navigation={navigation}
-									pic={{ uri: item.image }}
-									label={item.name}
-									route={"categories"}
-									params={item.id}
-								/>
-							))}
-					</View>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "space-around",
-							alignItems: "center",
-							// marginHorizontal: 20,
-							marginBottom: 40,
-						}}
-					>
-						{category &&
-							category.thirdRow.map((item) => (
-								<CategoriesCard
-									navigation={navigation}
-									pic={{ uri: item.image }}
-									label={item.name}
-									route={"categories"}
-									params={item.id}
-								/>
-							))}
-						<View></View>
-						<View></View>
-						<View></View>
-						<View></View>
-					</View>
 					<View
 						style={{
 							marginTop: 30,
@@ -835,21 +849,26 @@ const HomeContent = ({ navigation }) => {
 					>
 						Products
 					</Text>
-
-					{productData && (
-						<>
-							<FlatList
-								style={{ marginTop: 20 }}
-								data={productData}
-								renderItem={({ item }) => (
-									<SponsorCard item={item} navigation={navigation} />
-								)}
-								keyExtractor={(item) => item.id}
-								horizontal
-							/>
-						</>
+					{loading ? (
+						<LoadingScreen word={"Products Loading..."} />
+					) : (
+						<View>
+							{productData && (
+								<>
+									<FlatList
+										style={{ marginTop: 20 }}
+										data={productData}
+										renderItem={({ item }) => (
+											<SponsorCard item={item} navigation={navigation} />
+										)}
+										keyExtractor={(item) => item.id}
+										horizontal
+									/>
+								</>
+							)}
+						</View>
 					)}
-					<View style={{ marginTop: 100 }}></View>
+					{/* <View style={{ marginTop: 100 }}></View> */}
 					<Text
 						style={{
 							fontWeight: "500",
@@ -860,21 +879,22 @@ const HomeContent = ({ navigation }) => {
 					>
 						Available Stores
 					</Text>
-					{loading && (
+					{loading ? (
 						<View>
-							<Text>Loading...</Text>
+							<LoadingScreen word={"Available Stores Loading..."} />
 						</View>
-					)}
-					{stores && (
-						<FlatList
-							style={{ marginTop: 20 }}
-							data={stores}
-							renderItem={({ item }) => (
-								<ScrollCard item={item} navigation={navigation} />
-							)}
-							// renderItem={ScrollCard}
-							keyExtractor={(item) => item.id}
-						/>
+					) : (
+						stores && (
+							<FlatList
+								style={{ marginTop: 20 }}
+								data={stores}
+								renderItem={({ item }) => (
+									<ScrollCard item={item} navigation={navigation} />
+								)}
+								// renderItem={ScrollCard}
+								keyExtractor={(item) => item.id}
+							/>
+						)
 					)}
 				</ScrollView>
 

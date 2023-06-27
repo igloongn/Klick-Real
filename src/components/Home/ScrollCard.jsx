@@ -4,7 +4,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 const ScrollCard = ({ item, navigation }) => {
 	const navigate = useNavigation();
-	console.log(item);
+	// console.log(item);
 	return (
 		<TouchableOpacity
 			onPress={() =>

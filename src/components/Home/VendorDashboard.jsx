@@ -57,8 +57,8 @@ const VendorDashboard = ({ navigation }) => {
 
 	useEffect(() => {
 		AsyncStorage.getItem("token").then((token) => {
-			console.log("!!!!!!!!!!TOKEN!!!!!!!!");
-			console.log(token);
+			// console.log("!!!!!!!!!!TOKEN!!!!!!!!");
+			// console.log(token);
 			axios
 				.get("https://klick-api.onrender.com/auth/user", {
 					headers: {
@@ -68,7 +68,7 @@ const VendorDashboard = ({ navigation }) => {
 				.then((res) => {
 					// console.log("!!!!!!!!!!Store ID!!!!!!!!");
 					// console.log(res.data.stores[0].id);
-					console.log(token);
+					// console.log(token);
 					if (res.data.stores.length > 0) {
 						AsyncStorage.setItem("StoreData", res.data.stores[0].id);
 					}
@@ -81,8 +81,6 @@ const VendorDashboard = ({ navigation }) => {
 		});
 		// Get User Data
 		AsyncStorage.getItem("token").then((token) => {
-			console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
-			console.log(token);
 			axios
 				.get(`https://klick-api.onrender.com/auth/user`, {
 					headers: {
@@ -91,20 +89,18 @@ const VendorDashboard = ({ navigation }) => {
 				})
 				.then((userdata) => {
 					setUser(userdata.data.stores);
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					// console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
 					// console.log(user[0].logo);
-					console.log(user);
+					// console.log(user);
 				})
 				.catch((err) => {
-					console.log(
-						"!!!!!!!!!!!!!!!!!USer store Lenght Error!!!!!!!!!!!!!!!!"
-					);
+					console.log("!!!!!USer store Lenght Error!!!!!!!");
 					console.log(err);
 				});
 		});
 	}, []);
 
-	console.log("focused", focused);
+	// console.log("focused", focused);
 	// On Refresh event
 	const onRefresh = () => {
 		// Perform your refresh logic here
@@ -113,8 +109,8 @@ const VendorDashboard = ({ navigation }) => {
 
 		// Get User Data
 		AsyncStorage.getItem("token").then((token) => {
-			console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
-			console.log(token);
+			// console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
+			// console.log(token);
 			axios
 				.get(`https://klick-api.onrender.com/auth/user`, {
 					headers: {
@@ -123,15 +119,13 @@ const VendorDashboard = ({ navigation }) => {
 				})
 				.then((userdata) => {
 					setUser(userdata.data.stores);
-					console.log("!!!!!!!!!!!!!!!!!USer store Lenght!!!!!!!!!!!!!!!!");
+					// console.log("!!!!!!USer store Lenght!!!!!!!");
 					// console.log(user[0].logo);
-					console.log(user);
+					// console.log(user);
 					setRefreshing(false);
 				})
 				.catch((err) => {
-					console.log(
-						"!!!!!!!!!!!!!!!!!USer store Lenght Error!!!!!!!!!!!!!!!!"
-					);
+					console.log("!!!!USer store Lenght Error!!!!!!");
 					console.log(err);
 				});
 		});

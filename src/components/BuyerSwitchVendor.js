@@ -33,7 +33,7 @@ export const BuyerSwitchVendor = ({ children }) => {
 			);
 			if (response?.status >= 200 && response?.status < 203) {
 				const _data = await response.json();
-				console.log("y", _data);
+				// console.log("y", _data);
 				setMode(type);
 				// Alert.alert("Success", "user switched succesfully");
 				setSuccessModalVisible(true);
@@ -68,7 +68,12 @@ export const BuyerSwitchVendor = ({ children }) => {
 				button="Login"
 				state={failedModalVisible}
 				setState={setFailedModalVisible}
-				onPress={() => navigation.navigate("login")}
+				onPress={() => {
+					navigation.navigate({
+						name: "login",
+						params: { id: null, route: "modal" },
+					});
+				}}
 			/>
 			<BuyerSwitchVendorContext.Provider value={value}>
 				{children}

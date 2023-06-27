@@ -29,8 +29,8 @@ const CELL_COUNT = 4;
 const VerifyToken = ({ navigation, route }) => {
 	const email = route.params.email;
 	const token = route.params.token;
-	console.log("From the Verify Page");
-	console.log(token);
+	// console.log("From the Verify Page");
+	// console.log(token);
 
 	const [loading, setLoading] = useState(false);
 
@@ -51,7 +51,7 @@ const VerifyToken = ({ navigation, route }) => {
 				setLoading(true);
 				// const token = await AsyncStorage.getItem("regToken");
 				// console.log(token);
-				console.log(value);
+				// console.log(value);
 				const response = await fetch(API_URL + "/auth/verify", {
 					method: "POST",
 					headers: {
@@ -65,21 +65,17 @@ const VerifyToken = ({ navigation, route }) => {
 
 				const res_status_code = response.status;
 				const res_data = await response.json();
-				console.log("!!!!!!!!!!!!!!!!!!!!!!!");
-				console.log(res_data);
-				console.log(res_status_code);
+
 				if (res_status_code != 200) {
 					throw new Error(res_data.message);
 				}
 
-				// await AsyncStorage.setItem("isLoggedIn", "true");
-
-				// Alert.alert("Verification succesful", "Verification was successful", [
-				// 	{ text: "OK", onPress: () => navigation.navigate("hometab") },
-				// ]);
 				setSuccessModalVisible(true);
 				setTimeout(() => {
-					navigation.navigate("login");
+					navigation.navigate({
+						name: "login",
+						params: { id: null, route: "button" },
+					});
 				}, 3000);
 			} catch (error) {
 				// Handle network or other errors

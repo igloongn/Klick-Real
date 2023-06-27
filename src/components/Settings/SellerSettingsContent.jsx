@@ -69,12 +69,12 @@ const SellerSettingsContent = ({ navigation }) => {
 						},
 					})
 					.then((data) => {
-						console.log(data.data.stores);
+						// console.log(data.data.stores);
 						setUserdata(data.data.stores);
-						console.log("userdata");
-						console.log("userdata");
-						console.log("userdata");
-						console.log(userdata.firstName);
+						// console.log("userdata");
+						// console.log("userdata");
+						// console.log("userdata");
+						// console.log(userdata.firstName);
 					})
 					.catch((err) => {
 						console.log(err);
@@ -93,7 +93,7 @@ const SellerSettingsContent = ({ navigation }) => {
 
 		AsyncStorage.getItem("token")
 			.then((token) => {
-				console.log(token);
+				// console.log(token);
 				axios
 					.get("https://klick-api.onrender.com/auth/user", {
 						headers: {
@@ -101,12 +101,12 @@ const SellerSettingsContent = ({ navigation }) => {
 						},
 					})
 					.then((data) => {
-						console.log(data.data.stores);
 						setUserdata(data.data.stores);
-						console.log("userdata");
-						console.log("userdata");
-						console.log("userdata");
-						console.log(userdata.firstName);
+						// console.log(data.data.stores);
+						// console.log("userdata");
+						// console.log("userdata");
+						// console.log("userdata");
+						// console.log(userdata.firstName);
 					})
 					.catch((err) => {
 						console.log(err);
@@ -126,11 +126,11 @@ const SellerSettingsContent = ({ navigation }) => {
 	}, []);
 	const logout = async () => {
 		try {
-			console.log("Logout");
-			console.log("Logout");
-			console.log("Logout");
-			console.log("Logout");
-			console.log("Logout");
+			// console.log("Logout");
+			// console.log("Logout");
+			// console.log("Logout");
+			// console.log("Logout");
+			// console.log("Logout");
 			setLoading(true);
 
 			//clearthe stored token from AsyncStorage

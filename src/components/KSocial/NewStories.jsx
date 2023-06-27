@@ -14,11 +14,11 @@ const FullScreenCarousel = () => {
 			// console.log("!!!!!!!!!!Data!!!!!!!!!Yea");
 			// console.log(res.data.data.rows);
 			setData(res.data.data);
-			console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
-			console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
-			console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
-			console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
-			console.log(res.data.data[0].id)
+			// console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
+			// console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
+			// console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
+			// console.log('!!!!!!!!!!!!Stories!!!!!!!!!!!')
+			// console.log(res.data.data[0].id)
 		});
 
 		const interval = setInterval(() => {

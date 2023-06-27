@@ -30,7 +30,7 @@ const RegistrationSecond = ({ navigation, route }) => {
 	const [fillAllFields, setFillAllFields] = useState(false);
 
 	const { regPayload } = route.params;
-	console.log(regPayload);
+	// console.log(regPayload);
 
 	// const navigate = useNavigation()
 
@@ -42,8 +42,8 @@ const RegistrationSecond = ({ navigation, route }) => {
 			password,
 		};
 
-		console.log("payload");
-		console.log(payload);
+		// console.log("payload");
+		// console.log(payload);
 		// This is the Full Validation for all the textInputs
 		if (address.trim() === "" || password.trim() === "") {
 			// Alert.alert("Please fill in all fields");

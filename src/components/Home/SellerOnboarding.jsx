@@ -33,17 +33,17 @@ const SellerOnboarding = ({ navigation }) => {
 
 	const submit = async (navigation) => {
 		setLoading(true);
-		console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
-		console.log({
-			storeName,
-			phone,
-			state,
-			city,
-			address,
-			industry,
-			country,
-			Image: file[0],
-		});
+		// console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
+		// console.log({
+		// 	storeName,
+		// 	phone,
+		// 	state,
+		// 	city,
+		// 	address,
+		// 	industry,
+		// 	country,
+		// 	Image: file[0],
+		// });
 		// if (true) return;
 		let formData = new FormData();
 		formData.append("storeName", storeName.trim());
@@ -59,11 +59,11 @@ const SellerOnboarding = ({ navigation }) => {
 			type: "image/jpg",
 			name: file[0]?.filename,
 		});
-		console.log("!!!!!!!!!!!!formData!!!!!!!!!!!!!!");
-		console.log(formData);
+		// console.log("!!!!!!!!!!!!formData!!!!!!!!!!!!!!");
+		// console.log(formData);
 		const pictureName = file[0];
-		console.log("Yello");
-		console.log(pictureName);
+		// console.log("Yello");
+		// console.log(pictureName);
 		if (pictureName) {
 			// console.log("Picture is not set");
 			// 	formData.append("file", {
@@ -74,7 +74,6 @@ const SellerOnboarding = ({ navigation }) => {
 		} else {
 			console.log("Picture is not set");
 		}
-		console.log("General");
 
 		AsyncStorage.getItem("token")
 			.then((token) => {
@@ -88,8 +87,8 @@ const SellerOnboarding = ({ navigation }) => {
 					.then((res) => {
 						const _data = res.data;
 
-						console.log("y");
-						console.log("y", _data);
+						// console.log("y");
+						// console.log("y", _data);
 						// Alert.alert("Success", "Your Store was created successfully");
 						setSuccessModalVisible(true);
 						setTimeout(() => {
@@ -99,10 +98,6 @@ const SellerOnboarding = ({ navigation }) => {
 					})
 					.catch((error) => {
 						if (error.response) {
-							console.log("Error status:", error.response.status);
-							console.log("Error status:", error.response.status);
-							console.log("Error status:", error.response.status);
-							console.log("Error status:", error.response.status);
 							console.log("Error data:", error.response.data.msg);
 							setWeirdError(error.response.data.msg);
 						} else {

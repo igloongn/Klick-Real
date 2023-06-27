@@ -10,15 +10,15 @@ const StoreDetails = () => {
 	const [email, setEmail] = useState(null);
 	const [phone, setPhone] = useState(null);
 	const onSubmit = () => {
-		console.log("onSubmit");
+		// console.log("onSubmit");
 		if (name !== "" || email !== "" || phone !== "" || phone.length === 10) {
-			console.log('!!!!!!!!!!!!!!Payload!!!!!!!!!!!')
+			// console.log('!!!!!!!!!!!!!!Payload!!!!!!!!!!!')
 			const payload = {
 				name,
 				email,
 				phone,
 			};
-			console.log(payload)
+			// console.log(payload)
 			AsyncStorage.getItem("token")
 				.then((token) => {
 					axios

@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 const PopularCard = ({ item, navigation }) => {
-	console.log(item.images.length);
+	// console.log(item.images.length);
 	return (
 		<TouchableOpacity
 			style={{

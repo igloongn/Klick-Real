@@ -50,13 +50,12 @@ const FakeCategories = ({ route }) => {
 							headers: { Authorization: `Bearer ${token}` },
 						})
 						.then((data) => {
-							console.log("!!!!!!Product Data Yputube!!!!!!!");
+							// console.log("!!!!!!Product Data Yputube!!!!!!!");
 							const productlist = data.data.data.products;
-							console.log(productlist);
+							// console.log(productlist);
 							setProducts(productlist);
 							// console.log(products);
 
-							console.log("!!!!!!Product Data Yputube!!!!!!!");
 						})
 						.catch((error) => {
 							console.log("!!!!!!!!!Axios Error!!!!!!!");

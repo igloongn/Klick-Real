@@ -8,11 +8,13 @@ import {
 	Pressable,
 	ScrollView,
 	RefreshControl,
+	Dimensions,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import GeneralButton from "../General/GeneralButton";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoadingScreen from "../../utils/MyLoading";
 
 const Counter = ({ itemCount, navigation }) => {
 	// const [counter, setCounter] = useState(0);
@@ -73,12 +75,13 @@ const MyCart = ({ navigation }) => {
 	const [cartId, setCartId] = useState(null);
 	const [data, setData] = useState(null);
 	const [refreshing, setRefreshing] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	const emptyCart = () => {
-		console.log(cartId);
+		// console.log(cartId);
 		// AsyncStorage.removeItem('cart');
 		AsyncStorage.getItem("token").then((token) => {
-			console.log(token);
+			// console.log(token);
 			axios
 				.put(
 					`https://klick-api.onrender.com/cart/update/${cartId}`,
@@ -96,8 +99,8 @@ const MyCart = ({ navigation }) => {
 					}
 				)
 				.then((res) => {
-					console.log("!!!!!!Empty Cart Response!!!!!!!!!");
-					console.log(res.data);
+					// console.log("!!!!!!Empty Cart Response!!!!!!!!!");
+					// console.log(res.data);
 					AsyncStorage.setItem("cart", JSON.stringify([]));
 					setData([]);
 				})
@@ -110,29 +113,31 @@ const MyCart = ({ navigation }) => {
 
 	useEffect(() => {
 		// Auth Checker
-		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-		console.log("!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!");
-		AsyncStorage.getItem('token').then((token) => {
-			axios.get('https://klick-api.onrender.com/auth/user', {
-				headers: {
-					Authorization: 'Bearer ' + token
-				}
-			}).then((data) => {
-				console.log('The User is found');
-				// console.log(data.data);
-				
-			}).catch((err) => {
-				navigation.navigate('login')
-			});
-		}).catch((err) => {
-			
-		});
+		// console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				axios
+					.get("https://klick-api.onrender.com/auth/user", {
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					})
+					.then((data) => {
+						console.log("The User is found");
+						// console.log(data.data);
+					})
+					.catch((err) => {
+						navigation.navigate({
+								name: "login",
+								params: { id:null, route: 'cart' },
+							});
+					});
+			})
+			.catch((err) => {});
 		fetchCartData = () => {
 			AsyncStorage.getItem("token")
 				.then((token) => {
-					console.log(token)
+					// console.log(token);
 					axios
 						.get("https://klick-api.onrender.com/auth/user", {
 							headers: { Authorization: "Bearer " + token },
@@ -143,6 +148,7 @@ const MyCart = ({ navigation }) => {
 
 							setCartId(user.data.user.Cart.id);
 							setData(data);
+							setLoading(false)
 						})
 						.catch((error) => {
 							console.log(error);
@@ -157,12 +163,12 @@ const MyCart = ({ navigation }) => {
 	// Function to delete an item from the cart
 	const deleteCartItem = (itemId) => {
 		// Make a DELETE request to the API to delete the item
-		console.log(itemId);
+		// console.log(itemId);
 		AsyncStorage.getItem("token")
 			.then((token) => {
-				console.log("!!!!!!!!!!!data[0].name!!!!!!!!!!!!!");
+				// console.log("!!!!!!!!!!!data[0].name!!!!!!!!!!!!!");
 				const items = Object.keys(data);
-				console.log(items);
+				// console.log(items);
 
 				const updatedCart = items.filter((item) =>
 					console.log(data[item].name)
@@ -176,131 +182,144 @@ const MyCart = ({ navigation }) => {
 
 	return (
 		<View style={{}}>
-			<ScrollView
-				style={{}}
-				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				}
-			>
-				{data && (
-					<View
-						style={{
-							marginBottom: 100,
-							marginTop: 10,
-							// backgroundColor: 'red'
-						}}
-					>
-						<View style={{ marginBottom: 0 }}>
-							<View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
-								{Object.keys(data).map((key) => (
-									<View
-										style={{
-											display: "flex",
-											flexDirection: "row",
-											justifyContent: "space-around",
-											alignItems: "center",
-											backgroundColor: "white",
-											borderRadius: 8,
-											marginBottom: 15,
-										}}
-										elevation={10}
-									>
-										<View style={{ paddingVertical: 10 }}>
-											<Image
-												style={{
-													width: 102,
-													height: 102,
-													marginTop: 15,
-													borderRadius: 10,
-												}}
-												source={{ uri: data[key].image[0] }}
-											></Image>
-										</View>
+			{loading ? (
+				<View
+					style={{
+						// backgroundColor: 'red',
+						// flex: 1,
+						marginTop: 80,
+					}}
+				>
+					<LoadingScreen word={"Cart Data Loading...."} />
+				</View>
+			) : (
+				<ScrollView
+					style={{ height: Dimensions.get('window').height, }}
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					}
+				>
+					{data && (
+						<View
+							style={{
+								marginBottom: 100,
+								marginTop: 10,
+								// backgroundColor: 'red'
+							}}
+						>
+							<View style={{ marginBottom: 0 }}>
+								<View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
+									{Object.keys(data).map((key) => (
 										<View
+										// key={}
 											style={{
-												flex: 0.8,
 												display: "flex",
-												flexDirection: "column",
-												justifyContent: "flex-end",
-												alignItems: "flex-start",
-												// backgroundColor: 'red',
+												flexDirection: "row",
+												justifyContent: "space-around",
+												alignItems: "center",
+												backgroundColor: "white",
+												borderRadius: 8,
+												marginBottom: 15,
 											}}
+											elevation={10}
 										>
-											<Text style={{ fontSize: 18, fontWeight: "500" }}>
-												{data[key].name}
-											</Text>
-											<Text
+											<View style={{ paddingVertical: 10 }}>
+												<Image
+													style={{
+														width: 102,
+														height: 102,
+														marginTop: 15,
+														borderRadius: 10,
+													}}
+													source={{ uri: data[key].image[0] }}
+												></Image>
+											</View>
+											<View
 												style={{
-													color: "#0485E8",
-													marginHorizontal: 0,
-													fontWeight: "500",
-													fontSize: 13,
-													marginVertical: 7,
+													flex: 0.8,
+													display: "flex",
+													flexDirection: "column",
+													justifyContent: "flex-end",
+													alignItems: "flex-start",
+													// backgroundColor: 'red',
 												}}
 											>
-												N{data[key].UnitPrice}
-											</Text>
-											{/* <Text style={{marginHorizontal:0,fontWeight:"500",fontSize:15,marginTop:5}}>QTY:2</Text> */}
-											<Counter itemCount={data[key].quantity} />
+												<Text style={{ fontSize: 18, fontWeight: "500" }}>
+													{data[key].name}
+												</Text>
+												<Text
+													style={{
+														color: "#0485E8",
+														marginHorizontal: 0,
+														fontWeight: "500",
+														fontSize: 13,
+														marginVertical: 7,
+													}}
+												>
+													N{data[key].UnitPrice}
+												</Text>
+												{/* <Text style={{marginHorizontal:0,fontWeight:"500",fontSize:15,marginTop:5}}>QTY:2</Text> */}
+												<Counter itemCount={data[key].quantity} />
+											</View>
+											<View
+												style={{
+													alignSelf: "flex-start",
+													padding: 15,
+												}}
+											>
+												<FontAwesome
+													onPress={() => deleteCartItem(key)}
+													name="trash"
+													size={20}
+													color="red"
+												/>
+											</View>
 										</View>
-										<View
-											style={{
-												alignSelf: "flex-start",
-												padding: 15,
-											}}
-										>
-											<FontAwesome
-												onPress={() => deleteCartItem(key)}
-												name="trash"
-												size={20}
-												color="red"
-											/>
-										</View>
-									</View>
-								))}
+									))}
+								</View>
 							</View>
-						</View>
-						<TouchableOpacity
-							onPress={() => emptyCart()}
-							style={{ alignItems: "center" }}
-						>
-							<GeneralButton
-								message={"Empty Cart"}
-								marginLeft={140}
-								top={15}
-								backgroundColor={"#EB270B"}
-								borderColor={"#FEDD00"}
-								height={45}
-								width={335}
-							/>
-						</TouchableOpacity>
-						{data.length !== 0 && (
 							<TouchableOpacity
-								onPress={() =>
-									navigation.navigate({
-										name: "checkout",
-										params: { cartData: data },
-									})
-								}
-								style={{
-									marginTop: 20,
-									alignItems: "center",
-								}}
+								onPress={() => emptyCart()}
+								style={{ alignItems: "center" }}
 							>
 								<GeneralButton
-									message={"Checkout"}
+									message={"Empty Cart"}
 									marginLeft={140}
 									top={15}
-									backgroundColor={"#FEDD00"}
+									backgroundColor={"#EB270B"}
 									borderColor={"#FEDD00"}
 									height={45}
 									width={335}
 								/>
 							</TouchableOpacity>
-						)}
-					</View>
-				)}
-			</ScrollView>
+							{data.length !== 0 && (
+								<TouchableOpacity
+									onPress={() =>
+										navigation.navigate({
+											name: "checkout",
+											params: { cartData: data },
+										})
+									}
+									style={{
+										marginTop: 20,
+										alignItems: "center",
+									}}
+								>
+									<GeneralButton
+										message={"Checkout"}
+										marginLeft={140}
+										top={15}
+										backgroundColor={"#FEDD00"}
+										borderColor={"#FEDD00"}
+										height={45}
+										width={335}
+									/>
+								</TouchableOpacity>
+							)}
+						</View>
+					)}
+				</ScrollView>
+			)}
 		</View>
 	);
 };

@@ -28,8 +28,8 @@ const StoreList = () => {
 	useEffect(() => {
 		// axios.get('https://klick-api.onrender.com/product/store/product?storeId=')
 		AsyncStorage.getItem("token").then((token) => {
-			console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
-			console.log(token);
+			// console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
+			// console.log(token);
 			fetch(`https://klick-api.onrender.com/auth/user`, {
 				method: "GET",
 				mode: "no-cors",
@@ -41,16 +41,16 @@ const StoreList = () => {
 				.then((userdata) => {
 					const storeData = userdata.stores[0];
 					setStore(storeData);
-					console.log("!!!!!!!!!!User Data!!!!!!!!");
-					console.log(storeData.id);
+					// console.log("!!!!!!!!!!User Data!!!!!!!!");
+					// console.log(storeData.id);
 					axios
 						.get(
 							`https://klick-api.onrender.com/product/store/product?storeId=${storeData.id}`,
 							{ headers: { Authorization: `Bearer ${token}` } }
 						)
 						.then((data) => {
-							console.log("!!!!!!Product Data!!!!!!!");
-							console.log(data.data.data);
+							// console.log("!!!!!!Product Data!!!!!!!");
+							// console.log(data.data.data);
 							setProducts(data.data.data);
 						})
 						.catch((error) => {

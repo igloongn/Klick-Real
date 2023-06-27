@@ -53,14 +53,14 @@ const AddNewDiscount = ({ navigation }) => {
 
 	const makeDiscount = async () => {
 		setIsLoading(true);
-		console.log({ title, value, endDate });
+		// console.log({ title, value, endDate });
 		try {
 			const token = await AsyncStorage.getItem("token");
 			const userData = await getUserData();
-			console.log("data", typeof userData);
+			// console.log("data", typeof userData);
 			// const url = `https://klick-api.onrender.com/product/?category=${selectCatId}`
-			console.log("userData?.stores[0].id");
-			console.log(userData?.stores[0].id);
+			// console.log("userData?.stores[0].id");
+			// console.log(userData?.stores[0].id);
 			const response = await fetch(
 				`https://klick-api.onrender.com/brand/discount/${userData?.stores[0].id}`,
 				{
@@ -80,7 +80,7 @@ const AddNewDiscount = ({ navigation }) => {
 			);
 			if (response?.status >= 200 && response?.status < 203) {
 				const _data = await response.json();
-				console.log("y", _data);
+				// console.log("y", _data);
 				// Alert.alert("Success", "Discount added");
 				setSuccessModalVisible(true);
 

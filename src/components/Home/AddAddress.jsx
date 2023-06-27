@@ -76,11 +76,11 @@ const AddAddress = ({ navigation, route }) => {
 					type: "other",
 					defaults: true,
 				};
-				console.log("payload");
-				console.log(payload);
+				// console.log("payload");
+				// console.log(payload);
 
 				const token = await AsyncStorage.getItem("token");
-				console.log(token);
+				// console.log(token);
 				const postAddress = await axios.post(
 					"https://klick-api.onrender.com/address/",
 					payload,
@@ -88,7 +88,7 @@ const AddAddress = ({ navigation, route }) => {
 						headers: { Authorization: "Bearer " + token },
 					}
 				);
-				console.log(postAddress.data);
+				// console.log(postAddress.data);
 
 				setLoading(false);
 				setSuccessModalVisible(true);

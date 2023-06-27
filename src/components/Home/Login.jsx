@@ -24,7 +24,10 @@ import ModalFunc from "../../utils/ModalFunc";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation, route }) => {
+	const from = route.params;
+	// console.log("from");
+	// console.log(from);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState(null);
@@ -44,59 +47,21 @@ const Login = ({ navigation }) => {
 	// 	return emailRegex.test(email)_;
 	// };
 
-	const login = async () => {
-		// try {
-		// 	setLoading(true);
-		// 	console.log({
-		// 		email,
-		// 		password,
-		// 	});
-		// 	const response = await fetch(API_URL + "/auth/signin", {
-		// 		method: "POST",
-		// 		headers: {
-		// 			"Content-Type": "application/json",
-		// 		},
-		// 		body: JSON.stringify({
-		// 			email: email.trim(),
-		// 			password,
-		// 		}),
-		// 	});
-		// 	// if (response && response.data && response.data.access_token){
-		// 	//Login Susscessful
-		// 	const data = await response.json();
-		// 	// Store the authentication token in AsyncStorage
-		// 	console.log("!!!!!!!!!!!!!Login Response!!!!!!!!!!!!");
-		// 	// console.log(data.status_code);
-		// 	await AsyncStorage.setItem("token", data.access_token);
-		// 	await AsyncStorage.setItem("isLoggedIn", "true");
-		// 	// Do something with the response data
-		// 	// navigation.navigate('vendordash')
-		// 	setSuccessModalVisible(true);
-		// 	setTimeout(() => {
-		// 		navigation.navigate("hometab");
-		// 	}, 2000);
-		// } catch (error) {
-		// 	// Handle network or other errors
-		// 	console.error("!!!!!!!!!!!!!");
-		// 	console.error(error);
-		// 	setFailedModalVisible(true);
-		// 	setLoading(false);
-		// }
-
+	const onLogin = async () => {
 		const payload = {
 			email: email.trim(),
 			password,
 		};
-		console.log(payload);
+		// console.log(payload);
 		setLoading(true);
 		setFailedModalVisible(false);
 
 		axios
 			.post("https://klick-api.onrender.com/auth/signin", payload)
 			.then((response) => {
-				console.log("POST request successful");
-				console.log("Response:", response.data);
-				console.log("!!!!!!!!!!!!!Login Response!!!!!!!!!!!!");
+				// console.log("POST request successful");
+				// console.log("Response:", response.data);
+				// console.log("!!!!!!!!!!!!!Login Response!!!!!!!!!!!!");
 				// console.log(data.status_code);
 				AsyncStorage.setItem("token", response.data.access_token);
 				AsyncStorage.setItem("isLoggedIn", "true");
@@ -104,7 +69,33 @@ const Login = ({ navigation }) => {
 				// navigation.navigate('vendordash')
 				setSuccessModalVisible(true);
 				setTimeout(() => {
-					navigation.navigate("hometab");
+					switch (from.route) {
+						case "button":
+							console.log("from Buttom");
+							navigation.navigate("hometab");
+							break;
+
+						case "productData":
+							console.log("from Product Detail Page");
+							navigation.navigate({
+								name: "productdetails",
+								params: { id: from.id },
+							});
+							break;
+
+						case "cart":
+							console.log("from Cart");
+							navigation.navigate("mycart");
+							break;
+
+						case "modal":
+							console.log("from Buttom");
+							navigation.navigate("sellerstab");
+							break;
+
+						default:
+							break;
+					}
 				}, 1500);
 				setLoading(false);
 			})
@@ -213,7 +204,7 @@ const Login = ({ navigation }) => {
 						onChangeValue={(text) => setPassword(text)}
 						password={true}
 					/>
-					<TouchableOpacity onPress={() => login()}>
+					<TouchableOpacity onPress={() => onLogin()}>
 						<GeneralButton
 							backgroundColor={"#FEDD00"}
 							message={loading ? "Loading ....." : "Continue"}

@@ -23,9 +23,9 @@ const Stories = ({ navigation, route }) => {
 	const getAllData = async () => {
 		const { id } = route.params;
 		setLoading(true);
-		console.log("loading data");
+		// console.log("loading data");
 		const token = await AsyncStorage.getItem("token");
-		console.log("tok", token);
+		// console.log("tok", token);
 
 		fetch("https://klick-api.onrender.com/post/" + id, {
 			method: "GET",
@@ -38,7 +38,7 @@ const Stories = ({ navigation, route }) => {
 			.then((res) => res.json())
 			.then((data) => {
 				setData(data?.data);
-				console.log("--all", data);
+				// console.log("--all", data);
 			})
 			.catch((e) => console.log(e))
 			.finally(() => setLoading(false));
@@ -61,7 +61,7 @@ const Stories = ({ navigation, route }) => {
 		};
 	}, [focus, isLoading, data]);
 
-	console.log(route);
+	// console.log(route);
 	return (
 		<>
 			{data ? (

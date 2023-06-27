@@ -76,16 +76,9 @@ const AddNewProduct = ({ navigation }) => {
 	}, []);
 
 	useEffect(() => {
-		// fetch(`${base_url}category/getAll`)
-		// 	.then((res) => res.json())
-		// 	.then((data) => {
-		// 		setListofCat(data?.data);
-		// 		// console.log(data?.data)
-		// 	})
-		// 	.catch((err) => console.log(err));
 
 		AsyncStorage.getItem("token").then((token) => {
-			console.log(token);
+			// console.log(token);
 			axios
 				.get("https://klick-api.onrender.com/auth/user", {
 					headers: {
@@ -96,38 +89,14 @@ const AddNewProduct = ({ navigation }) => {
 				})
 				.then((user) => {
 					const userData = user.data;
-					console.log("!!!!!!!!!user data!!!!!!!!!");
-					console.log(userData.stores[0].id);
+					// console.log("!!!!!!!!!user data!!!!!!!!!");
+					// console.log(userData.stores[0].id);
 
 					setUser(userData);
-					// axios
-					// 	.get(
-					// 		`https://klick-api.onrender.com/brand/${userData.stores[0].id}`
-					// 	)
-					// 	.then((res) => {
-					// 		console.error("res.data.data.industry");
-					// 		console.log(res.data.data.industry);
-					// 		// axios
-					// 		// 	.get(
-					// 		// 		`https://klick-api.onrender.com/category/${res.data.data.industry}`
-					// 		// 	)
-					// 		// 	.then((res) => {
-					// 		// 		console.log("!!!!!!!!!Store Details!!!!!!!!!");
-					// 		// 		// console.log(res.data.data.name)
-					// 		// 		console.log(res.data.data);
-					// 		// 		setMyStoreCat(res.data.data);
-					// 		// 	});
-					// 	});
+					
 					axios
 						.get("https://klick-api.onrender.com/product/shipping/category")
 						.then((res) => {
-							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
-							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
-							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
-							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
-							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
-							// console.log("!!!!!!!!!Shipping Category!!!!!!!");
-							// console.log(res.data.data);
 							setListShippingCategory(res.data.data);
 						})
 						.catch((err) => {});
@@ -135,22 +104,10 @@ const AddNewProduct = ({ navigation }) => {
 						// .get("https://klick-api.onrender.com/product/shipping/category")
 						.get("https://klick-api.onrender.com/category/getAll")
 						.then((res) => {
-							// console.log("!!!!!!!!!Local Category!!!!!!!");
-							// console.log("!!!!!!!!!Local Category!!!!!!!");
-							// console.log("!!!!!!!!!Local Category!!!!!!!");
-							// console.log("!!!!!!!!!Local Category!!!!!!!");
-							// console.log(res.data.data);
 							setListLocalCategory(res.data.data);
 						});
 				});
 		});
-		// fetch(`${base_url}product/shipping/category`)
-		// 	.then((res) => res.json())
-		// 	.then((data) => {
-		// 		setsheepListofCat(data?.data);
-		// 		// console.log(data?.data)
-		// 	})
-		// 	.catch((err) => console.log(err));
 	}, []);
 
 	const data = useMemo(
@@ -225,43 +182,39 @@ const AddNewProduct = ({ navigation }) => {
 			});
 			// formdata.append.images
 
-			console.log("!!!!!!!Product Payload!!!!!!!!");
-			console.log({
-				name,
-				description,
-				price,
-				total,
-				instock,
-				type,
-				colors,
-				// shipCategoryId,
-				weight,
-				length,
-				width,
-				height,
-				// shipCategory,
-				images,
-				// selectCatId,
-				shippingCategory,
-				localCategory,
-			});
+			// console.log("!!!!!!!Product Payload!!!!!!!!");
+			// console.log({
+			// 	name,
+			// 	description,
+			// 	price,
+			// 	total,
+			// 	instock,
+			// 	type,
+			// 	colors,
+			// 	// shipCategoryId,
+			// 	weight,
+			// 	length,
+			// 	width,
+			// 	height,
+			// 	// shipCategory,
+			// 	images,
+			// 	// selectCatId,
+			// 	shippingCategory,
+			// 	localCategory,
+			// });
 
-			console.log("formd-23r6", formdata);
-
-			console.log("!!!!!!!Product Payload!!!!!!!!");
-			console.log(formdata);
-			// return;
+			// console.log("formd-23r6", formdata);
 
 			try {
 				const token = await AsyncStorage.getItem("token");
-				console.log("tok-1", token);
+				// console.log("tok-1", token);
 				// console.log(myStoreCat);
-				console.log("!!!!!!!!!!!!!!Create!!!!!!!!!!!");
+				// console.log("!!!!!!!!!!!!!!Create!!!!!!!!!!!");
 				// console.log(myStoreCat);
-				console.log(localCategory);
-				console.log(user.stores[0].id);
+				// console.log(localCategory);
+				// console.log(user.stores[0].id);
 				const url = `https://klick-api.onrender.com/product/?category=${localCategory}&storeId=${user.stores[0].id}`;
-				console.log(url);
+				// console.log(url);
 				// const response = await fetch("https://klick-api.onrender.com/product/?category=039c6ea9-45d7-493f-beb1-fd74fb40399d", {
 				const response = await fetch(url, {
 					method: "POST",

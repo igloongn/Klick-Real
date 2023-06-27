@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProductCard from "./ProductCard";
+import LoadingScreen from "../../utils/MyLoading";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -24,12 +25,13 @@ const ProductList = () => {
 	const navigation = useNavigation();
 	const [store, setStore] = useState(null);
 	const [products, setProducts] = useState([]);
+	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
 		// axios.get('https://klick-api.onrender.com/product/store/product?storeId=')
 		AsyncStorage.getItem("token").then((token) => {
-			console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
-			console.log(token);
+			// console.log("!!!!!!!!!!Token Inside!!!!!!!!!");
+			// console.log(token);
 			fetch(`https://klick-api.onrender.com/auth/user`, {
 				method: "GET",
 				mode: "no-cors",
@@ -41,17 +43,18 @@ const ProductList = () => {
 				.then((userdata) => {
 					const storeData = userdata.stores[0];
 					setStore(storeData);
-					console.log("!!!!!!!!!!User Data!!!!!!!!");
-					console.log(storeData.id);
+					// console.log("!!!!!!!!!!User Data!!!!!!!!");
+					// console.log(storeData.id);
 					axios
 						.get(
 							`https://klick-api.onrender.com/product/store/product?storeId=${storeData.id}`,
 							{ headers: { Authorization: `Bearer ${token}` } }
 						)
 						.then((data) => {
-							console.log("!!!!!!Product Data!!!!!!!");
-							console.log(data.data.data);
+							// console.log("!!!!!!Product Data!!!!!!!");
+							// console.log(data.data.data);
 							setProducts(data.data.data);
+							setLoading(false)
 						})
 						.catch((error) => {
 							console.log("!!!!!!!!!Axios Error!!!!!!!");
@@ -147,36 +150,49 @@ const ProductList = () => {
 				</TouchableOpacity>
 			</View>
 			{/* Body */}
-			<ScrollView>
-				{products.length > 0 ? (
-					products.map((item) => (
-						<ProductCard productDetails={item} navigation={navigation} />
-					))
-				) : (
-					<View>
-						<OpenBox />
-						<Text
-							style={{
-								fontSize: 25,
-								fontWeight: 400,
-								textAlign: "center",
-							}}
-						>
-							No Product Found
-						</Text>
-						<Text
-							style={{
-								fontSize: 16,
-								textAlign: "center",
-								color: "#6A6B6C",
-							}}
-						>
-							You’re yet to add any product to your store. Products that you add
-							will appear here
-						</Text>
-					</View>
-				)}
-			</ScrollView>
+			{loading ? (
+				<View
+					style={{
+						// backgroundColor: 'red',
+						flex: 1,
+						flexDirection: "column",
+						justifyContent: "flex-start"
+					}}
+				>
+					<LoadingScreen word={"My Product Loading...."} />
+				</View>
+			) : (
+				<ScrollView>
+					{products.length > 0 ? (
+						products.map((item) => (
+							<ProductCard productDetails={item} navigation={navigation} />
+						))
+					) : (
+						<View>
+							<OpenBox />
+							<Text
+								style={{
+									fontSize: 25,
+									fontWeight: 400,
+									textAlign: "center",
+								}}
+							>
+								No Product Found
+							</Text>
+							<Text
+								style={{
+									fontSize: 16,
+									textAlign: "center",
+									color: "#6A6B6C",
+								}}
+							>
+								You’re yet to add any product to your store. Products that you
+								add will appear here
+							</Text>
+						</View>
+					)}
+				</ScrollView>
+			)}
 		</View>
 	);
 };
