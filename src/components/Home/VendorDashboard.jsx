@@ -250,154 +250,213 @@ const VendorDashboard = ({ navigation }) => {
 					<Text style={{ fontSize: 11 }}>Create Store</Text>
 				</TouchableOpacity>
 
-				<View
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "space-around",
-						marginBottom: 20,
-					}}
-				>
-					<View
-						style={{
-							alignSelf: "center",
-						}}
-					>
-						<TouchableOpacity
-							onPress={() => navigation.navigate("addnewproduct")}
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "center",
-								justifyContent: "center",
-								height: 52,
-								width: 52,
-								backgroundColor: "#0485E8",
-								borderRadius: 50,
-							}}
-						>
-							<SimpleLineIcons name="handbag" size={24} color="white" />
-						</TouchableOpacity>
-						<Text style={{}}>Add Product</Text>
-					</View>
+				<View>
 					<View
 						style={{
 							display: "flex",
-							justifyContent: "center",
-							alignSelf: "center",
+							flexDirection: "row",
+							justifyContent: "space-around",
+							marginBottom: 20,
+							alignItems: "center",
 						}}
 					>
-						<TouchableOpacity
-							onPress={() => navigation.navigate("discounts")}
+						{/* Add Product Button */}
+						<View
 							style={{
 								display: "flex",
 								flexDirection: "column",
-								alignItems: "center",
+								alignSelf: "center",
 								justifyContent: "center",
-								height: 52,
-								width: 52,
-								backgroundColor: "#F5AF35",
-								borderRadius: 50,
 							}}
 						>
-							<AntDesign name="tagso" size={24} color={"white"} />
-						</TouchableOpacity>
-						<Text style={{ marginLeft: 0 }}>Discount</Text>
+							<View style={{ alignSelf: "center" }}>
+								<TouchableOpacity
+									onPress={() => navigation.navigate("addnewproduct")}
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+										justifyContent: "center",
+										height: 52,
+										width: 52,
+										backgroundColor: "#0485E8",
+										borderRadius: 50,
+									}}
+								>
+									<SimpleLineIcons name="handbag" size={24} color="white" />
+								</TouchableOpacity>
+							</View>
+							<Text>Add Product</Text>
+						</View>
+						{/* Discount Button */}
+						<View
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								alignSelf: "center",
+								justifyContent: "center",
+							}}
+						>
+							<View
+								style={{
+									alignSelf: "center",
+								}}
+							>
+								<TouchableOpacity
+									onPress={() => navigation.navigate("discounts")}
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+										justifyContent: "center",
+										height: 52,
+										width: 52,
+										backgroundColor: "#F5AF35",
+										borderRadius: 50,
+									}}
+								>
+									<AntDesign name="tagso" size={24} color={"white"} />
+								</TouchableOpacity>
+							</View>
+							<Text style={{ marginLeft: 0 }}>Discount</Text>
+						</View>
+						{/* My Store Button */}
+						<View
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								alignSelf: "center",
+								justifyContent: "center",
+							}}
+						>
+							<View
+								style={{
+									alignSelf: "center",
+								}}
+							>
+								<TouchableOpacity
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+										justifyContent: "center",
+										height: 52,
+										width: 52,
+										backgroundColor: "#FEDD00",
+										borderRadius: 50,
+									}}
+									onPress={() => navigation.navigate("productView")}
+								>
+									<FontAwesome5 name="store" size={24} color="white" />
+								</TouchableOpacity>
+							</View>
+							<Text style={{ marginLeft: 3 }}>My Store</Text>
+						</View>
 					</View>
+
 					<View
 						style={{
-							alignSelf: "center",
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "space-around",
+							marginBottom: 20,
 						}}
 					>
-						<TouchableOpacity
+						{/* Price Ad Button */}
+						<View
 							style={{
 								display: "flex",
 								flexDirection: "column",
-								alignItems: "center",
+								alignSelf: "center",
 								justifyContent: "center",
-								height: 52,
-								width: 52,
-								backgroundColor: "#FEDD00",
-								borderRadius: 50,
 							}}
-							onPress={() => navigation.navigate("productView")}
 						>
-							<FontAwesome5 name="store" size={24} color="white" />
-						</TouchableOpacity>
-						<Text style={{ marginLeft: 3 }}>My Store</Text>
-					</View>
-				</View>
-				<View
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "space-around",
-					}}
-				>
-					<View
-						style={{
-							alignSelf: "center",
-						}}
-					>
-						<TouchableOpacity
-							onPress={() => navigation.navigate("addNewPriceAd")}
+							<View
+								style={{
+									alignSelf: "center",
+								}}
+							>
+								<TouchableOpacity
+									onPress={() => navigation.navigate("addNewPriceAd")}
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+										justifyContent: "center",
+										height: 52,
+										width: 52,
+										backgroundColor: "#02508B",
+										borderRadius: 50,
+									}}
+								>
+									<AntDesign name="notification" size={24} color="white" />
+								</TouchableOpacity>
+							</View>
+							<Text style={{}}>Price Ad</Text>
+						</View>
+						{/* Settings Button */}
+						<View
 							style={{
 								display: "flex",
 								flexDirection: "column",
-								alignItems: "center",
+								alignSelf: "center",
 								justifyContent: "center",
-								height: 52,
-								width: 52,
-								backgroundColor: "#02508B",
-								borderRadius: 50,
 							}}
 						>
-							<AntDesign name="notification" size={24} color="white" />
-						</TouchableOpacity>
-						<Text style={{ marginLeft: -10 }}>Price Ad</Text>
-					</View>
-					<View
-						style={{
-							alignSelf: "center",
-						}}
-					>
-						<TouchableOpacity
-							onPress={() => navigation.navigate("settings")}
+							<View
+								style={{
+									alignSelf: "center",
+								}}
+							>
+								<TouchableOpacity
+									onPress={() => navigation.navigate("settings")}
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+										justifyContent: "center",
+										height: 52,
+										width: 52,
+										backgroundColor: "#1BB519",
+										borderRadius: 50,
+									}}
+								>
+									<AntDesign name="setting" size={24} color="white" />
+								</TouchableOpacity>
+								<Text style={{ marginLeft: 0 }}>Settings</Text>
+							</View>
+						</View>
+						{/* Support Button */}
+						<View
 							style={{
 								display: "flex",
 								flexDirection: "column",
-								alignItems: "center",
+								alignSelf: "center",
 								justifyContent: "center",
-								height: 52,
-								width: 52,
-								backgroundColor: "#1BB519",
-								borderRadius: 50,
 							}}
 						>
-							<AntDesign name="setting" size={24} color="white" />
-						</TouchableOpacity>
-						<Text style={{ marginLeft: 0 }}>Settings</Text>
-					</View>
-					<View
-						style={{
-							alignSelf: "center",
-						}}
-					>
-						<TouchableOpacity
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "center",
-								justifyContent: "center",
-								height: 52,
-								width: 52,
-								backgroundColor: "#EB270B",
-								borderRadius: 50,
-							}}
-						>
-							<Octicons name="comment-discussion" size={24} color="white" />
-						</TouchableOpacity>
-						<Text style={{ marginLeft: 3 }}>Support</Text>
+							<View
+								style={{
+									alignSelf: "center",
+								}}
+							>
+								<TouchableOpacity
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+										justifyContent: "center",
+										height: 52,
+										width: 52,
+										backgroundColor: "#EB270B",
+										borderRadius: 50,
+									}}
+								>
+									<Octicons name="comment-discussion" size={24} color="white" />
+								</TouchableOpacity>
+								<Text style={{ marginLeft: 3 }}>Support</Text>
+							</View>
+						</View>
 					</View>
 				</View>
 
@@ -451,7 +510,7 @@ const VendorDashboard = ({ navigation }) => {
 							marginTop: 0,
 						}}
 					>
-						N2,768,058
+						N0.00
 					</Text>
 					<View
 						onPress={(buysell) => setBuySell(!buysell)}

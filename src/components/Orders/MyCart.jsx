@@ -125,12 +125,25 @@ const MyCart = ({ navigation }) => {
 					.then((data) => {
 						console.log("The User is found");
 						// console.log(data.data);
+						const isEmptyObject = (obj) => {
+							return Object.keys(obj).length === 0;
+						};
+						isEmptyObject(data.data.DefaultAddress);
+						console.log(isEmptyObject(data.data.DefaultAddress));
+						if (!isEmptyObject(data.data.DefaultAddress) === true) {
+							// setDefaultAddress(false);
+							navigation.navigate("addaddress");
+
+							console.log("Default address Empty");
+						}
 					})
 					.catch((err) => {
+						console.log("User Error");
+						console.log(err);
 						navigation.navigate({
-								name: "login",
-								params: { id:null, route: 'cart' },
-							});
+							name: "login",
+							params: { id: null, route: "cart" },
+						});
 					});
 			})
 			.catch((err) => {});
@@ -148,7 +161,7 @@ const MyCart = ({ navigation }) => {
 
 							setCartId(user.data.user.Cart.id);
 							setData(data);
-							setLoading(false)
+							setLoading(false);
 						})
 						.catch((error) => {
 							console.log(error);
@@ -194,7 +207,7 @@ const MyCart = ({ navigation }) => {
 				</View>
 			) : (
 				<ScrollView
-					style={{ height: Dimensions.get('window').height, }}
+					style={{ height: Dimensions.get("window").height }}
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
@@ -211,7 +224,7 @@ const MyCart = ({ navigation }) => {
 								<View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
 									{Object.keys(data).map((key) => (
 										<View
-										// key={}
+											// key={}
 											style={{
 												display: "flex",
 												flexDirection: "row",

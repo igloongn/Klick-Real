@@ -209,7 +209,7 @@ const HomeContent = ({ navigation }) => {
 						isEmptyObject(userData.data.DefaultAddress);
 						// console.log(isEmptyObject(userData.data.DefaultAddress));
 						if (isEmptyObject(userData.data.DefaultAddress) === true) {
-							setDefaultAddress(false);
+							// setDefaultAddress(false);
 						}
 					})
 					.catch((err) => {
@@ -471,7 +471,7 @@ const HomeContent = ({ navigation }) => {
 								// console.log(isEmptyObject(userData.data.DefaultAddress));
 								if (isEmptyObject(userData.data.DefaultAddress) === true) {
 									// navigation.navigate("addaddress");
-									setDefaultAddress(false);
+									// setDefaultAddress(false);
 								}
 							})
 							.catch((err) => {

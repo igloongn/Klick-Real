@@ -40,7 +40,7 @@ const AddAddress = ({ navigation, route }) => {
 						},
 					})
 					.then((result) => {
-						setPhone(result.data.user.phone);
+						setPhone("+" + result.data.user.phone);
 					})
 					.catch((err) => {});
 			})
@@ -135,7 +135,7 @@ const AddAddress = ({ navigation, route }) => {
 							color: "#6A6B6C",
 						}}
 					>
-						Add Address.
+						{/* Add Address. */}
 					</Text>
 					<GeneralInput
 						placeholder={"dele6 Main St"}
