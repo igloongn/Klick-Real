@@ -130,7 +130,7 @@ const MyCart = ({ navigation }) => {
 						};
 						isEmptyObject(data.data.DefaultAddress);
 						console.log(isEmptyObject(data.data.DefaultAddress));
-						if (!isEmptyObject(data.data.DefaultAddress) === true) {
+						if (isEmptyObject(data.data.DefaultAddress) === true) {
 							// setDefaultAddress(false);
 							navigation.navigate("addaddress");
 
