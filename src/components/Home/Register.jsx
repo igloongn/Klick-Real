@@ -65,7 +65,7 @@ const Register = ({ navigation }) => {
 		console.log(isValidEmail);
 		return isValidEmail;
 	};
-
+	// myFunc("chike.ozulumba@gmail.com")
 	// const navigate = useNavigation()
 
 	const registerUser = async () => {
@@ -98,11 +98,12 @@ const Register = ({ navigation }) => {
 					Alert.alert("Please the password must be the same");
 				} else {
 					// if (!validateEmail(email)) {
-					if (!myFunc(email)) {
-						// console.log("Email Test Later");
-						// console.log(validateEmail(email));
-						Alert.alert("Please enter a valid email");
-					} else {
+					// if (!myFunc(email)) {
+					// 	// console.log("Email Test Later");
+					// 	// console.log(validateEmail(email));
+					// 	Alert.alert("Please enter a valid email");
+					// } 
+					// else {
 						if (phone.length !== 10) {
 							Alert.alert("Phone must be at least 10 digits");
 						} else {
@@ -158,7 +159,7 @@ const Register = ({ navigation }) => {
 								setLoading(false);
 							}
 						}
-					}
+					// }
 				}
 			}
 		}

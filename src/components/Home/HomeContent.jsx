@@ -558,14 +558,14 @@ const HomeContent = ({ navigation }) => {
 							<View style={{ paddingRight: 10 }}>
 								<View style={styles.cart}>
 									<TouchableOpacity
-										onPress={() => navigation.navigate("mycart")}
+										// onPress={() => navigation.navigate("mycart")}
 									>
 										<AntDesign name="shoppingcart" size={40} color="black" />
-										{cartCount ? (
+										{/* {cartCount ? (
 											<Badge count={cartCount} />
 										) : (
 											<Badge count={0} />
-										)}
+										)} */}
 									</TouchableOpacity>
 								</View>
 							</View>
@@ -595,14 +595,14 @@ const HomeContent = ({ navigation }) => {
 							<View style={{ paddingRight: 10 }}>
 								<View style={styles.cart}>
 									<TouchableOpacity
-										onPress={() => navigation.navigate("mycart")}
+										// onPress={() => navigation.navigate("mycart")}
 									>
-										<AntDesign name="shoppingcart" size={40} color="black" />
+										{/* <AntDesign name="shoppingcart" size={40} color="black" />
 										{cartCount ? (
 											<Badge count={cartCount} />
 										) : (
 											<Badge count={0} />
-										)}
+										)} */}
 									</TouchableOpacity>
 								</View>
 							</View>

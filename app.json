@@ -21,7 +21,7 @@
     "orientation": "portrait",
     "plugins": [],
     "sdkVersion": "48.0.0",
-    "slug": "klick",
+    "slug": "pop",
     "splash": {
       "backgroundColor": "#ffffff",
       "image": "./assets/splash.png",
@@ -34,10 +34,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "3b43951a-0d6b-449c-864d-1db7ec42de53"
+        "projectId": "5b98805a-1430-4557-9f17-281dbb15d2a3"
       }
     },
-    "owner": "henryrichie"
+    "owner": "nileriver"
   },
   "name": "klick2"
 }

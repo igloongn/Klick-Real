@@ -45,8 +45,12 @@ const ProductDetails = ({ navigation, route }) => {
 	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState(null);
 	const [count, setCount] = useState(1);
+	// const [buttonText, setButtonText] = useState({
+	// 	text: "Add to cart",
+	// 	color: "#FEDD00",
+	// });
 	const [buttonText, setButtonText] = useState({
-		text: "Add to cart",
+		text: "Buy now",
 		color: "#FEDD00",
 	});
 	const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -66,6 +70,8 @@ const ProductDetails = ({ navigation, route }) => {
 				// console.log("!!!!!!!!!!Product Detail!!!!!!!!!!!");
 				// console.log(res?.data.data);
 				setData(res.data.data);
+				// console.log('res.data.data')
+				// console.log(res.data.data);
 				setLoading(false);
 			})
 			.catch((err) => console.log(err));
@@ -80,81 +86,81 @@ const ProductDetails = ({ navigation, route }) => {
 		}
 	};
 	const addToCart = () => {
-		AsyncStorage.getItem("cart").then((cartData) => {
-			// AsyncStorage.getItem("token")
-			// .then((token) => {
-			// axios
-			// 	.get("https://klick-api.onrender.com/auth/user", {
-			// 		// headers: { Authorization: "Bearer " + token },
-			// 	})
-			// .then((user) => {
-			// console.log("!!!!!!!!Cart id!!!!!!!!!");
-			// console.log(user.data.user.Cart.id);
-			// const cartId = user.data.user.Cart.id;
-			// console.log("!!!!!!!!!Product ID!!!!!!!!!!");
-			const productId = data.id;
-			// console.log(productId);
-			// console.log("quantity: ", count);
-			const JSON_cartData = JSON.parse(cartData);
-			const payload = {
-				items: {
-					...JSON_cartData.items,
-					[productId]: count,
-				},
-			};
-			// AsyncStorage.setItem('cart', JSON.stringify([]))
-			AsyncStorage.setItem(
-				"cart",
-				JSON.stringify({
-					items: { ...JSON_cartData.items, [productId]: count },
-				})
-			);
-			setButtonText({ text: "Added", color: "green" });
-			// console.log(JSON_cartData);
+		// AsyncStorage.getItem("cart").then((cartData) => {
+		// 	const productId = data.id;
+		// 	const JSON_cartData = JSON.parse(cartData);
+		// 	const payload = {
+		// 		items: {
+		// 			...JSON_cartData.items,
+		// 			[productId]: count,
+		// 		},
+		// 	};
+		// 	AsyncStorage.setItem(
+		// 		"cart",
+		// 		JSON.stringify({
+		// 			items: { ...JSON_cartData.items, [productId]: count },
+		// 		})
+		// 	);
+		// 	setButtonText({ text: "Buy now", color: "#FEDD00" });
+		// 	// setButtonText({ text: "Added", color: "green" });
+		// 	navigation.navigate({
+		// 		name: "checkout",
+		// 		params: { id: data.id, item: data },
+		// 	});
+		// });
+		const productId = data.id;
+		// console.log(data);
+		// const JSON_data = JSON.parse(data);
+		// // setcartCount(Object.keys(JSON_data).length);
+		const payload = {
+			items: {
+				[data.id]: count,
+			},
+		};
+		console.log("Payload");
+		console.log(payload);
 
-			// console.log("!!!!!!!!!!!!!payload WHat will be pushed!!!!!!!!!!!");
-			// console.log({ ...JSON_cartData });
+		AsyncStorage.getItem("token")
+			.then((token) => {
+				axios
+					.get("https://klick-api.onrender.com/auth/user", {
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					})
+					.then((userdata) => {
+						// console.log(userdata.data.user.Cart.id);
 
-			// axios
-			// 	.put(
-			// 		`https://klick-api.onrender.com/cart/update/${cartId}`,
-			// 		{
-			// 			// items: {
-			// 			// 	[productId]: count,
-			// 			// },
-			// 			...payload,
-			// 		},
-			// 		{
-			// 			headers: {
-			// 				"Content-Type": "application/json",
-			// 				// Authorization: "Bearer " + token,
-			// 			},
-			// 		}
-			// 	)
-			// 	.then((res) => {
-			// 		console.log("!!!!!!Add to Cart Response!!!!!!!!!");
-			// 		console.log(res.data);
-			// 		setButtonText({ text: "Added", color: "green" });
-			// 	})
-			// 	.catch((err) => {
-			// 		console.log("Add to cart Error!!!!!!!!!!");
-			// 		console.log(err);
-			// 	});
-			// })
-			// .catch(function (error) {
-			// 	console.log("!!!!!!!!!User Error!!!!!!!!!!");
-			// 	console.log(error);
-			// });
-			// })
-			// .catch((error) => {
-			// 	console.log("!!!!!!!!Get token Error!!!!!!!!");
-			// 	console.log(error);
-			// });
+						axios
+							.put(
+								`https://klick-api.onrender.com/cart/update/${userdata.data.user.Cart.id}`,
+								payload,
+								{
+									headers: {
+										"Content-Type": "application/json",
+										Authorization: "Bearer " + token,
+									},
+								}
+							)
+							.then((res) => {
+								console.log("!!!!!!Add to Cart Response!!!!!!!!!");
+								console.log(res.data);
+							})
+							.catch((err) => {
+								console.log("Add to cart Error!!!!!!!!!!");
+								console.log(err);
+							});
+					})
+					.catch((err) => {});
+			})
+			.catch((err) => {});
+
+		setButtonText({ text: "Buy now", color: "#FEDD00" });
+		// setButtonText({ text: "Added", color: "green" });
+		navigation.navigate({
+			name: "checkout",
+			params: { id: data.id, item: data },
 		});
-		// navigation.navigate({
-		// 	name: "mycart",
-		// 	params: { id: data.id, itemCount: count },
-		// })
 	};
 
 	// Handle External Link
@@ -485,7 +491,7 @@ const ProductDetails = ({ navigation, route }) => {
 						} else {
 							navigation.navigate({
 								name: "login",
-								params: { id: data?.id, route: 'productData' },
+								params: { id: data?.id, route: "productData" },
 							});
 						}
 					}}

@@ -125,6 +125,8 @@ const MyCart = ({ navigation }) => {
 					.then((data) => {
 						console.log("The User is found");
 						// console.log(data.data);
+
+						// Default Address Check
 						const isEmptyObject = (obj) => {
 							return Object.keys(obj).length === 0;
 						};

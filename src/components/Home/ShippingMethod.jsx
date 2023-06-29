@@ -18,7 +18,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import PaymentModal from "../../utils/PaymentModal";
 
 const ShippingMethod = ({ navigation, route }) => {
-	const { checkoutData, cartDetail, addressPayload } = route.params;
+	// const { checkoutData, cartDetail, addressPayload } = route.params;
+	const { checkoutData, cartDetail, addressPayload, item } = route.params;
 	// console.log("!!!!!!!!!!!!!!!!!!!!");
 	// console.log(cartDetail);
 	// console.log(addressPayload);

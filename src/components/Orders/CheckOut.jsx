@@ -60,82 +60,88 @@ const DeliveryChange = ({ name, address, navigation }) => {
 	);
 };
 
+// const Cart = ({ navigation, data }) => {
 const Cart = ({ navigation, data }) => {
-	// console.log("!!!!!!!!!!!!!!!!;");
-	// console.log(data);
+	console.log("!!!!!!!!!!!!!!!!;");
+	console.log("!!!!!!!!!!!!!!!!;");
+	console.log(data);
 
 	return (
 		<View style={{ marginBottom: 0 }}>
 			<View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
-				{Object.keys(data).map((key) => (
+				{/* {data.map((key) => ( */}
+				{/* // {Object.keys(data).map((key) => ( */}
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						justifyContent: "space-around",
+						alignItems: "center",
+						// backgroundColor: "red",
+						backgroundColor: "white",
+						borderRadius: 8,
+						marginBottom: 15,
+					}}
+					elevation={10}
+				>
+					<View style={{ paddingVertical: 10 }}>
+						<Image
+							style={{
+								width: 102,
+								height: 102,
+								marginTop: 15,
+								borderRadius: 10,
+							}}
+							// source={{ uri: data[key].image[0] }}
+							source={{ uri: data.images[0] }}
+						></Image>
+					</View>
 					<View
 						style={{
+							flex: 0.8,
 							display: "flex",
-							flexDirection: "row",
-							justifyContent: "space-around",
-							alignItems: "center",
-							// backgroundColor: "red",
-							backgroundColor: "white",
-							borderRadius: 8,
-							marginBottom: 15,
+							flexDirection: "column",
+							justifyContent: "flex-end",
+							alignItems: "flex-start",
+							// backgroundColor: 'red',
 						}}
-						elevation={10}
 					>
-						<View style={{ paddingVertical: 10 }}>
-							<Image
-								style={{
-									width: 102,
-									height: 102,
-									marginTop: 15,
-									borderRadius: 10,
-								}}
-								source={{ uri: data[key].image[0] }}
-							></Image>
-						</View>
-						<View
+						<Text style={{ fontSize: 18, fontWeight: "500" }}>
+							{/* {data[key].name} */}
+							{data.name}
+						</Text>
+						<Text
 							style={{
-								flex: 0.8,
-								display: "flex",
-								flexDirection: "column",
-								justifyContent: "flex-end",
-								alignItems: "flex-start",
-								// backgroundColor: 'red',
+								color: "#0485E8",
+								marginHorizontal: 0,
+								fontWeight: "500",
+								fontSize: 13,
+								marginVertical: 7,
 							}}
 						>
-							<Text style={{ fontSize: 18, fontWeight: "500" }}>
-								{data[key].name}
-							</Text>
-							<Text
-								style={{
-									color: "#0485E8",
-									marginHorizontal: 0,
-									fontWeight: "500",
-									fontSize: 13,
-									marginVertical: 7,
-								}}
-							>
-								N{data[key].UnitPrice}
-							</Text>
-							<Text
-								style={{
-									marginHorizontal: 0,
-									fontWeight: "500",
-									fontSize: 15,
-									marginTop: 5,
-								}}
-							>
-								QTY: {data[key].quantity}
-							</Text>
-							{/* <Counter itemCount={data[key].quantity} /> */}
-						</View>
-						<View
+							{/* N{data[key].UnitPrice} */}N{data.price}
+						</Text>
+						<Text
 							style={{
-								alignSelf: "flex-start",
-								padding: 15,
+								marginHorizontal: 0,
+								fontWeight: "500",
+								fontSize: 15,
+								marginTop: 5,
 							}}
-						></View>
+						>
+							{/* QTY: {data[key].quantity} */}
+							QTY: {data.quantity.instock}
+						</Text>
+						{/* <Counter itemCount={data[key].quantity} /> */}
 					</View>
-				))}
+					<View
+						style={{
+							alignSelf: "flex-start",
+							padding: 15,
+						}}
+					></View>
+				</View>
+				{/* ))} */}
 			</View>
 		</View>
 	);
@@ -143,7 +149,11 @@ const Cart = ({ navigation, data }) => {
 
 const CheckOut = ({ navigation, route }) => {
 	// const { id, itemCount, payload } = route.params;
-	const { cartData } = route.params;
+	// const { cartData } = route.params;
+
+	const { item } = route.params;
+	// console.log('!!!!!!!!!!!!item!!!!!!!!!')
+	// console.log(item)
 	const [data, setData] = useState(null);
 	const [address, setAddress] = useState(null);
 	const [cartID, setCartID] = useState(null);
@@ -158,19 +168,30 @@ const CheckOut = ({ navigation, route }) => {
 				.then((userdata) => {
 					// console.log("userdata.data");
 					// console.log(userdata.data.DefaultAddress);
-					const decodeToken = jwtDecode(token);
-					// console.log("decodeToken");
-					// console.log(userdata.data.user.Cart.id);
-					setCartID(userdata.data.user.Cart.id);
-					const newObj = {
-						address: userdata.data.DefaultAddress.address,
-						city: userdata.data.DefaultAddress.city,
-						state: userdata.data.DefaultAddress.state,
-						fullName: decodeToken.fullName,
+					const isEmptyObject = (obj) => {
+						return Object.keys(obj).length === 0;
 					};
-
-					setAddress(newObj);
-					setLoading(false);
+					isEmptyObject(userdata.data.DefaultAddress);
+					console.log(isEmptyObject(userdata.data.DefaultAddress));
+					if (isEmptyObject(userdata.data.DefaultAddress) === true) {
+						// setDefaultAddress(false);
+						navigation.navigate("addaddress");
+						console.log("Default address Empty");
+					} else {
+						const decodeToken = jwtDecode(token);
+						// console.log("decodeToken");
+						// console.log(userdata.data.user.Cart.id);
+						setCartID(userdata.data.user.Cart.id);
+						const newObj = {
+							address: userdata.data.DefaultAddress.address,
+							city: userdata.data.DefaultAddress.city,
+							state: userdata.data.DefaultAddress.state,
+							fullName: decodeToken.fullName,
+						};
+						console.log(newObj);
+						setAddress(newObj);
+						setLoading(false);
+					}
 				});
 		});
 	}, []);
@@ -178,9 +199,11 @@ const CheckOut = ({ navigation, route }) => {
 	const handleCheckout = () => {
 		// console.log("CheckOut");
 		AsyncStorage.getItem("token").then((token) => {
-			// console.log(cartID);
+			console.log(cartID);
 			// console.log(token);
 
+
+			// The Old One
 			axios
 				.get(`https://klick-api.onrender.com/cart/checkout/${cartID}`, {
 					headers: {
@@ -198,7 +221,13 @@ const CheckOut = ({ navigation, route }) => {
 							const cartDetail = data.data.data;
 							navigation.navigate({
 								name: "shippingmethod",
-								params: { checkoutData, cartDetail, addressPayload: address },
+								// params: { checkoutData, cartDetail, addressPayload: address },
+								params: {
+									item,
+									checkoutData,
+									cartDetail,
+									addressPayload: address,
+								},
 							});
 						})
 						.catch((err) => {
@@ -243,7 +272,8 @@ const CheckOut = ({ navigation, route }) => {
 									address.address + ", " + address.city + ", " + address.state
 								}
 							/>
-							<Cart data={cartData} />
+							<Cart data={item} />
+							{/* <Cart data={item} /> */}
 
 							<TouchableOpacity
 								// onPress={() => navigation.navigate("shippingmethod")}
